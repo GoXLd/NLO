@@ -18,6 +18,15 @@ if defined?(JekyllAdmin::Server)
 
       get "/*" do
         requested = params.fetch("splat", []).first.to_s
+
+        # Some browsers/plugins can resolve admin API requests as /admin/_api/*.
+        # Forward them to the actual mounted endpoint at /_api/*.
+        if requested == "_api" || requested.start_with?("_api/")
+          target = "/#{requested}"
+          target = "#{target}?#{request.query_string}" unless request.query_string.to_s.empty?
+          redirect target
+        end
+
         file_path = File.expand_path(requested, settings.public_folder)
 
         if file_path.start_with?(settings.public_folder) && File.file?(file_path)
