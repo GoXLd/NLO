@@ -27,6 +27,7 @@ jobs:
       - name: Generate charts
         run: tools/generate-githubchart.sh
         env:
+        # Colors and palette for the charts, matching GitHub's design (Paste)
           GITHUBCHART_COLOR_LIGHT: "#295170"
           GITHUBCHART_ZERO_LIGHT: "#eeeeee"
           GITHUBCHART_TEXT_LIGHT: "#767676"

@@ -16,7 +16,7 @@ timezone: Europe/Paris
 
 title: NLO # the main title
 
-tagline: A text-focused Jekyll theme # it will display as the subtitle
+tagline: A Github-focused Jekyll theme # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   A minimal, responsive and feature-rich Jekyll theme for technical writing.
@@ -147,7 +147,7 @@ nlo:
     sidebar_image_dark: /assets/img/githubchart-sidebar-dark.svg
   branding:
     logo_src: /assets/img/logo_nlo.png # e.g. /assets/img/logo_nlo.png
-    logo_alt: # defaults to social.name or title
+    logo_alt: NLO # defaults to social.name or title
     logo_aria_label: # defaults to social.name or title
   adsense:
     client: # e.g. ca-pub-xxxxxxxxxxxxxxxx
