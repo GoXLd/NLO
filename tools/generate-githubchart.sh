@@ -11,7 +11,7 @@ dark_main="$output_dir/githubchart-dark.svg"
 dark_sidebar="$output_dir/githubchart-sidebar-dark.svg"
 
 color_light="${GITHUBCHART_COLOR_LIGHT:-#295170}"
-color_dark="${GITHUBCHART_COLOR_DARK:-#7aa2ff}"
+color_dark="${GITHUBCHART_COLOR_DARK:-#6f8fc2}"
 zero_light="${GITHUBCHART_ZERO_LIGHT:-#eeeeee}"
 zero_dark="${GITHUBCHART_ZERO_DARK:-#2d333b}"
 text_light="${GITHUBCHART_TEXT_LIGHT:-#767676}"
@@ -78,6 +78,10 @@ def rgb_to_hex(rgb):
 def mix_with_white(rgb, ratio):
     return tuple(int(round(255 * (1 - ratio) + channel * ratio)) for channel in rgb)
 
+def mix(rgb_a, rgb_b, ratio):
+    # ratio: 0..1, where 0 is rgb_a and 1 is rgb_b
+    return tuple(int(round(a * (1 - ratio) + b * ratio)) for a, b in zip(rgb_a, rgb_b))
+
 def update_fill(el, color):
     style = el.get("style")
     if style:
@@ -92,8 +96,21 @@ def update_fill(el, color):
     else:
         el.set("fill", color)
 
-def build_palette(base_hex, zero_hex):
+def build_palette(base_hex, zero_hex, mode):
     base_rgb = hex_to_rgb(base_hex)
+    zero_rgb = hex_to_rgb(zero_hex)
+
+    if mode == "dark":
+        # Dark palette should stay subdued: move from zero color toward base color,
+        # instead of mixing with white (which causes harsh contrast).
+        return {
+            "0": zero_hex,
+            "1": rgb_to_hex(mix(zero_rgb, base_rgb, 0.28)),
+            "2": rgb_to_hex(mix(zero_rgb, base_rgb, 0.46)),
+            "3": rgb_to_hex(mix(zero_rgb, base_rgb, 0.68)),
+            "4": rgb_to_hex(mix(zero_rgb, base_rgb, 0.88)),
+        }
+
     return {
         "0": zero_hex,
         "1": rgb_to_hex(mix_with_white(base_rgb, 0.25)),
@@ -158,8 +175,8 @@ def render_mode(main_path, sidebar_path, palette, label_color):
     crop_for_sidebar(sidebar_root)
     sidebar_tree.write(sidebar_path, encoding="utf-8", xml_declaration=True)
 
-light_palette = build_palette(color_light, zero_light)
-dark_palette = build_palette(color_dark, zero_dark)
+light_palette = build_palette(color_light, zero_light, "light")
+dark_palette = build_palette(color_dark, zero_dark, "dark")
 
 render_mode(light_main, light_sidebar, light_palette, text_light)
 render_mode(dark_main, dark_sidebar, dark_palette, text_dark)

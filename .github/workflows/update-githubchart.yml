@@ -28,7 +28,7 @@ jobs:
         run: tools/generate-githubchart.sh
         env:
           GITHUBCHART_COLOR_LIGHT: "#295170"
-          GITHUBCHART_COLOR_DARK: "#7aa2ff"
+          GITHUBCHART_COLOR_DARK: "#6f8fc2"
           GITHUBCHART_ZERO_LIGHT: "#eeeeee"
           GITHUBCHART_ZERO_DARK: "#2d333b"
           GITHUBCHART_TEXT_LIGHT: "#767676"
