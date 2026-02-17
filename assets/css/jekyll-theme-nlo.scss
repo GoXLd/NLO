@@ -1,0 +1,72 @@
+---
+---
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* append your custom style below */
+
+#sidebar .sidebar-githubchart {
+  padding: 0 1.25rem 1rem 2.5rem;
+  margin-top: 0.6rem;
+  margin-bottom: 0.25rem;
+}
+
+#sidebar .profile-wrapper {
+  margin-bottom: 10px;
+}
+
+@media all and (min-width: 1650px) {
+  #sidebar .sidebar-githubchart {
+    padding-left: 3.5rem;
+  }
+}
+
+#sidebar .sidebar-githubchart .github-activity {
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  line-height: 0;
+}
+
+#sidebar .sidebar-githubchart img {
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 4px;
+  border: 1px solid #e2e2e2;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  display: block;
+  opacity: 1;
+}
+
+html[data-mode="dark"] #sidebar .sidebar-githubchart img {
+  background-color: #1e1e1e;
+  border-color: #2d2d2d;
+}
+
+.home-githubchart {
+  width: 100%;
+}
+
+#post-list .home-githubchart-card {
+  width: 100%;
+}
+
+#post-list .home-githubchart-card .card-body {
+  padding: 0;
+}
+
+#post-list .home-githubchart img {
+  width: 100% !important;
+  max-width: none;
+  height: auto !important;
+  border-radius: 6px;
+  border: 1px solid var(--main-border-color);
+  background-color: var(--main-bg);
+  display: block;
+}

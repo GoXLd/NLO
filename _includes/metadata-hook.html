@@ -1,0 +1,38 @@
+{% if page.layout == "post" and page.ads and site.nlo.adsense and site.nlo.adsense.client %}
+  <script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={{ site.nlo.adsense.client }}"
+    crossorigin="anonymous"
+  ></script>
+{% endif %}
+
+{% if site.nlo.branding and site.nlo.branding.logo_src %}
+  <style>
+    .site-title img {
+      display: block;
+      height: 64px;
+      width: auto;
+      max-width: 100%;
+    }
+  </style>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const siteTitle = document.querySelector("a.site-title");
+      if (!siteTitle || siteTitle.querySelector("img")) return;
+
+      const logo = document.createElement("img");
+      logo.src = "{{ site.nlo.branding.logo_src | relative_url }}";
+      logo.alt = "{{ site.nlo.branding.logo_alt | default: site.social.name | default: site.title | escape }}";
+      logo.loading = "lazy";
+      logo.decoding = "async";
+
+      siteTitle.textContent = "";
+      siteTitle.setAttribute(
+        "aria-label",
+        "{{ site.nlo.branding.logo_aria_label | default: site.social.name | default: site.title | escape }}"
+      );
+      siteTitle.appendChild(logo);
+    });
+  </script>
+{% endif %}
