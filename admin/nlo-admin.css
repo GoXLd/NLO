@@ -794,11 +794,91 @@ html[data-mode='dark'] .warning {
 }
 
 .nlo-admin-gh-label {
-  margin: 0 0 0.42rem;
+  margin: 0;
   color: var(--admin-heading);
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+}
+
+.nlo-admin-gh-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.45rem;
+  margin-bottom: 0.42rem;
+}
+
+.nlo-admin-gh-help {
+  position: relative;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  color: var(--admin-text-muted);
+  font-size: 0.69rem;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 50%;
+  background: var(--admin-surface-muted);
+  cursor: help;
+}
+
+.nlo-admin-gh-help:hover,
+.nlo-admin-gh-help:focus-visible {
+  color: var(--admin-accent-strong);
+  border-color: var(--admin-accent);
+  outline: none;
+}
+
+.nlo-admin-gh-help::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 3;
+  width: 250px;
+  padding: 0.48rem 0.55rem;
+  color: #e8edf9;
+  font-size: 0.69rem;
+  line-height: 1.38;
+  text-align: left;
+  white-space: pre-line;
+  border: 1px solid rgb(138 183 255 / 28%);
+  border-radius: 8px;
+  background: rgb(12 18 30 / 96%);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 45%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+
+.nlo-admin-gh-help::before {
+  content: '';
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 8px;
+  z-index: 4;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid rgb(138 183 255 / 28%);
+  border-left: 1px solid rgb(138 183 255 / 28%);
+  background: rgb(12 18 30 / 96%);
+  transform: rotate(45deg);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 140ms ease;
+}
+
+.nlo-admin-gh-help:hover::after,
+.nlo-admin-gh-help:hover::before,
+.nlo-admin-gh-help:focus-visible::after,
+.nlo-admin-gh-help:focus-visible::before {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .nlo-admin-gh-controls {
@@ -955,5 +1035,10 @@ html[data-mode='dark'] .warning {
     top: auto;
     right: 10px;
     bottom: 54px;
+  }
+
+  .nlo-admin-gh-help::after {
+    right: -10px;
+    width: 226px;
   }
 }

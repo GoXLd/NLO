@@ -230,10 +230,29 @@
     const wrapper = document.createElement('section');
     wrapper.id = 'nlo-admin-gh-palette-picker';
 
+    const header = document.createElement('div');
+    header.className = 'nlo-admin-gh-head';
+
     const label = document.createElement('p');
     label.id = 'nlo-admin-gh-palette-label';
     label.className = 'nlo-admin-gh-label';
-    wrapper.appendChild(label);
+    header.appendChild(label);
+
+    const help = document.createElement('button');
+    help.type = 'button';
+    help.className = 'nlo-admin-gh-help';
+    help.textContent = '?';
+    help.setAttribute(
+      'data-tip',
+      'Copy Env копирует переменные палитры.\n' +
+        'Вставь их в .github/workflows/update-githubchart.yml\n' +
+        'в блок env шага Generate charts.\n' +
+        'Далее запусти workflow вручную или tools/generate-githubchart.sh.'
+    );
+    help.setAttribute('aria-label', 'How Copy Env works');
+    header.appendChild(help);
+
+    wrapper.appendChild(header);
 
     const controls = document.createElement('div');
     controls.className = 'nlo-admin-gh-controls';
@@ -257,6 +276,7 @@
     copy.type = 'button';
     copy.id = 'nlo-admin-gh-copy-env';
     copy.textContent = 'Copy Env';
+    copy.title = 'Copy variables for workflow env';
     copy.addEventListener('click', () => copyPaletteEnv(copy));
 
     controls.appendChild(select);
