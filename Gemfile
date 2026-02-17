@@ -6,6 +6,7 @@ gemspec
 
 gem "html-proofer", "~> 5.0", group: :test
 gem "githubchart", "~> 4.0", group: :development
+gem "jekyll-admin", "~> 0.11", group: :development
 
 platforms :windows, :jruby do
   gem "tzinfo", ">= 1", "< 3"

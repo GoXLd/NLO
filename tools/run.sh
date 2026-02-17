@@ -3,6 +3,7 @@
 # Run jekyll serve and then launch the site
 
 prod=false
+admin=false
 command="bundle exec jekyll s -l"
 host="127.0.0.1"
 
@@ -12,6 +13,7 @@ help() {
   echo "   bash /path/to/run [options]"
   echo
   echo "Options:"
+  echo "     -a, --admin          Open the visual editor at /admin."
   echo "     -H, --host [HOST]    Host to bind to."
   echo "     -p, --production     Run Jekyll in 'production' mode."
   echo "     -h, --help           Print this help information."
@@ -20,6 +22,10 @@ help() {
 while (($#)); do
   opt="$1"
   case $opt in
+  -a | --admin)
+    admin=true
+    shift
+    ;;
   -H | --host)
     host="$2"
     shift 2
@@ -46,9 +52,16 @@ if $prod; then
   command="JEKYLL_ENV=production $command"
 fi
 
+if $admin; then
+  command="$command -o /admin"
+fi
+
 if [ -e /proc/1/cgroup ] && grep -q docker /proc/1/cgroup; then
   command="$command --force_polling"
 fi
 
 echo -e "\n> $command\n"
+if $admin; then
+  echo "> Visual editor URL: http://$host:4000/admin"
+fi
 eval "$command"

@@ -36,6 +36,37 @@ nlo:
     client:
 ```
 
+## Local Visual Editor
+
+`NLO` includes local browser editing via `jekyll-admin`.
+
+Install dependencies:
+
+```bash
+bundle install
+```
+
+Run site with editor:
+
+```bash
+bash tools/run.sh --admin
+```
+
+Admin API URL:
+
+```text
+http://127.0.0.1:4000/admin
+```
+
+`/admin` uses a local fork from `admin/` in this repository, so UI/UX can be customized without editing the upstream gem.
+
+Fork entry points:
+
+- `admin/index.html`
+- `admin/nlo-admin.css`
+- `admin/nlo-admin.js`
+- `_plugins/jekyll-admin-fork.rb` (mounts local fork at `/admin`)
+
 ## Migration
 
 Use the checklist in [`MIGRATION_CHECKLIST.md`](MIGRATION_CHECKLIST.md).
