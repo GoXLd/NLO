@@ -1,13 +1,18 @@
 ---
-title: "NLO vs Chirpy: Diff Log"
-description: >-
-  Объективный список отличий темы NLO от оригинального jekyll-theme-chirpy.
+title: 'NLO vs Chirpy: Diff Log'
+description: Объективный список отличий темы NLO от оригинального jekyll-theme-chirpy.
   Пост обновляется по мере миграции и развития темы.
-date: 2026-02-17 12:30:00 +0100
-categories: [NLO, Migration]
-tags: [nlo, chirpy, changelog]
+date: '2026-02-17 12:30:00 +0100'
+categories:
+- NLO
+- Migration
+tags:
+- nlo
+- chirpy
+- changelog
 ---
 
+![](assets/img/logo_nlo.png)
 Этот пост фиксирует **конкретные технические отличия** от оригинальной темы.
 Формат простой: добавляем пункт, когда он реализован и проверен.
 
