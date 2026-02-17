@@ -65,8 +65,8 @@
       '| Value 1  | Value 2  |\n\n',
     footnote: 'Text with footnote[^1].\n\n[^1]: Footnote text.\n\n',
     image_modes:
-      "![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }\n" +
-      "![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }\n\n"
+      '![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n' +
+      '![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n\n'
   };
 
   function systemMode() {
@@ -215,7 +215,7 @@
     try {
       document.execCommand('copy');
       done();
-    } catch (_e) {
+    } catch {
       // ignore fallback copy failures
     } finally {
       area.remove();
@@ -457,14 +457,28 @@
       return;
     }
 
+    const reloadKey = 'nlo_admin_sw_cleanup_done';
+
     navigator.serviceWorker
       .getRegistrations()
       .then((registrations) => {
-        registrations.forEach((registration) => {
-          if (registration.scope.includes('/admin')) {
-            registration.unregister().catch(() => {});
-          }
-        });
+        const adminRegistrations = registrations.filter((registration) =>
+          registration.scope.includes('/admin')
+        );
+
+        if (!adminRegistrations.length) {
+          sessionStorage.removeItem(reloadKey);
+          return;
+        }
+
+        Promise.all(adminRegistrations.map((registration) => registration.unregister().catch(() => false)))
+          .then(() => {
+            if (!sessionStorage.getItem(reloadKey)) {
+              sessionStorage.setItem(reloadKey, '1');
+              window.location.reload();
+            }
+          })
+          .catch(() => {});
       })
       .catch(() => {});
   }

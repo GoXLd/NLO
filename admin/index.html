@@ -21,6 +21,48 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
+    <script>
+      (() => {
+        if (!window.fetch) return;
+
+        const originalFetch = window.fetch.bind(window);
+
+        function normalizeApiUrl(input) {
+          try {
+            const url = new URL(typeof input === "string" ? input : input.url, window.location.origin);
+            if (url.pathname.startsWith("/admin/_api/")) {
+              url.pathname = url.pathname.replace("/admin/_api/", "/_api/");
+              return url.toString();
+            }
+            return typeof input === "string" ? input : input.url;
+          } catch (_e) {
+            return input;
+          }
+        }
+
+        window.fetch = (input, init) => {
+          const normalized = normalizeApiUrl(input);
+          return originalFetch(normalized, init).then((response) => {
+            const responseUrl = new URL(response.url, window.location.origin);
+            const isConfigApi = responseUrl.pathname === "/_api/configuration";
+            const contentType = (response.headers.get("content-type") || "").toLowerCase();
+            const isJson = contentType.includes("application/json");
+
+            if (!isConfigApi || isJson) {
+              return response;
+            }
+
+            const fallback = new URL("/_api/configuration", window.location.origin);
+            fallback.searchParams.set("_", String(Date.now()));
+            return originalFetch(fallback.toString(), {
+              credentials: "same-origin",
+              cache: "no-store"
+            });
+          });
+        };
+      })();
+    </script>
+
     <script src="/admin/static/js/runtime-main.95f94e60.js"></script>
     <script src="/admin/static/js/2.08ea13e0.chunk.js"></script>
     <script src="/admin/static/js/main.a0831f44.chunk.js"></script>
