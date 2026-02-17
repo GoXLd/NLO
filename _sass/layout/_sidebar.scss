@@ -79,8 +79,12 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     @include mx.mt-mb(2.5rem);
     @extend %clickable-transition;
 
-    padding-left: 2.5rem;
-    padding-right: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-left: 1.75rem;
+    padding-right: 1.75rem;
     width: 100%;
 
     @include bp.lg {
@@ -90,7 +94,8 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     @include bp.xxxl {
       margin-top: 3.5rem;
       margin-bottom: 2.5rem;
-      padding-left: 3.5rem;
+      padding-left: 2.75rem;
+      padding-right: 2.75rem;
     }
   }
 
@@ -105,7 +110,9 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
     letter-spacing: 0.25px;
     margin-top: 1.25rem;
     margin-bottom: 0.5rem;
-    width: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     color: var(--site-title-color);
   }
 
