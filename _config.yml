@@ -140,9 +140,11 @@ assets:
 
 nlo:
   github_chart:
-    enabled: false # set true to render GitHub contribution chart blocks
+    enabled: true # set true to render GitHub contribution chart blocks
     home_image: /assets/img/githubchart.svg
+    home_image_dark: /assets/img/githubchart-dark.svg
     sidebar_image: /assets/img/githubchart-sidebar.svg
+    sidebar_image_dark: /assets/img/githubchart-sidebar-dark.svg
   branding:
     logo_src: # e.g. /img/logo.png
     logo_alt: # defaults to social.name or title

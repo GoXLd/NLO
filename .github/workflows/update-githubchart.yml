@@ -1,0 +1,51 @@
+name: "Update GitHub Charts"
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-charts:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+          bundler-cache: true
+
+      - name: Generate charts
+        run: tools/generate-githubchart.sh
+        env:
+          GITHUBCHART_COLOR_LIGHT: "#295170"
+          GITHUBCHART_COLOR_DARK: "#7aa2ff"
+          GITHUBCHART_ZERO_LIGHT: "#eeeeee"
+          GITHUBCHART_ZERO_DARK: "#2d333b"
+          GITHUBCHART_TEXT_LIGHT: "#767676"
+          GITHUBCHART_TEXT_DARK: "#8b949e"
+
+      - name: Commit and push if changed
+        run: |
+          if git status --porcelain | grep -E 'assets/img/githubchart' >/dev/null; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add \
+              assets/img/githubchart.svg \
+              assets/img/githubchart-sidebar.svg \
+              assets/img/githubchart-dark.svg \
+              assets/img/githubchart-sidebar-dark.svg
+            git commit -m "chore(assets): update GitHub contribution charts"
+            git push
+          else
+            echo "No chart changes"
+          fi

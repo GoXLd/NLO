@@ -8,6 +8,7 @@ layout: default
 {% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
 {% assign nlo_github_chart = site.nlo.github_chart %}
 {% assign nlo_home_chart = nlo_github_chart.home_image | default: '/assets/img/githubchart.svg' %}
+{% assign nlo_home_chart_dark = nlo_github_chart.home_image_dark | default: nlo_home_chart %}
 {% assign github_user = site.github.username %}
 
 {% assign posts = '' | split: '' %}
@@ -55,7 +56,15 @@ layout: default
       <div class="card-body">
         <div class="home-githubchart">
           <img
+            class="githubchart-light"
             src="{{ nlo_home_chart | relative_url }}"
+            alt="{{ github_user }} GitHub contribution graph"
+            loading="lazy"
+            decoding="async"
+          >
+          <img
+            class="githubchart-dark"
+            src="{{ nlo_home_chart_dark | relative_url }}"
             alt="{{ github_user }} GitHub contribution graph"
             loading="lazy"
             decoding="async"

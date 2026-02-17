@@ -44,9 +44,36 @@
   opacity: 1;
 }
 
+#sidebar .sidebar-githubchart .githubchart-dark,
+#post-list .home-githubchart .githubchart-dark {
+  display: none;
+}
+
 html[data-mode="dark"] #sidebar .sidebar-githubchart img {
   background-color: #1e1e1e;
   border-color: #2d2d2d;
+}
+
+html[data-mode="dark"] #sidebar .sidebar-githubchart .githubchart-dark,
+html[data-mode="dark"] #post-list .home-githubchart .githubchart-dark {
+  display: block;
+}
+
+html[data-mode="dark"] #sidebar .sidebar-githubchart .githubchart-light,
+html[data-mode="dark"] #post-list .home-githubchart .githubchart-light {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-dark,
+  html:not([data-mode]) #post-list .home-githubchart .githubchart-dark {
+    display: block;
+  }
+
+  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-light,
+  html:not([data-mode]) #post-list .home-githubchart .githubchart-light {
+    display: none;
+  }
 }
 
 .home-githubchart {

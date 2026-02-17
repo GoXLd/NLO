@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "html-proofer", "~> 5.0", group: :test
+gem "githubchart", "~> 4.0", group: :development
 
 platforms :windows, :jruby do
   gem "tzinfo", ">= 1", "< 3"

@@ -19,6 +19,7 @@
   {% assign github_user = site.github.username %}
   {% assign nlo_github_chart = site.nlo.github_chart %}
   {% assign nlo_sidebar_chart = nlo_github_chart.sidebar_image | default: '/assets/img/githubchart-sidebar.svg' %}
+  {% assign nlo_sidebar_chart_dark = nlo_github_chart.sidebar_image_dark | default: nlo_sidebar_chart %}
   {% if github_user and nlo_github_chart and nlo_github_chart.enabled and page.layout != 'home' %}
     <div class="sidebar-githubchart w-100">
       <a
@@ -29,7 +30,15 @@
         aria-label="{{ github_user }} GitHub contributions"
       >
         <img
+          class="githubchart-light"
           src="{{ nlo_sidebar_chart | relative_url }}"
+          alt="{{ github_user }} GitHub contribution graph"
+          loading="lazy"
+          decoding="async"
+        >
+        <img
+          class="githubchart-dark"
+          src="{{ nlo_sidebar_chart_dark | relative_url }}"
           alt="{{ github_user }} GitHub contribution graph"
           loading="lazy"
           decoding="async"
