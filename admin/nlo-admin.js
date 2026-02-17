@@ -18,6 +18,41 @@
       light: ['#e6e8eb', '#c9d9e7', '#8fb2cc', '#2c5472', '#c8632d']
     }
   };
+  const cyrillicMap = {
+    а: 'a',
+    б: 'b',
+    в: 'v',
+    г: 'g',
+    д: 'd',
+    е: 'e',
+    ё: 'e',
+    ж: 'zh',
+    з: 'z',
+    и: 'i',
+    й: 'y',
+    к: 'k',
+    л: 'l',
+    м: 'm',
+    н: 'n',
+    о: 'o',
+    п: 'p',
+    р: 'r',
+    с: 's',
+    т: 't',
+    у: 'u',
+    ф: 'f',
+    х: 'h',
+    ц: 'ts',
+    ч: 'ch',
+    ш: 'sh',
+    щ: 'sch',
+    ъ: '',
+    ы: 'y',
+    ь: '',
+    э: 'e',
+    ю: 'yu',
+    я: 'ya'
+  };
 
   const snippets = {
     prompt_tip: '> Tip text\n{: .prompt-tip }\n\n',
@@ -242,6 +277,161 @@
     applyGhPalette(currentGhPalette());
   }
 
+  function fieldScore(input, hints) {
+    const content = [
+      input.name || '',
+      input.id || '',
+      input.placeholder || '',
+      input.getAttribute('aria-label') || ''
+    ]
+      .join(' ')
+      .toLowerCase();
+
+    return hints.some((hint) => content.includes(hint));
+  }
+
+  function findInputByLabel(labelText) {
+    const labels = Array.from(document.querySelectorAll('label'));
+    const match = labels.find((label) => label.textContent.trim().toLowerCase() === labelText);
+    if (!match) {
+      return null;
+    }
+
+    const targetId = match.getAttribute('for');
+    if (targetId) {
+      const byId = document.getElementById(targetId);
+      if (byId && (byId.tagName === 'INPUT' || byId.tagName === 'TEXTAREA')) {
+        return byId;
+      }
+    }
+
+    let node = match.nextElementSibling;
+    while (node) {
+      if (node.tagName === 'INPUT' || node.tagName === 'TEXTAREA') {
+        return node;
+      }
+      const nested = node.querySelector?.('input,textarea');
+      if (nested) {
+        return nested;
+      }
+      node = node.nextElementSibling;
+    }
+
+    return null;
+  }
+
+  function locateTitleInput() {
+    const candidates = Array.from(document.querySelectorAll('input,textarea'));
+    const byMeta = candidates.find((input) => fieldScore(input, ['title']));
+    if (byMeta) {
+      return byMeta;
+    }
+    return findInputByLabel('title');
+  }
+
+  function locatePathInput() {
+    const candidates = Array.from(document.querySelectorAll('input,textarea'));
+    const byMeta = candidates.find((input) => fieldScore(input, ['path', 'filename', 'relative_path']));
+    if (byMeta) {
+      return byMeta;
+    }
+    return findInputByLabel('path');
+  }
+
+  function transliterate(str) {
+    return Array.from(str || '')
+      .map((char) => {
+        const lower = char.toLowerCase();
+        return Object.prototype.hasOwnProperty.call(cyrillicMap, lower) ? cyrillicMap[lower] : char;
+      })
+      .join('');
+  }
+
+  function slugifyTitle(value) {
+    const transliterated = transliterate(String(value || ''));
+    const slug = transliterated
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    if (slug) {
+      return slug;
+    }
+
+    const date = new Date().toISOString().slice(0, 10);
+    return `post-${date}`;
+  }
+
+  function isInvalidPath(pathValue) {
+    const path = String(pathValue || '').trim();
+    if (!path) {
+      return true;
+    }
+    if (/^\.(md|markdown)$/i.test(path)) {
+      return true;
+    }
+    if (/\/\.(md|markdown)$/i.test(path)) {
+      return true;
+    }
+    if (/^\d{4}-\d{2}-\d{2}-\.(md|markdown)$/i.test(path)) {
+      return true;
+    }
+    return false;
+  }
+
+  function rewritePath(pathValue, slug) {
+    const path = String(pathValue || '').trim();
+    const ext = /\.markdown$/i.test(path) ? 'markdown' : 'md';
+
+    const dateMatch = path.match(/^(\d{4}-\d{2}-\d{2}-)\.(md|markdown)$/i);
+    if (dateMatch) {
+      return `${dateMatch[1]}${slug}.${dateMatch[2].toLowerCase()}`;
+    }
+
+    const dirMatch = path.match(/^(.*\/)\.(md|markdown)$/i);
+    if (dirMatch) {
+      return `${dirMatch[1]}${slug}.${dirMatch[2].toLowerCase()}`;
+    }
+
+    return `${slug}.${ext}`;
+  }
+
+  function ensurePathAutofill() {
+    const titleInput = locateTitleInput();
+    const pathInput = locatePathInput();
+
+    if (!titleInput || !pathInput || pathInput.dataset.nloPathAutofill === '1') {
+      return;
+    }
+
+    pathInput.dataset.nloPathAutofill = '1';
+
+    const syncPathFromTitle = () => {
+      const currentPath = String(pathInput.value || '');
+      if (!isInvalidPath(currentPath)) {
+        return;
+      }
+
+      const slug = slugifyTitle(titleInput.value || '');
+      const nextPath = rewritePath(currentPath, slug);
+      if (!nextPath || nextPath === currentPath) {
+        return;
+      }
+
+      pathInput.value = nextPath;
+      pathInput.dispatchEvent(new Event('input', { bubbles: true }));
+      pathInput.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+
+    titleInput.addEventListener('input', syncPathFromTitle);
+    titleInput.addEventListener('blur', syncPathFromTitle);
+    syncPathFromTitle();
+  }
+
   function cleanupAdminServiceWorkers() {
     if (!('serviceWorker' in navigator)) {
       return;
@@ -345,11 +535,13 @@
     cleanupAdminServiceWorkers();
     ensureThemeToggle();
     ensureGhPalettePicker();
+    ensurePathAutofill();
     scanEditors();
 
     const observer = new MutationObserver(() => {
       ensureThemeToggle();
       ensureGhPalettePicker();
+      ensurePathAutofill();
       scanEditors();
     });
 
