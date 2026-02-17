@@ -23,41 +23,129 @@
 
     <script>
       (() => {
-        if (!window.fetch) return;
+        if (!window.fetch || !window.URL || !window.Response) return;
 
         const originalFetch = window.fetch.bind(window);
+        const origin = window.location.origin;
+        let cachedConfigPayload = null;
 
-        function normalizeApiUrl(input) {
+        function parseUrl(input) {
           try {
-            const url = new URL(typeof input === "string" ? input : input.url, window.location.origin);
-            if (url.pathname.startsWith("/admin/_api/")) {
-              url.pathname = url.pathname.replace("/admin/_api/", "/_api/");
-              return url.toString();
-            }
-            return typeof input === "string" ? input : input.url;
-          } catch (_e) {
-            return input;
+            return new URL(typeof input === 'string' ? input : input.url, origin);
+          } catch {
+            return null;
           }
         }
 
-        window.fetch = (input, init) => {
-          const normalized = normalizeApiUrl(input);
-          return originalFetch(normalized, init).then((response) => {
-            const responseUrl = new URL(response.url, window.location.origin);
-            const isConfigApi = responseUrl.pathname === "/_api/configuration";
-            const contentType = (response.headers.get("content-type") || "").toLowerCase();
-            const isJson = contentType.includes("application/json");
+        function isConfigPath(pathname) {
+          return (
+            pathname === '/_api/configuration' ||
+            pathname === '/admin/_api/configuration' ||
+            pathname === '/admin/configuration' ||
+            pathname === '/configuration'
+          );
+        }
 
-            if (!isConfigApi || isJson) {
+        function normalizeUrl(url) {
+          if (!url) return null;
+
+          if (url.pathname.startsWith('/admin/_api/')) {
+            url.pathname = url.pathname.replace('/admin/_api/', '/_api/');
+            return url;
+          }
+
+          if (url.pathname === '/admin/configuration' || url.pathname === '/configuration') {
+            url.pathname = '/_api/configuration';
+          }
+
+          return url;
+        }
+
+        function rememberConfigPayload(text) {
+          if (!text) return false;
+          try {
+            JSON.parse(text);
+            cachedConfigPayload = text;
+            return true;
+          } catch {
+            return false;
+          }
+        }
+
+        function configResponseFromCache() {
+          return new Response(cachedConfigPayload || '{}', {
+            status: 200,
+            headers: { 'Content-Type': 'application/json; charset=utf-8' }
+          });
+        }
+
+        const warmupUrl = new URL('/_api/configuration', origin);
+        warmupUrl.searchParams.set('_prefetch', '1');
+        originalFetch(warmupUrl.toString(), {
+          credentials: 'same-origin',
+          cache: 'no-store'
+        })
+          .then((response) => (response.ok ? response.text() : ''))
+          .then((text) => {
+            rememberConfigPayload(text);
+          })
+          .catch(() => {});
+
+        window.fetch = (input, init) => {
+          const parsed = parseUrl(input);
+          const normalized = normalizeUrl(parsed ? new URL(parsed.toString()) : null);
+          const isConfigRequest = normalized && isConfigPath(normalized.pathname);
+
+          if (isConfigRequest && cachedConfigPayload) {
+            return Promise.resolve(configResponseFromCache());
+          }
+
+          let nextInput = input;
+          if (normalized && parsed && normalized.toString() !== parsed.toString()) {
+            nextInput =
+              typeof input === 'string' ? normalized.toString() : new Request(normalized.toString(), input);
+          }
+
+          return originalFetch(nextInput, init).then((response) => {
+            if (!isConfigRequest) {
               return response;
             }
 
-            const fallback = new URL("/_api/configuration", window.location.origin);
-            fallback.searchParams.set("_", String(Date.now()));
-            return originalFetch(fallback.toString(), {
-              credentials: "same-origin",
-              cache: "no-store"
-            });
+            return response
+              .clone()
+              .text()
+              .then((text) => {
+                if (rememberConfigPayload(text)) {
+                  return response;
+                }
+
+                const retryUrl = new URL('/_api/configuration', origin);
+                retryUrl.searchParams.set('_', String(Date.now()));
+                return originalFetch(retryUrl.toString(), {
+                  credentials: 'same-origin',
+                  cache: 'no-store'
+                })
+                  .then((retryResponse) =>
+                    retryResponse
+                      .clone()
+                      .text()
+                      .then((retryText) => {
+                        if (rememberConfigPayload(retryText)) {
+                          return retryResponse;
+                        }
+                        if (cachedConfigPayload) {
+                          return configResponseFromCache();
+                        }
+                        return retryResponse;
+                      })
+                  )
+                  .catch(() => {
+                    if (cachedConfigPayload) {
+                      return configResponseFromCache();
+                    }
+                    return response;
+                  });
+              });
           });
         };
       })();
@@ -66,6 +154,6 @@
     <script src="/admin/static/js/runtime-main.95f94e60.js"></script>
     <script src="/admin/static/js/2.08ea13e0.chunk.js"></script>
     <script src="/admin/static/js/main.a0831f44.chunk.js"></script>
-    <script defer src="/admin/nlo-admin.js?v=20260217-gh-palette-1"></script>
+    <script defer src="/admin/nlo-admin.js?v=20260217-gh-palette-2"></script>
   </body>
 </html>
