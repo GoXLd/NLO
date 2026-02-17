@@ -565,18 +565,35 @@
     });
   }
 
+  function suppressFalseConfigErrorNotice() {
+    if (!window.__nloAdminConfigFetchOk) {
+      return;
+    }
+
+    const notifications = document.querySelectorAll('.notification');
+    notifications.forEach((notification) => {
+      const message = notification.querySelector('.notification-message');
+      const text = (message?.textContent || '').trim().toLowerCase();
+      if (text === 'could not fetch the config') {
+        notification.remove();
+      }
+    });
+  }
+
   function boot() {
     cleanupAdminServiceWorkers();
     ensureThemeToggle();
     ensureGhPalettePicker();
     ensurePathAutofill();
     scanEditors();
+    suppressFalseConfigErrorNotice();
 
     const observer = new MutationObserver(() => {
       ensureThemeToggle();
       ensureGhPalettePicker();
       ensurePathAutofill();
       scanEditors();
+      suppressFalseConfigErrorNotice();
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
