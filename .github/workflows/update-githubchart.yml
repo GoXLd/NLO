@@ -32,7 +32,19 @@ jobs:
           GITHUBCHART_ZERO_LIGHT: "#eeeeee"
           GITHUBCHART_TEXT_LIGHT: "#767676"
           GITHUBCHART_TEXT_DARK: "#8b949e"
-          GITHUBCHART_DARK_PALETTE: "slate-a"
+          # nlo-chart-palette:start
+          GITHUBCHART_DARK_PALETTE: "nlo-logo"
+          GITHUBCHART_DARK_LEVEL0: "#2a2d30"
+          GITHUBCHART_DARK_LEVEL1: "#223244"
+          GITHUBCHART_DARK_LEVEL2: "#2c4a66"
+          GITHUBCHART_DARK_LEVEL3: "#3a6488"
+          GITHUBCHART_DARK_LEVEL4: "#b35a2a"
+          GITHUBCHART_LIGHT_LEVEL0: "#e6e8eb"
+          GITHUBCHART_LIGHT_LEVEL1: "#c9d9e7"
+          GITHUBCHART_LIGHT_LEVEL2: "#8fb2cc"
+          GITHUBCHART_LIGHT_LEVEL3: "#2c5472"
+          GITHUBCHART_LIGHT_LEVEL4: "#c8632d"
+          # nlo-chart-palette:end
 
       - name: Commit and push if changed
         run: |

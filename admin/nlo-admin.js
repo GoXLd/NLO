@@ -222,6 +222,80 @@
     }
   }
 
+  function palettePayload(name = currentGhPalette()) {
+    const palette = chartPalettes[name];
+    if (!palette) {
+      return null;
+    }
+
+    return {
+      palette: name,
+      dark: Array.isArray(palette.dark) ? [...palette.dark] : [],
+      light: Array.isArray(palette.light) ? [...palette.light] : []
+    };
+  }
+
+  function setPaletteStatus(message, isError = false) {
+    const status = document.getElementById('nlo-admin-gh-status');
+    if (!status) {
+      return;
+    }
+
+    status.textContent = message || '';
+    status.dataset.state = isError ? 'error' : 'ok';
+  }
+
+  async function applyPaletteToWorkflow(button) {
+    if (!button) {
+      return;
+    }
+
+    const payload = palettePayload();
+    if (!payload) {
+      setPaletteStatus('Palette payload is empty', true);
+      return;
+    }
+
+    const previous = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Applying...';
+    setPaletteStatus('Updating workflow and rebuilding SVG...');
+
+    try {
+      const response = await fetch('/admin/_nlo/githubchart/apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        cache: 'no-store',
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response
+        .json()
+        .catch(() => ({ ok: false, error: `Invalid server response (${response.status})` }));
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || `Request failed (${response.status})`);
+      }
+
+      button.textContent = 'Applied';
+      setPaletteStatus('Done: workflow updated, SVG charts rebuilt.');
+      window.setTimeout(() => {
+        button.textContent = previous;
+      }, 1400);
+    } catch (error) {
+      button.textContent = 'Failed';
+      setPaletteStatus(`Error: ${error.message}`, true);
+      window.setTimeout(() => {
+        button.textContent = previous;
+      }, 2200);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
   function ensureGhPalettePicker() {
     if (document.getElementById('nlo-admin-gh-palette-picker')) {
       return;
@@ -247,7 +321,8 @@
       'Copy Env копирует переменные палитры.\n' +
         'Вставь их в .github/workflows/update-githubchart.yml\n' +
         'в блок env шага Generate charts.\n' +
-        'Далее запусти workflow вручную или tools/generate-githubchart.sh.'
+        'Apply + Build делает это автоматически\n' +
+        'и сразу локально пересобирает SVG.'
     );
     help.setAttribute('aria-label', 'How Copy Env works');
     header.appendChild(help);
@@ -279,8 +354,18 @@
     copy.title = 'Copy variables for workflow env';
     copy.addEventListener('click', () => copyPaletteEnv(copy));
 
+    const apply = document.createElement('button');
+    apply.type = 'button';
+    apply.id = 'nlo-admin-gh-apply';
+    apply.textContent = 'Apply + Build';
+    apply.title = 'Update workflow palette and regenerate chart SVG locally';
+    apply.addEventListener('click', () => {
+      applyPaletteToWorkflow(apply);
+    });
+
     controls.appendChild(select);
     controls.appendChild(copy);
+    controls.appendChild(apply);
     wrapper.appendChild(controls);
 
     const preview = document.createElement('div');
@@ -292,6 +377,13 @@
       preview.appendChild(swatch);
     }
     wrapper.appendChild(preview);
+
+    const status = document.createElement('p');
+    status.id = 'nlo-admin-gh-status';
+    status.className = 'nlo-admin-gh-status';
+    status.dataset.state = 'ok';
+    status.textContent = 'Choose palette and click Apply + Build.';
+    wrapper.appendChild(status);
 
     document.body.appendChild(wrapper);
     applyGhPalette(currentGhPalette());

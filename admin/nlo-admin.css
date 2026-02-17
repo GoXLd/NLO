@@ -882,7 +882,9 @@ html[data-mode='dark'] .warning {
 }
 
 .nlo-admin-gh-controls {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
   gap: 0.38rem;
 }
 
@@ -913,6 +915,27 @@ html[data-mode='dark'] .warning {
 #nlo-admin-gh-copy-env:hover {
   color: var(--admin-accent-strong);
   border-color: var(--admin-accent);
+}
+
+#nlo-admin-gh-apply {
+  min-height: 30px;
+  padding: 0 0.6rem;
+  color: #f5f9ff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid var(--admin-accent);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-strong));
+  cursor: pointer;
+}
+
+#nlo-admin-gh-apply:hover {
+  filter: brightness(1.05);
+}
+
+#nlo-admin-gh-apply:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .nlo-admin-gh-preview {
@@ -946,6 +969,17 @@ html[data-mode='dark'] .warning {
 
 .nlo-admin-gh-swatch[data-level='4'] {
   background: var(--gh-4);
+}
+
+.nlo-admin-gh-status {
+  margin: 0.42rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--admin-text-muted);
+}
+
+.nlo-admin-gh-status[data-state='error'] {
+  color: var(--admin-danger);
 }
 
 .nlo-admin-snippets {

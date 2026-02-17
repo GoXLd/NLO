@@ -92,7 +92,13 @@ mkdir -p "$output_dir"
 tmp_raw="$(mktemp "${TMPDIR:-/tmp}/githubchart-raw.XXXXXX.svg")"
 trap 'rm -f "$tmp_raw"' EXIT
 
-bundle exec githubchart -u "$github_user" "$tmp_raw"
+if [[ -n "${GITHUBCHART_RUBY_BIN:-}" ]]; then
+  "$GITHUBCHART_RUBY_BIN" -S githubchart -u "$github_user" "$tmp_raw"
+elif [[ -n "${BUNDLE_BIN_PATH:-}" ]]; then
+  githubchart -u "$github_user" "$tmp_raw"
+else
+  bundle exec githubchart -u "$github_user" "$tmp_raw"
+fi
 
 GITHUBCHART_INPUT="$tmp_raw" \
 GITHUBCHART_LIGHT_MAIN="$light_main" \
