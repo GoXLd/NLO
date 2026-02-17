@@ -1,6 +1,23 @@
 (() => {
   const MODE_KEY = 'mode';
+  const GH_PALETTE_KEY = 'gh_palette';
+  const DEFAULT_GH_PALETTE = 'slate-a';
   const root = document.documentElement;
+  const chartPalettes = {
+    'slate-a': {
+      label: 'Slate A',
+      dark: ['#1b1b1b', '#22252a', '#2b3038', '#343c47', '#3f4a59']
+    },
+    'slate-b': {
+      label: 'Slate B',
+      dark: ['#1a1a1a', '#23272d', '#2d333b', '#38414b', '#44505c']
+    },
+    'nlo-logo': {
+      label: 'NLO Logo',
+      dark: ['#2a2d30', '#223244', '#2c4a66', '#3a6488', '#b35a2a'],
+      light: ['#e6e8eb', '#c9d9e7', '#8fb2cc', '#2c5472', '#c8632d']
+    }
+  };
 
   const snippets = {
     prompt_tip: '> Tip text\n{: .prompt-tip }\n\n',
@@ -39,6 +56,20 @@
     return systemMode();
   }
 
+  function currentGhPalette() {
+    const saved = sessionStorage.getItem(GH_PALETTE_KEY);
+    if (saved && chartPalettes[saved]) {
+      return saved;
+    }
+
+    const attr = root.getAttribute('data-gh-palette');
+    if (attr && chartPalettes[attr]) {
+      return attr;
+    }
+
+    return DEFAULT_GH_PALETTE;
+  }
+
   function applyMode(mode) {
     root.setAttribute('data-mode', mode);
     sessionStorage.setItem(MODE_KEY, mode);
@@ -47,6 +78,29 @@
     if (toggle) {
       toggle.textContent = `Theme: ${modeLabel(mode)}`;
       toggle.setAttribute('aria-label', `Switch theme. Current: ${modeLabel(mode)}`);
+    }
+  }
+
+  function applyGhPalette(name) {
+    const paletteName = chartPalettes[name] ? name : DEFAULT_GH_PALETTE;
+    const palette = chartPalettes[paletteName];
+    const darkColors = palette.dark || chartPalettes[DEFAULT_GH_PALETTE].dark;
+
+    root.setAttribute('data-gh-palette', paletteName);
+    sessionStorage.setItem(GH_PALETTE_KEY, paletteName);
+
+    darkColors.forEach((color, level) => {
+      root.style.setProperty(`--gh-${level}`, color);
+    });
+
+    const select = document.getElementById('nlo-admin-gh-palette-select');
+    if (select && select.value !== paletteName) {
+      select.value = paletteName;
+    }
+
+    const label = document.getElementById('nlo-admin-gh-palette-label');
+    if (label) {
+      label.textContent = `GitHub Chart Palette: ${palette.label}`;
     }
   }
 
@@ -66,6 +120,143 @@
     button.addEventListener('click', flipMode);
     document.body.appendChild(button);
     applyMode(currentMode());
+  }
+
+  function paletteEnvBlock() {
+    const paletteName = currentGhPalette();
+    const palette = chartPalettes[paletteName];
+    if (!palette) {
+      return '';
+    }
+
+    const dark = palette.dark || [];
+    const light = palette.light || [];
+    const lightLines =
+      light.length === 5
+        ? `\nGITHUBCHART_LIGHT_LEVEL0: "${light[0]}"\n` +
+          `GITHUBCHART_LIGHT_LEVEL1: "${light[1]}"\n` +
+          `GITHUBCHART_LIGHT_LEVEL2: "${light[2]}"\n` +
+          `GITHUBCHART_LIGHT_LEVEL3: "${light[3]}"\n` +
+          `GITHUBCHART_LIGHT_LEVEL4: "${light[4]}"`
+        : '';
+
+    return (
+      `GITHUBCHART_DARK_PALETTE: "${paletteName}"\n` +
+      `GITHUBCHART_DARK_LEVEL0: "${dark[0]}"\n` +
+      `GITHUBCHART_DARK_LEVEL1: "${dark[1]}"\n` +
+      `GITHUBCHART_DARK_LEVEL2: "${dark[2]}"\n` +
+      `GITHUBCHART_DARK_LEVEL3: "${dark[3]}"\n` +
+      `GITHUBCHART_DARK_LEVEL4: "${dark[4]}"` +
+      lightLines
+    );
+  }
+
+  function copyPaletteEnv(button) {
+    const text = paletteEnvBlock();
+    if (!text || !button) {
+      return;
+    }
+
+    const done = () => {
+      const prev = button.textContent;
+      button.textContent = 'Copied';
+      window.setTimeout(() => {
+        button.textContent = prev;
+      }, 1200);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => {});
+      return;
+    }
+
+    const area = document.createElement('textarea');
+    area.value = text;
+    area.setAttribute('readonly', 'readonly');
+    area.style.position = 'fixed';
+    area.style.left = '-9999px';
+    document.body.appendChild(area);
+    area.select();
+    try {
+      document.execCommand('copy');
+      done();
+    } catch (_e) {
+      // ignore fallback copy failures
+    } finally {
+      area.remove();
+    }
+  }
+
+  function ensureGhPalettePicker() {
+    if (document.getElementById('nlo-admin-gh-palette-picker')) {
+      return;
+    }
+
+    const wrapper = document.createElement('section');
+    wrapper.id = 'nlo-admin-gh-palette-picker';
+
+    const label = document.createElement('p');
+    label.id = 'nlo-admin-gh-palette-label';
+    label.className = 'nlo-admin-gh-label';
+    wrapper.appendChild(label);
+
+    const controls = document.createElement('div');
+    controls.className = 'nlo-admin-gh-controls';
+
+    const select = document.createElement('select');
+    select.id = 'nlo-admin-gh-palette-select';
+    select.className = 'nlo-admin-gh-select';
+
+    Object.entries(chartPalettes).forEach(([key, palette]) => {
+      const option = document.createElement('option');
+      option.value = key;
+      option.textContent = palette.label;
+      select.appendChild(option);
+    });
+
+    select.addEventListener('change', (event) => {
+      applyGhPalette(event.target.value);
+    });
+
+    const copy = document.createElement('button');
+    copy.type = 'button';
+    copy.id = 'nlo-admin-gh-copy-env';
+    copy.textContent = 'Copy Env';
+    copy.addEventListener('click', () => copyPaletteEnv(copy));
+
+    controls.appendChild(select);
+    controls.appendChild(copy);
+    wrapper.appendChild(controls);
+
+    const preview = document.createElement('div');
+    preview.className = 'nlo-admin-gh-preview';
+    for (let i = 0; i < 5; i += 1) {
+      const swatch = document.createElement('span');
+      swatch.className = 'nlo-admin-gh-swatch';
+      swatch.dataset.level = String(i);
+      preview.appendChild(swatch);
+    }
+    wrapper.appendChild(preview);
+
+    document.body.appendChild(wrapper);
+    applyGhPalette(currentGhPalette());
+  }
+
+  function cleanupAdminServiceWorkers() {
+    if (!('serviceWorker' in navigator)) {
+      return;
+    }
+
+    navigator.serviceWorker
+      .getRegistrations()
+      .then((registrations) => {
+        registrations.forEach((registration) => {
+          if (registration.scope.includes('/admin')) {
+            registration.unregister().catch(() => {});
+          }
+        });
+      })
+      .catch(() => {});
   }
 
   function resolveCodeMirror(toolbar) {
@@ -151,11 +342,14 @@
   }
 
   function boot() {
+    cleanupAdminServiceWorkers();
     ensureThemeToggle();
+    ensureGhPalettePicker();
     scanEditors();
 
     const observer = new MutationObserver(() => {
       ensureThemeToggle();
+      ensureGhPalettePicker();
       scanEditors();
     });
 

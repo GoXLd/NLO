@@ -28,11 +28,10 @@ jobs:
         run: tools/generate-githubchart.sh
         env:
           GITHUBCHART_COLOR_LIGHT: "#295170"
-          GITHUBCHART_COLOR_DARK: "#6f8fc2"
           GITHUBCHART_ZERO_LIGHT: "#eeeeee"
-          GITHUBCHART_ZERO_DARK: "#2d333b"
           GITHUBCHART_TEXT_LIGHT: "#767676"
           GITHUBCHART_TEXT_DARK: "#8b949e"
+          GITHUBCHART_DARK_PALETTE: "slate-a"
 
       - name: Commit and push if changed
         run: |

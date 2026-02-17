@@ -11,11 +11,72 @@ dark_main="$output_dir/githubchart-dark.svg"
 dark_sidebar="$output_dir/githubchart-sidebar-dark.svg"
 
 color_light="${GITHUBCHART_COLOR_LIGHT:-#295170}"
-color_dark="${GITHUBCHART_COLOR_DARK:-#6f8fc2}"
 zero_light="${GITHUBCHART_ZERO_LIGHT:-#eeeeee}"
-zero_dark="${GITHUBCHART_ZERO_DARK:-#2d333b}"
 text_light="${GITHUBCHART_TEXT_LIGHT:-#767676}"
 text_dark="${GITHUBCHART_TEXT_DARK:-#8b949e}"
+
+dark_palette="${GITHUBCHART_DARK_PALETTE:-slate-a}"
+dark_level_0="${GITHUBCHART_DARK_LEVEL0:-}"
+dark_level_1="${GITHUBCHART_DARK_LEVEL1:-}"
+dark_level_2="${GITHUBCHART_DARK_LEVEL2:-}"
+dark_level_3="${GITHUBCHART_DARK_LEVEL3:-}"
+dark_level_4="${GITHUBCHART_DARK_LEVEL4:-}"
+light_level_0="${GITHUBCHART_LIGHT_LEVEL0:-}"
+light_level_1="${GITHUBCHART_LIGHT_LEVEL1:-}"
+light_level_2="${GITHUBCHART_LIGHT_LEVEL2:-}"
+light_level_3="${GITHUBCHART_LIGHT_LEVEL3:-}"
+light_level_4="${GITHUBCHART_LIGHT_LEVEL4:-}"
+
+# Presets for dark-mode chart levels.
+# slate-a:
+#   0 #1b1b1b
+#   1 #22252a
+#   2 #2b3038
+#   3 #343c47
+#   4 #3f4a59
+# slate-b:
+#   0 #1a1a1a
+#   1 #23272d
+#   2 #2d333b
+#   3 #38414b
+#   4 #44505c
+# nlo-logo:
+#   dark  : #2a2d30 #223244 #2c4a66 #3a6488 #b35a2a
+#   light : #e6e8eb #c9d9e7 #8fb2cc #2c5472 #c8632d
+if [[ -z "$dark_level_0" || -z "$dark_level_1" || -z "$dark_level_2" || -z "$dark_level_3" || -z "$dark_level_4" ]]; then
+  case "$dark_palette" in
+    slate-a)
+      dark_level_0="#1b1b1b"
+      dark_level_1="#22252a"
+      dark_level_2="#2b3038"
+      dark_level_3="#343c47"
+      dark_level_4="#3f4a59"
+      ;;
+    slate-b)
+      dark_level_0="#1a1a1a"
+      dark_level_1="#23272d"
+      dark_level_2="#2d333b"
+      dark_level_3="#38414b"
+      dark_level_4="#44505c"
+      ;;
+    nlo-logo)
+      dark_level_0="#2a2d30"
+      dark_level_1="#223244"
+      dark_level_2="#2c4a66"
+      dark_level_3="#3a6488"
+      dark_level_4="#b35a2a"
+      light_level_0="#e6e8eb"
+      light_level_1="#c9d9e7"
+      light_level_2="#8fb2cc"
+      light_level_3="#2c5472"
+      light_level_4="#c8632d"
+      ;;
+    *)
+      echo "Unknown GITHUBCHART_DARK_PALETTE: '$dark_palette' (expected: slate-a|slate-b|nlo-logo)" >&2
+      exit 1
+      ;;
+  esac
+fi
 
 github_user="${GITHUB_USER:-}"
 if [[ -z "$github_user" && -f "$config_file" ]]; then
@@ -39,9 +100,17 @@ GITHUBCHART_LIGHT_SIDEBAR="$light_sidebar" \
 GITHUBCHART_DARK_MAIN="$dark_main" \
 GITHUBCHART_DARK_SIDEBAR="$dark_sidebar" \
 GITHUBCHART_COLOR_LIGHT="$color_light" \
-GITHUBCHART_COLOR_DARK="$color_dark" \
 GITHUBCHART_ZERO_LIGHT="$zero_light" \
-GITHUBCHART_ZERO_DARK="$zero_dark" \
+GITHUBCHART_DARK_LEVEL0="$dark_level_0" \
+GITHUBCHART_DARK_LEVEL1="$dark_level_1" \
+GITHUBCHART_DARK_LEVEL2="$dark_level_2" \
+GITHUBCHART_DARK_LEVEL3="$dark_level_3" \
+GITHUBCHART_DARK_LEVEL4="$dark_level_4" \
+GITHUBCHART_LIGHT_LEVEL0="$light_level_0" \
+GITHUBCHART_LIGHT_LEVEL1="$light_level_1" \
+GITHUBCHART_LIGHT_LEVEL2="$light_level_2" \
+GITHUBCHART_LIGHT_LEVEL3="$light_level_3" \
+GITHUBCHART_LIGHT_LEVEL4="$light_level_4" \
 GITHUBCHART_TEXT_LIGHT="$text_light" \
 GITHUBCHART_TEXT_DARK="$text_dark" \
 python3 - <<'PY'
@@ -57,11 +126,23 @@ dark_main = Path(os.environ["GITHUBCHART_DARK_MAIN"])
 dark_sidebar = Path(os.environ["GITHUBCHART_DARK_SIDEBAR"])
 
 color_light = os.environ.get("GITHUBCHART_COLOR_LIGHT", "#295170")
-color_dark = os.environ.get("GITHUBCHART_COLOR_DARK", "#7aa2ff")
 zero_light = os.environ.get("GITHUBCHART_ZERO_LIGHT", "#eeeeee")
-zero_dark = os.environ.get("GITHUBCHART_ZERO_DARK", "#2d333b")
 text_light = os.environ.get("GITHUBCHART_TEXT_LIGHT", "#767676")
 text_dark = os.environ.get("GITHUBCHART_TEXT_DARK", "#8b949e")
+dark_levels = {
+    "0": os.environ.get("GITHUBCHART_DARK_LEVEL0", ""),
+    "1": os.environ.get("GITHUBCHART_DARK_LEVEL1", ""),
+    "2": os.environ.get("GITHUBCHART_DARK_LEVEL2", ""),
+    "3": os.environ.get("GITHUBCHART_DARK_LEVEL3", ""),
+    "4": os.environ.get("GITHUBCHART_DARK_LEVEL4", ""),
+}
+light_levels = {
+    "0": os.environ.get("GITHUBCHART_LIGHT_LEVEL0", ""),
+    "1": os.environ.get("GITHUBCHART_LIGHT_LEVEL1", ""),
+    "2": os.environ.get("GITHUBCHART_LIGHT_LEVEL2", ""),
+    "3": os.environ.get("GITHUBCHART_LIGHT_LEVEL3", ""),
+    "4": os.environ.get("GITHUBCHART_LIGHT_LEVEL4", ""),
+}
 
 raw_tree = ET.parse(input_path)
 
@@ -96,28 +177,46 @@ def update_fill(el, color):
     else:
         el.set("fill", color)
 
+def is_hex_color(color):
+    if not isinstance(color, str):
+        return False
+    color = color.strip()
+    if len(color) != 7 or not color.startswith("#"):
+        return False
+    try:
+        int(color[1:], 16)
+        return True
+    except ValueError:
+        return False
+
 def build_palette(base_hex, zero_hex, mode):
     base_rgb = hex_to_rgb(base_hex)
     zero_rgb = hex_to_rgb(zero_hex)
 
+    if mode == "light":
+        if all(is_hex_color(light_levels.get(str(i), "")) for i in range(5)):
+            return {str(i): light_levels[str(i)] for i in range(5)}
+        return {
+            "0": zero_hex,
+            "1": rgb_to_hex(mix_with_white(base_rgb, 0.25)),
+            "2": rgb_to_hex(mix_with_white(base_rgb, 0.45)),
+            "3": rgb_to_hex(mix_with_white(base_rgb, 0.7)),
+            "4": rgb_to_hex(base_rgb),
+        }
+
     if mode == "dark":
-        # Dark palette should stay subdued: move from zero color toward base color,
-        # instead of mixing with white (which causes harsh contrast).
+        if all(is_hex_color(dark_levels.get(str(i), "")) for i in range(5)):
+            return {str(i): dark_levels[str(i)] for i in range(5)}
+        # Fallback interpolation for unexpected input.
         return {
             "0": zero_hex,
             "1": rgb_to_hex(mix(zero_rgb, base_rgb, 0.28)),
-            "2": rgb_to_hex(mix(zero_rgb, base_rgb, 0.46)),
+            "2": rgb_to_hex(mix(zero_rgb, base_rgb, 0.48)),
             "3": rgb_to_hex(mix(zero_rgb, base_rgb, 0.68)),
             "4": rgb_to_hex(mix(zero_rgb, base_rgb, 0.88)),
         }
 
-    return {
-        "0": zero_hex,
-        "1": rgb_to_hex(mix_with_white(base_rgb, 0.25)),
-        "2": rgb_to_hex(mix_with_white(base_rgb, 0.45)),
-        "3": rgb_to_hex(mix_with_white(base_rgb, 0.7)),
-        "4": rgb_to_hex(base_rgb),
-    }
+    return {}
 
 def crop_for_sidebar(root):
     for parent in root.iter():
@@ -176,7 +275,7 @@ def render_mode(main_path, sidebar_path, palette, label_color):
     sidebar_tree.write(sidebar_path, encoding="utf-8", xml_declaration=True)
 
 light_palette = build_palette(color_light, zero_light, "light")
-dark_palette = build_palette(color_dark, zero_dark, "dark")
+dark_palette = build_palette("#3f4a59", "#1b1b1b", "dark")
 
 render_mode(light_main, light_sidebar, light_palette, text_light)
 render_mode(dark_main, dark_sidebar, dark_palette, text_dark)

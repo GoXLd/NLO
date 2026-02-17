@@ -1,6 +1,11 @@
 :root {
   --admin-font-body: 'Source Sans Pro', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --admin-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --gh-0: #1b1b1b;
+  --gh-1: #22252a;
+  --gh-2: #2b3038;
+  --gh-3: #343c47;
+  --gh-4: #3f4a59;
 
   --admin-bg: #f2f5fa;
   --admin-bg-glow: rgb(25 83 186 / 14%);
@@ -775,6 +780,94 @@ html[data-mode='dark'] .warning {
   border-color: var(--admin-accent);
 }
 
+#nlo-admin-gh-palette-picker {
+  position: fixed;
+  top: 56px;
+  right: 16px;
+  z-index: 1200;
+  min-width: 188px;
+  padding: 0.54rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow-soft);
+}
+
+.nlo-admin-gh-label {
+  margin: 0 0 0.42rem;
+  color: var(--admin-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.nlo-admin-gh-controls {
+  display: flex;
+  gap: 0.38rem;
+}
+
+.nlo-admin-gh-select {
+  flex: 1 1 auto;
+  min-height: 30px;
+  padding: 0 0.42rem;
+  color: var(--admin-text);
+  font-size: 0.72rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: var(--admin-surface-muted);
+}
+
+#nlo-admin-gh-copy-env {
+  flex: 0 0 auto;
+  min-height: 30px;
+  padding: 0 0.55rem;
+  color: var(--admin-heading);
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: var(--admin-surface-muted);
+  cursor: pointer;
+}
+
+#nlo-admin-gh-copy-env:hover {
+  color: var(--admin-accent-strong);
+  border-color: var(--admin-accent);
+}
+
+.nlo-admin-gh-preview {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.24rem;
+  margin-top: 0.46rem;
+}
+
+.nlo-admin-gh-swatch {
+  height: 10px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  border-radius: 4px;
+}
+
+.nlo-admin-gh-swatch[data-level='0'] {
+  background: var(--gh-0);
+}
+
+.nlo-admin-gh-swatch[data-level='1'] {
+  background: var(--gh-1);
+}
+
+.nlo-admin-gh-swatch[data-level='2'] {
+  background: var(--gh-2);
+}
+
+.nlo-admin-gh-swatch[data-level='3'] {
+  background: var(--gh-3);
+}
+
+.nlo-admin-gh-swatch[data-level='4'] {
+  background: var(--gh-4);
+}
+
 .nlo-admin-snippets {
   display: flex;
   flex-wrap: wrap;
@@ -856,5 +949,11 @@ html[data-mode='dark'] .warning {
     top: auto;
     right: 10px;
     bottom: 10px;
+  }
+
+  #nlo-admin-gh-palette-picker {
+    top: auto;
+    right: 10px;
+    bottom: 54px;
   }
 }
