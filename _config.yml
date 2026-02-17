@@ -146,7 +146,7 @@ nlo:
     sidebar_image: /assets/img/githubchart-sidebar.svg
     sidebar_image_dark: /assets/img/githubchart-sidebar-dark.svg
   branding:
-    logo_src: # e.g. /img/logo.png
+    logo_src: /assets/img/logo_nlo.png # e.g. /assets/img/logo_nlo.png
     logo_alt: # defaults to social.name or title
     logo_aria_label: # defaults to social.name or title
   adsense:
