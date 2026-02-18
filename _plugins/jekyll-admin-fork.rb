@@ -17,7 +17,9 @@ if defined?(JekyllAdmin::Server)
       set :static, true
       CHART_WORKFLOW_PATH = File.expand_path("../.github/workflows/update-githubchart.yml", __dir__)
       CHART_GENERATOR_PATH = File.expand_path("../tools/generate-githubchart.sh", __dir__)
+      CONFIG_PATH = File.expand_path("../_config.yml", __dir__)
       COLOR_RE = /\A#[0-9a-fA-F]{6}\z/
+      AVATAR_FRAME_STYLES = %w[round discord apple].freeze
 
       get "/" do
         send_file index_path
@@ -68,6 +70,31 @@ if defined?(JekyllAdmin::Server)
           workflow_path: CHART_WORKFLOW_PATH,
           assets_rebuilt: true
         )
+      end
+
+      post "/_nlo/avatar-frame/apply" do
+        content_type :json
+        request_payload = request.body.read.to_s
+        payload = parse_payload(request_payload)
+
+        unless payload[:ok]
+          status 400
+          return JSON.generate(ok: false, error: payload[:error])
+        end
+
+        validation = validate_avatar_frame_payload(payload[:data])
+        unless validation[:ok]
+          status 422
+          return JSON.generate(ok: false, error: validation[:error])
+        end
+
+        config_update = write_avatar_frame_to_config(config_path: CONFIG_PATH, style: validation[:style])
+        unless config_update[:ok]
+          status 500
+          return JSON.generate(ok: false, error: config_update[:error])
+        end
+
+        JSON.generate(ok: true, style: validation[:style], config_path: CONFIG_PATH)
       end
 
       get "/*" do
@@ -128,6 +155,14 @@ if defined?(JekyllAdmin::Server)
           dark_levels: dark_levels,
           light_levels: light_levels
         }
+      end
+
+      def validate_avatar_frame_payload(data)
+        style = data.fetch("style", "").to_s.strip.downcase
+        return { ok: false, error: "Avatar frame style is required" } if style.empty?
+        return { ok: false, error: "Unsupported avatar frame style" } unless AVATAR_FRAME_STYLES.include?(style)
+
+        { ok: true, style: style }
       end
 
       def workflow_palette_block(indent:, palette:, dark_levels:, light_levels:)
@@ -217,6 +252,72 @@ if defined?(JekyllAdmin::Server)
             output: output
           }
         end
+      end
+
+      def write_avatar_frame_to_config(config_path:, style:)
+        unless File.file?(config_path)
+          return { ok: false, error: "Config file not found: #{config_path}" }
+        end
+
+        content = File.read(config_path)
+        updated_content = upsert_avatar_frame(content, style)
+        return { ok: false, error: "Could not locate nlo.branding in _config.yml" } unless updated_content
+
+        File.write(config_path, updated_content) if updated_content != content
+        { ok: true }
+      end
+
+      def upsert_avatar_frame(content, style)
+        lines = content.lines
+        nlo_index = find_key_index(lines, 0, lines.length, "nlo")
+        return nil unless nlo_index
+
+        nlo_indent = line_indent(lines[nlo_index])
+        nlo_end = block_end_index(lines, nlo_index + 1, nlo_indent)
+        branding_index = find_key_index(lines, nlo_index + 1, nlo_end, "branding")
+        return nil unless branding_index
+
+        branding_indent = line_indent(lines[branding_index])
+        branding_end = block_end_index(lines, branding_index + 1, branding_indent)
+        avatar_frame_index = find_key_index(lines, branding_index + 1, branding_end, "avatar_frame")
+
+        value_indent = " " * (branding_indent + 2)
+        avatar_frame_line = "#{value_indent}avatar_frame: #{style} # [round | discord | apple]\n"
+
+        if avatar_frame_index
+          lines[avatar_frame_index] = avatar_frame_line
+        else
+          lines.insert(branding_end, avatar_frame_line)
+        end
+
+        lines.join
+      end
+
+      def find_key_index(lines, start_idx, end_idx, key)
+        key_pattern = /^\s*#{Regexp.escape(key)}:\s*(?:#.*)?$/
+        (start_idx...end_idx).find { |idx| lines[idx].match?(key_pattern) }
+      end
+
+      def block_end_index(lines, start_idx, parent_indent)
+        idx = start_idx
+
+        while idx < lines.length
+          stripped = lines[idx].strip
+          if stripped.empty? || stripped.start_with?("#")
+            idx += 1
+            next
+          end
+
+          break if line_indent(lines[idx]) <= parent_indent
+
+          idx += 1
+        end
+
+        idx
+      end
+
+      def line_indent(line)
+        line[/\A[ \t]*/].size
       end
     end
   end

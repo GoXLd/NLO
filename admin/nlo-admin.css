@@ -876,6 +876,66 @@ html[data-mode='dark'] .warning {
   box-shadow: var(--admin-shadow-soft);
 }
 
+#nlo-admin-avatar-frame-picker {
+  position: fixed;
+  top: 166px;
+  right: 16px;
+  z-index: 1200;
+  min-width: 188px;
+  padding: 0.54rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 12px;
+  background: var(--admin-surface);
+  box-shadow: var(--admin-shadow-soft);
+}
+
+.nlo-admin-avatar-frame-label {
+  margin: 0 0 0.42rem;
+  color: var(--admin-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.nlo-admin-avatar-frame-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+#nlo-admin-avatar-frame-apply {
+  min-height: 30px;
+  padding: 0 0.62rem;
+  color: #f5f9ff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid var(--admin-accent);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-strong));
+  cursor: pointer;
+}
+
+#nlo-admin-avatar-frame-apply:hover {
+  filter: brightness(1.05);
+}
+
+#nlo-admin-avatar-frame-apply:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.nlo-admin-avatar-frame-status {
+  margin: 0.42rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--admin-text-muted);
+}
+
+.nlo-admin-avatar-frame-status[data-state='error'] {
+  color: var(--admin-danger);
+}
+
 .nlo-admin-gh-label {
   margin: 0;
   color: var(--admin-heading);
@@ -1204,6 +1264,12 @@ html[data-mode='dark'] .warning {
     top: auto;
     right: 10px;
     bottom: 54px;
+  }
+
+  #nlo-admin-avatar-frame-picker {
+    top: auto;
+    right: 10px;
+    bottom: 136px;
   }
 
   .nlo-admin-gh-help::after {

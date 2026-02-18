@@ -1,13 +1,38 @@
 <!-- The Side Bar -->
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
+  {% assign avatar_frame = site.nlo.branding.avatar_frame | default: 'round' | downcase %}
+  {% unless avatar_frame == 'discord' or avatar_frame == 'apple' %}
+    {% assign avatar_frame = 'round' %}
+  {% endunless %}
+
   <header class="profile-wrapper">
-    <a href="{{ '/' | relative_url }}" id="avatar" class="rounded-circle">
-      {%- if site.avatar != empty and site.avatar -%}
-        {%- capture avatar_url -%}
-          {% include media-url.html src=site.avatar %}
+    <a href="{{ '/' | relative_url }}" id="avatar" class="avatar-frame-{{ avatar_frame }}">
+      {%- assign avatar_light_src = site.avatar.light | default: site.avatar -%}
+      {%- assign avatar_dark_src = site.avatar.dark | default: avatar_light_src -%}
+
+      {%- if avatar_light_src != empty and avatar_light_src -%}
+        {%- capture avatar_light_url -%}
+          {% include media-url.html src=avatar_light_src %}
         {%- endcapture -%}
-        <img src="{{- avatar_url -}}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+
+        {%- capture avatar_dark_url -%}
+          {% include media-url.html src=avatar_dark_src %}
+        {%- endcapture -%}
+
+        {% if avatar_dark_src != avatar_light_src %}
+          <img
+            class="light"
+            src="{{- avatar_light_url -}}"
+            width="112"
+            height="112"
+            alt="avatar"
+            onerror="this.style.display='none'"
+          >
+          <img class="dark" src="{{- avatar_dark_url -}}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+        {% else %}
+          <img src="{{- avatar_light_url -}}" width="112" height="112" alt="avatar" onerror="this.style.display='none'">
+        {% endif %}
       {%- endif -%}
     </a>
 

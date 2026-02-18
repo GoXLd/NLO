@@ -2,6 +2,12 @@
   const MODE_KEY = 'mode';
   const GH_PALETTE_KEY = 'gh_palette';
   const DEFAULT_GH_PALETTE = 'default';
+  const AVATAR_FRAME_DEFAULT = 'round';
+  const avatarFrameOptions = {
+    round: 'Round',
+    discord: 'Discord',
+    apple: 'Apple App'
+  };
   const root = document.documentElement;
   const chartPalettes = {
     default: {
@@ -223,6 +229,26 @@
     return legacyPaletteMap[normalized] || normalized;
   }
 
+  function normalizeAvatarFrame(style) {
+    const normalized = String(style || '')
+      .trim()
+      .toLowerCase();
+    return Object.prototype.hasOwnProperty.call(avatarFrameOptions, normalized)
+      ? normalized
+      : AVATAR_FRAME_DEFAULT;
+  }
+
+  function isConfigurationRoute() {
+    const currentPath = (window.location.pathname || '').toLowerCase();
+    const currentHash = (window.location.hash || '').toLowerCase();
+
+    return (
+      currentPath.includes('/configuration') ||
+      currentHash.includes('configuration') ||
+      currentHash.includes('/config')
+    );
+  }
+
   function systemMode() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
@@ -400,6 +426,16 @@
     status.dataset.state = isError ? 'error' : 'ok';
   }
 
+  function setAvatarFrameStatus(message, isError = false) {
+    const status = document.getElementById('nlo-admin-avatar-frame-status');
+    if (!status) {
+      return;
+    }
+
+    status.textContent = message || '';
+    status.dataset.state = isError ? 'error' : 'ok';
+  }
+
   async function applyPaletteToWorkflow(button) {
     if (!button) {
       return;
@@ -451,17 +487,70 @@
     }
   }
 
-  function ensureGhPalettePicker() {
-    const currentPath = (window.location.pathname || '').toLowerCase();
-    const currentHash = (window.location.hash || '').toLowerCase();
-    const isConfigurationRoute =
-      currentPath.includes('/configuration') ||
-      currentHash.includes('configuration') ||
-      currentHash.includes('/config');
+  async function syncAvatarFrameSelect(select) {
+    const config = await fetchAdminConfig();
+    const value = normalizeAvatarFrame(config?.nlo?.branding?.avatar_frame);
+    if (select && select.value !== value) {
+      select.value = value;
+    }
+  }
 
+  async function applyAvatarFrameToConfig(button, select) {
+    if (!button || !select) {
+      return;
+    }
+
+    const style = normalizeAvatarFrame(select.value);
+    const previous = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Applying...';
+    setAvatarFrameStatus('Updating _config.yml...');
+
+    try {
+      const response = await fetch('/admin/_nlo/avatar-frame/apply', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin',
+        cache: 'no-store',
+        body: JSON.stringify({ style })
+      });
+
+      const data = await response
+        .json()
+        .catch(() => ({ ok: false, error: `Invalid server response (${response.status})` }));
+
+      if (!response.ok || !data.ok) {
+        throw new Error(data.error || `Request failed (${response.status})`);
+      }
+
+      adminConfigCache = adminConfigCache || {};
+      adminConfigCache.nlo = adminConfigCache.nlo || {};
+      adminConfigCache.nlo.branding = adminConfigCache.nlo.branding || {};
+      adminConfigCache.nlo.branding.avatar_frame = style;
+
+      button.textContent = 'Applied';
+      setAvatarFrameStatus('Saved. Rebuild/refresh site preview to see new frame.');
+      window.setTimeout(() => {
+        button.textContent = previous;
+      }, 1400);
+    } catch (error) {
+      button.textContent = 'Failed';
+      setAvatarFrameStatus(`Error: ${error.message}`, true);
+      window.setTimeout(() => {
+        button.textContent = previous;
+      }, 2200);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  function ensureGhPalettePicker() {
+    const showOnConfiguration = isConfigurationRoute();
     const existingPicker = document.getElementById('nlo-admin-gh-palette-picker');
 
-    if (!isConfigurationRoute) {
+    if (!showOnConfiguration) {
       existingPicker?.remove();
       return;
     }
@@ -557,6 +646,67 @@
 
     document.body.appendChild(wrapper);
     applyGhPalette(currentGhPalette());
+  }
+
+  function ensureAvatarFramePicker() {
+    const showOnConfiguration = isConfigurationRoute();
+    const existingPicker = document.getElementById('nlo-admin-avatar-frame-picker');
+
+    if (!showOnConfiguration) {
+      existingPicker?.remove();
+      return;
+    }
+
+    if (existingPicker) {
+      const existingSelect = existingPicker.querySelector('#nlo-admin-avatar-frame-select');
+      void syncAvatarFrameSelect(existingSelect);
+      return;
+    }
+
+    const wrapper = document.createElement('section');
+    wrapper.id = 'nlo-admin-avatar-frame-picker';
+
+    const label = document.createElement('p');
+    label.className = 'nlo-admin-avatar-frame-label';
+    label.textContent = 'Avatar Frame';
+    wrapper.appendChild(label);
+
+    const controls = document.createElement('div');
+    controls.className = 'nlo-admin-avatar-frame-controls';
+
+    const select = document.createElement('select');
+    select.id = 'nlo-admin-avatar-frame-select';
+    select.className = 'nlo-admin-gh-select';
+
+    Object.entries(avatarFrameOptions).forEach(([value, text]) => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.textContent = text;
+      select.appendChild(option);
+    });
+
+    const apply = document.createElement('button');
+    apply.type = 'button';
+    apply.id = 'nlo-admin-avatar-frame-apply';
+    apply.textContent = 'Apply';
+    apply.title = 'Save avatar frame style to _config.yml';
+    apply.addEventListener('click', () => {
+      applyAvatarFrameToConfig(apply, select);
+    });
+
+    controls.appendChild(select);
+    controls.appendChild(apply);
+    wrapper.appendChild(controls);
+
+    const status = document.createElement('p');
+    status.id = 'nlo-admin-avatar-frame-status';
+    status.className = 'nlo-admin-avatar-frame-status';
+    status.dataset.state = 'ok';
+    status.textContent = 'Choose frame style for sidebar avatar.';
+    wrapper.appendChild(status);
+
+    document.body.appendChild(wrapper);
+    void syncAvatarFrameSelect(select);
   }
 
   function fieldScore(input, hints) {
@@ -850,6 +1000,7 @@
     cleanupAdminServiceWorkers();
     ensureThemeToggle();
     ensureGhPalettePicker();
+    ensureAvatarFramePicker();
     void ensureSidebarBranding();
     ensurePathAutofill();
     scanEditors();
@@ -858,6 +1009,7 @@
     const observer = new MutationObserver(() => {
       ensureThemeToggle();
       ensureGhPalettePicker();
+      ensureAvatarFramePicker();
       void ensureSidebarBranding();
       ensurePathAutofill();
       scanEditors();

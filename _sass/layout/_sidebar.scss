@@ -66,12 +66,39 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       height: 7rem;
     }
 
+    &.avatar-frame-round {
+      border-radius: 50%;
+    }
+
+    &.avatar-frame-discord {
+      border-radius: 34%;
+    }
+
+    &.avatar-frame-apple {
+      border-radius: 28%;
+    }
+
     img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       transition: transform 0.5s;
 
       &:hover {
         transform: scale(1.2);
       }
+    }
+
+    &.avatar-frame-round img {
+      border-radius: 50%;
+    }
+
+    &.avatar-frame-discord img {
+      border-radius: 34%;
+    }
+
+    &.avatar-frame-apple img {
+      border-radius: 28%;
     }
   }
 
