@@ -89,6 +89,10 @@
     return baseurl ? `${baseurl}/` : '/';
   }
 
+  function isPlainLeftClick(event) {
+    return event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
+  }
+
   function withBaseurl(path, baseurl) {
     const source = String(path || '').trim();
     if (!source) {
@@ -149,7 +153,7 @@
 
   function applySidebarBranding(config) {
     const logoLink = document.querySelector('.sidebar .logo');
-    if (!logoLink || logoLink.dataset.nloBrandingApplied === '1') {
+    if (!logoLink) {
       return;
     }
 
@@ -157,13 +161,35 @@
     const logoAlt =
       config?.nlo?.branding?.logo_alt || config?.social?.name || config?.title || 'Site logo';
     const logoAria = config?.nlo?.branding?.logo_aria_label || logoAlt;
-    const logoSrc = withBaseurl(config?.nlo?.branding?.logo_src, config?.baseurl);
+    const logoSrc = withBaseurl(
+      config?.nlo?.branding?.logo_src || '/assets/img/logo_nlo.png',
+      config?.baseurl
+    );
 
     logoLink.dataset.nloBrandingApplied = '1';
+    logoLink.dataset.nloSiteHref = siteHref;
     logoLink.classList.add('nlo-admin-logo');
     logoLink.setAttribute('href', siteHref);
     logoLink.setAttribute('aria-label', logoAria);
     logoLink.setAttribute('title', logoAlt);
+
+    if (logoLink.dataset.nloHomeClickBound !== '1') {
+      logoLink.dataset.nloHomeClickBound = '1';
+      logoLink.addEventListener(
+        'click',
+        (event) => {
+          if (!isPlainLeftClick(event)) {
+            return;
+          }
+
+          event.preventDefault();
+          event.stopPropagation();
+          const href = logoLink.dataset.nloSiteHref || '/';
+          window.location.assign(href);
+        },
+        true
+      );
+    }
 
     logoLink.querySelector('img.nlo-admin-logo-image')?.remove();
     logoLink.textContent = '';
@@ -183,11 +209,7 @@
 
   async function ensureSidebarBranding() {
     const config = await fetchAdminConfig();
-    if (!config) {
-      return;
-    }
-
-    applySidebarBranding(config);
+    applySidebarBranding(config || {});
   }
 
   function normalizePaletteName(name) {
@@ -424,7 +446,22 @@
   }
 
   function ensureGhPalettePicker() {
-    if (document.getElementById('nlo-admin-gh-palette-picker')) {
+    const currentPath = (window.location.pathname || '').toLowerCase();
+    const currentHash = (window.location.hash || '').toLowerCase();
+    const isConfigurationRoute =
+      currentPath.includes('/configuration') ||
+      currentHash.includes('configuration') ||
+      currentHash.includes('/config');
+
+    const existingPicker = document.getElementById('nlo-admin-gh-palette-picker');
+
+    if (!isConfigurationRoute) {
+      existingPicker?.remove();
+      return;
+    }
+
+    if (existingPicker) {
+      applyGhPalette(currentGhPalette());
       return;
     }
 
