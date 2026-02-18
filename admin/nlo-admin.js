@@ -68,6 +68,12 @@
       '![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n' +
       '![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n\n'
   };
+  const snippetButtonKinds = {
+    prompt_tip: 'is-tip',
+    prompt_info: 'is-info',
+    prompt_warning: 'is-warning',
+    prompt_danger: 'is-danger'
+  };
   let adminConfigCache = null;
   let adminConfigPromise = null;
 
@@ -782,6 +788,10 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'nlo-admin-snippet-btn';
+    const kindClass = snippetButtonKinds[key];
+    if (kindClass) {
+      button.classList.add(kindClass);
+    }
     button.textContent = label;
 
     button.addEventListener('click', () => {
