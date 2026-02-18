@@ -24,12 +24,35 @@
     >
       {% for _lang_code in available_langs %}
         {% if _lang_code == default_lang %}
-          {% assign _target = _base_path %}
+          {% assign _target_candidate = _base_path %}
         {% elsif _base_path == '/' %}
-          {% assign _target = '/' | append: _lang_code | append: '/' %}
+          {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
         {% else %}
-          {% assign _target = '/' | append: _lang_code | append: _base_path %}
+          {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
         {% endif %}
+
+        {% assign _target = _target_candidate %}
+        {% assign _target_exists = false %}
+
+        {% for _post in site.posts %}
+          {% if _post.url == _target_candidate %}
+            {% assign _target_exists = true %}
+            {% break %}
+          {% endif %}
+        {% endfor %}
+
+        {% unless _target_exists %}
+          {% for _page in site.pages %}
+            {% if _page.url == _target_candidate %}
+              {% assign _target_exists = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+        {% endunless %}
+
+        {% unless _target_exists %}
+          {% assign _target = _base_path %}
+        {% endunless %}
 
         {% capture _flag %}{% include lang-flag.html language=_lang_code %}{% endcapture %}
         <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>
