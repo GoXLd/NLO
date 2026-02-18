@@ -165,7 +165,7 @@
 
   function applySidebarBranding(config) {
     const logoLink = document.querySelector('.sidebar .logo');
-    if (!logoLink) {
+    if (!logoLink || logoLink.dataset.nloBrandingApplied === '1') {
       return;
     }
 
