@@ -1,11 +1,11 @@
 :root {
   --admin-font-body: 'Source Sans Pro', 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --admin-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
-  --gh-0: #1b1b1b;
-  --gh-1: #22252a;
-  --gh-2: #2b3038;
-  --gh-3: #343c47;
-  --gh-4: #3f4a59;
+  --gh-0: #222730;
+  --gh-1: #2a313b;
+  --gh-2: #333c49;
+  --gh-3: #3e4959;
+  --gh-4: #4b5a6d;
 
   --admin-bg: #f2f5fa;
   --admin-bg-glow: rgb(25 83 186 / 14%);

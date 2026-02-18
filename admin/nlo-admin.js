@@ -1,22 +1,22 @@
 (() => {
   const MODE_KEY = 'mode';
   const GH_PALETTE_KEY = 'gh_palette';
-  const DEFAULT_GH_PALETTE = 'slate-a';
+  const DEFAULT_GH_PALETTE = 'default';
   const root = document.documentElement;
   const chartPalettes = {
-    'slate-a': {
-      label: 'Slate A',
-      dark: ['#1b1b1b', '#22252a', '#2b3038', '#343c47', '#3f4a59']
-    },
-    'slate-b': {
-      label: 'Slate B',
-      dark: ['#1a1a1a', '#23272d', '#2d333b', '#38414b', '#44505c']
+    default: {
+      label: 'Default',
+      dark: ['#222730', '#2a313b', '#333c49', '#3e4959', '#4b5a6d']
     },
     'nlo-logo': {
       label: 'NLO Logo',
-      dark: ['#2a2d30', '#223244', '#2c4a66', '#3a6488', '#b35a2a'],
+      dark: ['#23262a', '#223244', '#2c4a66', '#3a6488', '#b35a2a'],
       light: ['#e6e8eb', '#c9d9e7', '#8fb2cc', '#2c5472', '#c8632d']
     }
+  };
+  const legacyPaletteMap = {
+    'slate-a': 'default',
+    'slate-b': 'default'
   };
   const cyrillicMap = {
     а: 'a',
@@ -69,6 +69,11 @@
       '![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n\n'
   };
 
+  function normalizePaletteName(name) {
+    const normalized = String(name || '').trim();
+    return legacyPaletteMap[normalized] || normalized;
+  }
+
   function systemMode() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
@@ -92,12 +97,12 @@
   }
 
   function currentGhPalette() {
-    const saved = sessionStorage.getItem(GH_PALETTE_KEY);
+    const saved = normalizePaletteName(sessionStorage.getItem(GH_PALETTE_KEY));
     if (saved && chartPalettes[saved]) {
       return saved;
     }
 
-    const attr = root.getAttribute('data-gh-palette');
+    const attr = normalizePaletteName(root.getAttribute('data-gh-palette'));
     if (attr && chartPalettes[attr]) {
       return attr;
     }
@@ -117,7 +122,8 @@
   }
 
   function applyGhPalette(name) {
-    const paletteName = chartPalettes[name] ? name : DEFAULT_GH_PALETTE;
+    const next = normalizePaletteName(name);
+    const paletteName = chartPalettes[next] ? next : DEFAULT_GH_PALETTE;
     const palette = chartPalettes[paletteName];
     const darkColors = palette.dark || chartPalettes[DEFAULT_GH_PALETTE].dark;
 

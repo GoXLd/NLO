@@ -15,7 +15,7 @@ zero_light="${GITHUBCHART_ZERO_LIGHT:-#eeeeee}"
 text_light="${GITHUBCHART_TEXT_LIGHT:-#767676}"
 text_dark="${GITHUBCHART_TEXT_DARK:-#8b949e}"
 
-dark_palette="${GITHUBCHART_DARK_PALETTE:-slate-a}"
+dark_palette="${GITHUBCHART_DARK_PALETTE:-default}"
 dark_level_0="${GITHUBCHART_DARK_LEVEL0:-}"
 dark_level_1="${GITHUBCHART_DARK_LEVEL1:-}"
 dark_level_2="${GITHUBCHART_DARK_LEVEL2:-}"
@@ -28,39 +28,26 @@ light_level_3="${GITHUBCHART_LIGHT_LEVEL3:-}"
 light_level_4="${GITHUBCHART_LIGHT_LEVEL4:-}"
 
 # Presets for dark-mode chart levels.
-# slate-a:
-#   0 #1b1b1b
-#   1 #22252a
-#   2 #2b3038
-#   3 #343c47
-#   4 #3f4a59
-# slate-b:
-#   0 #1a1a1a
-#   1 #23272d
-#   2 #2d333b
-#   3 #38414b
-#   4 #44505c
+# default:
+#   0 #222730
+#   1 #2a313b
+#   2 #333c49
+#   3 #3e4959
+#   4 #4b5a6d
 # nlo-logo:
-#   dark  : #2a2d30 #223244 #2c4a66 #3a6488 #b35a2a
+#   dark  : #23262a #223244 #2c4a66 #3a6488 #b35a2a
 #   light : #e6e8eb #c9d9e7 #8fb2cc #2c5472 #c8632d
 if [[ -z "$dark_level_0" || -z "$dark_level_1" || -z "$dark_level_2" || -z "$dark_level_3" || -z "$dark_level_4" ]]; then
   case "$dark_palette" in
-    slate-a)
-      dark_level_0="#1b1b1b"
-      dark_level_1="#22252a"
-      dark_level_2="#2b3038"
-      dark_level_3="#343c47"
-      dark_level_4="#3f4a59"
-      ;;
-    slate-b)
-      dark_level_0="#1a1a1a"
-      dark_level_1="#23272d"
-      dark_level_2="#2d333b"
-      dark_level_3="#38414b"
-      dark_level_4="#44505c"
+    default|slate-a)
+      dark_level_0="#222730"
+      dark_level_1="#2a313b"
+      dark_level_2="#333c49"
+      dark_level_3="#3e4959"
+      dark_level_4="#4b5a6d"
       ;;
     nlo-logo)
-      dark_level_0="#2a2d30"
+      dark_level_0="#23262a"
       dark_level_1="#223244"
       dark_level_2="#2c4a66"
       dark_level_3="#3a6488"
@@ -72,7 +59,7 @@ if [[ -z "$dark_level_0" || -z "$dark_level_1" || -z "$dark_level_2" || -z "$dar
       light_level_4="#c8632d"
       ;;
     *)
-      echo "Unknown GITHUBCHART_DARK_PALETTE: '$dark_palette' (expected: slate-a|slate-b|nlo-logo)" >&2
+      echo "Unknown GITHUBCHART_DARK_PALETTE: '$dark_palette' (expected: default|nlo-logo)" >&2
       exit 1
       ;;
   esac
