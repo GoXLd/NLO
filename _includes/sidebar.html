@@ -68,6 +68,16 @@
         </li>
         <!-- .nav-item -->
       {% endfor %}
+
+      {% if jekyll.environment == 'development' %}
+        <li class="nav-item">
+          <a href="{{ '/admin' | relative_url }}" class="nav-link">
+            <i class="fa-fw fas fa-screwdriver-wrench"></i>
+            <span>ADMIN</span>
+          </a>
+        </li>
+        <!-- .nav-item -->
+      {% endif %}
     </ul>
   </nav>
 
