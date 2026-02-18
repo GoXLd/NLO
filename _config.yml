@@ -151,7 +151,7 @@ nlo:
     logo_aria_label: # defaults to social.name or title
     avatar_light: /assets/img/avatar_light.webp # optional
     avatar_dark: /assets/img/avatar_dark.webp # optional
-    avatar_frame: round # [round | discord | apple]
+    avatar_frame: discord # [round | discord]
   adsense:
     client: # e.g. ca-pub-xxxxxxxxxxxxxxxx
 

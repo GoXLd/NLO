@@ -19,7 +19,7 @@ if defined?(JekyllAdmin::Server)
       CHART_GENERATOR_PATH = File.expand_path("../tools/generate-githubchart.sh", __dir__)
       CONFIG_PATH = File.expand_path("../_config.yml", __dir__)
       COLOR_RE = /\A#[0-9a-fA-F]{6}\z/
-      AVATAR_FRAME_STYLES = %w[round discord apple].freeze
+      AVATAR_FRAME_STYLES = %w[round discord].freeze
 
       get "/" do
         send_file index_path
@@ -282,7 +282,7 @@ if defined?(JekyllAdmin::Server)
         avatar_frame_index = find_key_index(lines, branding_index + 1, branding_end, "avatar_frame")
 
         value_indent = " " * (branding_indent + 2)
-        avatar_frame_line = "#{value_indent}avatar_frame: #{style} # [round | discord | apple]\n"
+        avatar_frame_line = "#{value_indent}avatar_frame: #{style} # [round | discord]\n"
 
         if avatar_frame_index
           lines[avatar_frame_index] = avatar_frame_line

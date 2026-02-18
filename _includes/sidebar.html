@@ -2,7 +2,7 @@
 
 <aside aria-label="Sidebar" id="sidebar" class="d-flex flex-column align-items-end">
   {% assign avatar_frame = site.nlo.branding.avatar_frame | default: 'round' | downcase %}
-  {% unless avatar_frame == 'discord' or avatar_frame == 'apple' %}
+  {% unless avatar_frame == 'discord' %}
     {% assign avatar_frame = 'round' %}
   {% endunless %}
 
@@ -98,6 +98,13 @@
   </nav>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    {% if jekyll.environment == 'development' %}
+      <a href="{{ '/admin' | relative_url }}" aria-label="admin" class="admin-shortcut nav-link w-100">
+        <i class="fa-fw fas fa-screwdriver-wrench"></i>
+        <span>ADMIN</span>
+      </a>
+    {% endif %}
+
     {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
         <i class="fas fa-adjust"></i>
@@ -107,12 +114,6 @@
         <span class="icon-border"></span>
       {% endif %}
     {% endunless %}
-
-    {% if jekyll.environment == 'development' %}
-      <a href="{{ '/admin' | relative_url }}" aria-label="admin">
-        <i class="fas fa-screwdriver-wrench"></i>
-      </a>
-    {% endif %}
 
     {% for entry in site.data.contact %}
       {%- assign url = null -%}

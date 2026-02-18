@@ -863,26 +863,17 @@ html[data-mode='dark'] .warning {
   border-color: var(--admin-accent);
 }
 
-#nlo-admin-gh-palette-picker {
-  position: fixed;
-  top: 56px;
-  right: 16px;
-  z-index: 1200;
-  min-width: 188px;
-  padding: 0.54rem;
-  border: 1px solid var(--admin-border);
-  border-radius: 12px;
-  background: var(--admin-surface);
-  box-shadow: var(--admin-shadow-soft);
+#nlo-admin-config-settings {
+  display: grid;
+  gap: 0.72rem;
+  margin: 0 0 0.86rem;
 }
 
+#nlo-admin-gh-palette-picker,
 #nlo-admin-avatar-frame-picker {
-  position: fixed;
-  top: 166px;
-  right: 16px;
-  z-index: 1200;
-  min-width: 188px;
-  padding: 0.54rem;
+  min-width: 0;
+  width: 100%;
+  padding: 0.62rem 0.7rem;
   border: 1px solid var(--admin-border);
   border-radius: 12px;
   background: var(--admin-surface);
@@ -939,7 +930,7 @@ html[data-mode='dark'] .warning {
 .nlo-admin-gh-label {
   margin: 0;
   color: var(--admin-heading);
-  font-size: 0.72rem;
+  font-size: 0.74rem;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -1258,18 +1249,6 @@ html[data-mode='dark'] .warning {
     top: auto;
     right: 10px;
     bottom: 10px;
-  }
-
-  #nlo-admin-gh-palette-picker {
-    top: auto;
-    right: 10px;
-    bottom: 54px;
-  }
-
-  #nlo-admin-avatar-frame-picker {
-    top: auto;
-    right: 10px;
-    bottom: 136px;
   }
 
   .nlo-admin-gh-help::after {

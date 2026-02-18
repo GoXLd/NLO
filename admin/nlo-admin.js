@@ -5,8 +5,7 @@
   const AVATAR_FRAME_DEFAULT = 'round';
   const avatarFrameOptions = {
     round: 'Round',
-    discord: 'Discord',
-    apple: 'Apple App'
+    discord: 'Discord Style'
   };
   const root = document.documentElement;
   const chartPalettes = {
@@ -247,6 +246,38 @@
       currentHash.includes('configuration') ||
       currentHash.includes('/config')
     );
+  }
+
+  function resolveConfigSettingsHost() {
+    if (!isConfigurationRoute()) {
+      return null;
+    }
+
+    let host = document.getElementById('nlo-admin-config-settings');
+    if (host) {
+      return host;
+    }
+
+    const target =
+      document.querySelector('.content .content-wrapper .content-body') ||
+      document.querySelector('.content .content-wrapper') ||
+      document.querySelector('.content');
+
+    if (!target) {
+      return null;
+    }
+
+    host = document.createElement('section');
+    host.id = 'nlo-admin-config-settings';
+    target.prepend(host);
+    return host;
+  }
+
+  function cleanupConfigSettingsHost() {
+    const host = document.getElementById('nlo-admin-config-settings');
+    if (host && !host.children.length) {
+      host.remove();
+    }
   }
 
   function systemMode() {
@@ -552,10 +583,16 @@
 
     if (!showOnConfiguration) {
       existingPicker?.remove();
+      cleanupConfigSettingsHost();
       return;
     }
 
     if (existingPicker) {
+      return;
+    }
+
+    const host = resolveConfigSettingsHost();
+    if (!host) {
       return;
     }
 
@@ -643,7 +680,7 @@
     status.textContent = 'Choose palette and click Apply + Build.';
     wrapper.appendChild(status);
 
-    document.body.appendChild(wrapper);
+    host.appendChild(wrapper);
     applyGhPalette(currentGhPalette());
   }
 
@@ -653,10 +690,16 @@
 
     if (!showOnConfiguration) {
       existingPicker?.remove();
+      cleanupConfigSettingsHost();
       return;
     }
 
     if (existingPicker) {
+      return;
+    }
+
+    const host = resolveConfigSettingsHost();
+    if (!host) {
       return;
     }
 
@@ -702,7 +745,7 @@
     status.textContent = 'Choose frame style for sidebar avatar.';
     wrapper.appendChild(status);
 
-    document.body.appendChild(wrapper);
+    host.appendChild(wrapper);
     void syncAvatarFrameSelect(select);
   }
 
