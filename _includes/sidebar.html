@@ -8,8 +8,8 @@
 
   <header class="profile-wrapper">
     <a href="{{ '/' | relative_url }}" id="avatar" class="avatar-frame-{{ avatar_frame }}">
-      {%- assign avatar_light_src = site.avatar.light | default: site.avatar -%}
-      {%- assign avatar_dark_src = site.avatar.dark | default: avatar_light_src -%}
+      {%- assign avatar_light_src = site.nlo.branding.avatar_light | default: site.avatar.light | default: site.avatar -%}
+      {%- assign avatar_dark_src = site.nlo.branding.avatar_dark | default: site.avatar.dark | default: avatar_light_src -%}
 
       {%- if avatar_light_src != empty and avatar_light_src -%}
         {%- capture avatar_light_url -%}
