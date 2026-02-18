@@ -55,10 +55,11 @@ script_includes:
       <div class="d-flex justify-content-between">
         <!-- author(s) -->
         <span>
-          {% if page.author %}
-            {% assign authors = page.author %}
-          {% elsif page.authors %}
+          {% assign authors = '' | split: '' %}
+          {% if page.authors %}
             {% assign authors = page.authors %}
+          {% elsif page.author %}
+            {% assign authors = page.author | split: ',' %}
           {% endif %}
 
           {{ site.data.locales[lang].post.written_by }}
@@ -66,10 +67,13 @@ script_includes:
           <em>
             {% if authors %}
               {% for author in authors %}
-                {% if site.data.authors[author].url -%}
-                  <a href="{{ site.data.authors[author].url }}">{{ site.data.authors[author].name }}</a>
+                {% assign author_key = author | strip %}
+                {% assign author_profile = site.data.authors[author_key] %}
+                {% assign author_name = author_profile.name | default: author_key %}
+                {% if author_profile and author_profile.url -%}
+                  <a href="{{ author_profile.url }}">{{ author_name }}</a>
                 {%- else -%}
-                  {{ site.data.authors[author].name }}
+                  {{ author_name }}
                 {%- endif %}
                 {% unless forloop.last %}{{ '</em>, <em>' }}{% endunless %}
               {% endfor %}
