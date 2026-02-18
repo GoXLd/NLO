@@ -194,6 +194,31 @@ i {
   filter: saturate(0.78) contrast(1.05);
 }
 
+.sidebar .logo.nlo-admin-logo {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px !important;
+  text-indent: 0 !important;
+  overflow: hidden;
+  background: none !important;
+  background-image: none !important;
+  background-size: 0 0 !important;
+}
+
+.sidebar .logo.nlo-admin-logo::before,
+.sidebar .logo.nlo-admin-logo::after {
+  content: none !important;
+}
+
+.sidebar .logo.nlo-admin-logo .nlo-admin-logo-image {
+  display: block;
+  width: auto;
+  max-width: min(152px, 84%);
+  max-height: 44px;
+  object-fit: contain;
+}
+
 html[data-mode='dark'] .sidebar .logo {
   filter: saturate(0.55) brightness(0.96) contrast(1.08);
 }

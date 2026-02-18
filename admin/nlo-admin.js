@@ -68,6 +68,127 @@
       '![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n' +
       '![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w=\'1212\' h=\'668\' }\n\n'
   };
+  let adminConfigCache = null;
+  let adminConfigPromise = null;
+
+  function trimTrailingSlash(value) {
+    return String(value || '').replace(/\/+$/, '');
+  }
+
+  function normalizeBaseurl(baseurl) {
+    const value = trimTrailingSlash(baseurl);
+    if (!value) {
+      return '';
+    }
+
+    return value.startsWith('/') ? value : `/${value}`;
+  }
+
+  function resolveSiteHref(config) {
+    const baseurl = normalizeBaseurl(config?.baseurl);
+    return baseurl ? `${baseurl}/` : '/';
+  }
+
+  function withBaseurl(path, baseurl) {
+    const source = String(path || '').trim();
+    if (!source) {
+      return '';
+    }
+
+    if (/^(https?:)?\/\//i.test(source) || source.startsWith('data:') || source.startsWith('blob:')) {
+      return source;
+    }
+
+    if (!source.startsWith('/')) {
+      return source;
+    }
+
+    const normalizedBaseurl = normalizeBaseurl(baseurl);
+    if (!normalizedBaseurl || source.startsWith(`${normalizedBaseurl}/`)) {
+      return source;
+    }
+
+    return `${normalizedBaseurl}${source}`;
+  }
+
+  async function fetchAdminConfig() {
+    if (adminConfigCache) {
+      return adminConfigCache;
+    }
+
+    if (adminConfigPromise) {
+      return adminConfigPromise;
+    }
+
+    adminConfigPromise = fetch('/_api/configuration', {
+      credentials: 'same-origin',
+      cache: 'no-store'
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Configuration request failed (${response.status})`);
+        }
+        return response.json();
+      })
+      .then((payload) => {
+        const config = payload?.content && typeof payload.content === 'object' ? payload.content : payload;
+        if (!config || typeof config !== 'object') {
+          throw new Error('Configuration payload is invalid');
+        }
+
+        adminConfigCache = config;
+        return config;
+      })
+      .catch(() => null)
+      .finally(() => {
+        adminConfigPromise = null;
+      });
+
+    return adminConfigPromise;
+  }
+
+  function applySidebarBranding(config) {
+    const logoLink = document.querySelector('.sidebar .logo');
+    if (!logoLink || logoLink.dataset.nloBrandingApplied === '1') {
+      return;
+    }
+
+    const siteHref = resolveSiteHref(config);
+    const logoAlt =
+      config?.nlo?.branding?.logo_alt || config?.social?.name || config?.title || 'Site logo';
+    const logoAria = config?.nlo?.branding?.logo_aria_label || logoAlt;
+    const logoSrc = withBaseurl(config?.nlo?.branding?.logo_src, config?.baseurl);
+
+    logoLink.dataset.nloBrandingApplied = '1';
+    logoLink.classList.add('nlo-admin-logo');
+    logoLink.setAttribute('href', siteHref);
+    logoLink.setAttribute('aria-label', logoAria);
+    logoLink.setAttribute('title', logoAlt);
+
+    logoLink.querySelector('img.nlo-admin-logo-image')?.remove();
+    logoLink.textContent = '';
+
+    if (!logoSrc) {
+      return;
+    }
+
+    const image = document.createElement('img');
+    image.className = 'nlo-admin-logo-image';
+    image.src = logoSrc;
+    image.alt = logoAlt;
+    image.loading = 'eager';
+    image.decoding = 'async';
+    logoLink.appendChild(image);
+  }
+
+  async function ensureSidebarBranding() {
+    const config = await fetchAdminConfig();
+    if (!config) {
+      return;
+    }
+
+    applySidebarBranding(config);
+  }
 
   function normalizePaletteName(name) {
     const normalized = String(name || '').trim();
@@ -682,6 +803,7 @@
     cleanupAdminServiceWorkers();
     ensureThemeToggle();
     ensureGhPalettePicker();
+    void ensureSidebarBranding();
     ensurePathAutofill();
     scanEditors();
     suppressFalseConfigErrorNotice();
@@ -689,6 +811,7 @@
     const observer = new MutationObserver(() => {
       ensureThemeToggle();
       ensureGhPalettePicker();
+      void ensureSidebarBranding();
       ensurePathAutofill();
       scanEditors();
       suppressFalseConfigErrorNotice();
