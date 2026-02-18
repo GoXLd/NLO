@@ -55,15 +55,15 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
 
   #avatar {
     display: block;
-    width: 6.5rem;
-    height: 6.5rem;
+    width: 8.45rem;
+    height: 8.45rem;
     overflow: hidden;
     box-shadow: var(--avatar-border-color) 0 0 0 2px;
     transform: translateZ(0); /* fixed the zoom in Safari */
 
     @include bp.sm {
-      width: 7rem;
-      height: 7rem;
+      width: 9.1rem;
+      height: 9.1rem;
     }
 
     &.avatar-frame-round {

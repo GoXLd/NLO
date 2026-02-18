@@ -865,6 +865,8 @@ html[data-mode='dark'] .warning {
 
 #nlo-admin-config-settings {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 0.72rem;
   margin: 0 0 0.86rem;
 }
@@ -1219,6 +1221,10 @@ html[data-mode='dark'] .warning {
 }
 
 @media (max-width: 860px) {
+  #nlo-admin-config-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .sidebar {
     width: 200px !important;
   }
