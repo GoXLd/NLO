@@ -556,7 +556,6 @@
     }
 
     if (existingPicker) {
-      applyGhPalette(currentGhPalette());
       return;
     }
 
@@ -658,8 +657,6 @@
     }
 
     if (existingPicker) {
-      const existingSelect = existingPicker.querySelector('#nlo-admin-avatar-frame-select');
-      void syncAvatarFrameSelect(existingSelect);
       return;
     }
 
