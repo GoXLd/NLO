@@ -1131,6 +1131,13 @@ html[data-mode='dark'] .warning {
   background: var(--admin-surface-soft);
 }
 
+.nlo-admin-author-hint {
+  margin: 0.32rem 0 0;
+  color: var(--admin-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
 .nlo-admin-snippet-btn {
   padding: 0.34rem 0.6rem;
   color: var(--admin-text);

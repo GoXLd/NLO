@@ -1,0 +1,41 @@
+{% if available_langs and available_langs.size > 1 %}
+  {% assign _current_lang = include.lang | default: lang | default: default_lang %}
+  {% assign _current_path = page.url | default: '/' %}
+  {% assign _base_path = _current_path %}
+  {% assign _path_parts = _current_path | split: '/' %}
+  {% assign _path_prefix = _path_parts[1] %}
+
+  {% if available_langs contains _path_prefix %}
+    {% capture _prefix %}/{{ _path_prefix }}{% endcapture %}
+    {% assign _base_path = _current_path | replace_first: _prefix, '' %}
+    {% if _base_path == '' %}
+      {% assign _base_path = '/' %}
+    {% endif %}
+  {% endif %}
+
+  <label class="nlo-lang-switcher {{ include.class | default: '' }}">
+    <span class="nlo-lang-switcher__label">
+      {{ site.data.locales[include.lang].nlo.language | default: site.data.locales[default_lang].nlo.language | default: 'Language' }}
+    </span>
+    <select
+      class="nlo-lang-switcher__select"
+      aria-label="Language"
+      onchange="if (this.value) window.location.href = this.value;"
+    >
+      {% for _lang_code in available_langs %}
+        {% if _lang_code == default_lang %}
+          {% assign _target = _base_path %}
+        {% elsif _base_path == '/' %}
+          {% assign _target = '/' | append: _lang_code | append: '/' %}
+        {% else %}
+          {% assign _target = '/' | append: _lang_code | append: _base_path %}
+        {% endif %}
+
+        {% capture _flag %}{% include lang-flag.html language=_lang_code %}{% endcapture %}
+        <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>
+          {{ _flag | strip }} {{ _lang_code | split: '-' | first | upcase }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+{% endif %}

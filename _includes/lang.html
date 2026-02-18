@@ -1,10 +1,66 @@
 {% comment %}
-  Detect appearance language and return it through variable "lang"
+  Detect appearance language and expose:
+  - lang: active language for current page
+  - default_lang: primary language
+  - available_langs: list of configured languages
 {% endcomment %}
-{% if site.data.locales[page.lang] %}
+{% assign available_langs = '' | split: '' %}
+{% assign _lang_json = site.lang | jsonify %}
+
+{% assign _raw_langs = '' | split: '' %}
+{% if _lang_json contains '[' %}
+  {% assign _raw_langs = site.lang %}
+{% elsif site.lang contains ',' %}
+  {% assign _raw_langs = site.lang | split: ',' %}
+{% elsif site.lang %}
+  {% assign _raw_langs = _raw_langs | push: site.lang %}
+{% endif %}
+
+{% for _candidate_raw in _raw_langs %}
+  {% assign _candidate = _candidate_raw | downcase | strip %}
+  {% if _candidate == '' %}
+    {% continue %}
+  {% endif %}
+
+  {% assign _resolved = '' %}
+  {% for _locale in site.data.locales %}
+    {% assign _locale_key = _locale[0] %}
+    {% assign _locale_down = _locale_key | downcase %}
+    {% assign _prefix = _candidate | append: '-' %}
+    {% assign _prefix_size = _prefix | size %}
+    {% assign _locale_head = _locale_down | slice: 0, _prefix_size %}
+
+    {% if _locale_down == _candidate or _locale_head == _prefix %}
+      {% assign _resolved = _locale_key %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if _resolved != '' %}
+    {% unless available_langs contains _resolved %}
+      {% assign available_langs = available_langs | push: _resolved %}
+    {% endunless %}
+  {% endif %}
+{% endfor %}
+
+{% if available_langs == empty %}
+  {% assign available_langs = available_langs | push: 'en' %}
+{% endif %}
+
+{% assign default_lang = available_langs | first %}
+{% assign _url_lang = '' %}
+{% assign _url_parts = page.url | default: '/' | split: '/' %}
+{% assign _url_prefix = _url_parts[1] %}
+{% if available_langs contains _url_prefix %}
+  {% assign _url_lang = _url_prefix %}
+{% endif %}
+
+{% if page.lang and available_langs contains page.lang %}
   {% assign lang = page.lang %}
-{% elsif site.data.locales[site.lang] %}
-  {% assign lang = site.lang %}
+{% elsif _url_lang != '' %}
+  {% assign lang = _url_lang %}
+{% elsif site.alt_lang and available_langs contains site.alt_lang %}
+  {% assign lang = site.alt_lang %}
 {% else %}
-  {% assign lang = 'en' %}
+  {% assign lang = default_lang %}
 {% endif %}

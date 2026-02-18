@@ -6,6 +6,9 @@ theme: jekyll-theme-nlo
 # The language of the webpage › http://www.lingoes.net/en/translator/langcode.htm
 # If it has the same name as one of the files in folder `_data/locales`, the layout language will also be changed,
 # otherwise, the layout language will use the default value of 'en'.
+# NLO extension: you can pass multiple languages as comma-separated list, for example:
+# lang: en, ru-RU, fr-FR
+# In this case a language switcher with country flags will appear in UI.
 lang: en
 
 # Change to your timezone › https://zones.arilyn.cc

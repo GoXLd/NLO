@@ -119,3 +119,81 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
   background-color: var(--main-bg);
   display: block;
 }
+
+.nlo-lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: auto;
+  margin: 0;
+}
+
+.nlo-lang-switcher__label {
+  color: var(--text-muted-color);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.nlo-lang-switcher__select {
+  min-width: 126px;
+  padding: 0.36rem 0.55rem;
+  color: var(--text-color);
+  font-size: 0.82rem;
+  line-height: 1.2;
+  border: 1px solid var(--main-border-color);
+  border-radius: 10px;
+  background: var(--card-bg);
+  cursor: pointer;
+}
+
+#sidebar .nlo-lang-switcher--sidebar {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.66rem;
+  border: 1px solid var(--sidebar-border-color);
+  border-radius: 0.75rem;
+  background: var(--sidebar-btn-bg);
+}
+
+#sidebar .nlo-lang-switcher--sidebar .nlo-lang-switcher__label {
+  color: var(--sidebar-muted-color);
+}
+
+#sidebar .nlo-lang-switcher--sidebar .nlo-lang-switcher__select {
+  width: 100%;
+  min-width: 0;
+  color: var(--sidebar-active-color);
+  border-color: var(--sidebar-border-color);
+  background: var(--sidebar-bg);
+}
+
+#topbar .nlo-lang-switcher--topbar {
+  display: none;
+  margin-left: 0.65rem;
+}
+
+#topbar .nlo-lang-switcher--topbar .nlo-lang-switcher__label {
+  display: none;
+}
+
+#topbar .nlo-lang-switcher--topbar .nlo-lang-switcher__select {
+  min-width: 88px;
+  padding: 0.3rem 0.45rem;
+  font-size: 0.78rem;
+  border-radius: 8px;
+}
+
+@media (max-width: 991.98px) {
+  #topbar .nlo-lang-switcher--topbar {
+    display: flex;
+  }
+
+  #sidebar .nlo-lang-switcher--sidebar {
+    display: none;
+  }
+
+  #topbar #search {
+    min-width: 0;
+  }
+}

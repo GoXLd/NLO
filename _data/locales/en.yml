@@ -27,6 +27,9 @@ panel:
   trending_tags: Trending Tags
   toc: Contents
 
+nlo:
+  language: Language
+
 copyright:
   # Shown at the bottom of the post
   license:

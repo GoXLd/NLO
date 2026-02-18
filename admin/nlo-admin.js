@@ -810,6 +810,23 @@
     return findInputByLabel('path');
   }
 
+  function locateAuthorInput() {
+    const candidates = Array.from(document.querySelectorAll('input,textarea'));
+    const byMeta = candidates.find((input) =>
+      fieldScore(input, ['author']) && !fieldScore(input, ['authorization'])
+    );
+    if (byMeta) {
+      return byMeta;
+    }
+
+    const byLabel = findInputByLabel('author');
+    if (byLabel) {
+      return byLabel;
+    }
+
+    return findInputByLabel('authors');
+  }
+
   function transliterate(str) {
     return Array.from(str || '')
       .map((char) => {
@@ -902,6 +919,31 @@
     titleInput.addEventListener('input', syncPathFromTitle);
     titleInput.addEventListener('blur', syncPathFromTitle);
     syncPathFromTitle();
+  }
+
+  function ensureAuthorHint() {
+    const authorInput = locateAuthorInput();
+    if (!authorInput || authorInput.dataset.nloAuthorHintBound === '1') {
+      return;
+    }
+
+    authorInput.dataset.nloAuthorHintBound = '1';
+    authorInput.setAttribute(
+      'title',
+      'Use author key from _data/authors.yml (for example: cotes) to render linked author profile. Unknown value is shown as plain text.'
+    );
+
+    const note = document.createElement('p');
+    note.className = 'nlo-admin-author-hint';
+    note.textContent =
+      'Author tip: use key from _data/authors.yml (for example: cotes) for link. If key is missing, it will be shown as plain text.';
+
+    const parent = authorInput.parentElement;
+    if (parent) {
+      parent.appendChild(note);
+    } else {
+      authorInput.insertAdjacentElement('afterend', note);
+    }
   }
 
   function cleanupAdminServiceWorkers() {
@@ -1043,6 +1085,7 @@
     ensureAvatarFramePicker();
     void ensureSidebarBranding();
     ensurePathAutofill();
+    ensureAuthorHint();
     scanEditors();
     suppressFalseConfigErrorNotice();
 
@@ -1052,6 +1095,7 @@
       ensureAvatarFramePicker();
       void ensureSidebarBranding();
       ensurePathAutofill();
+      ensureAuthorHint();
       scanEditors();
       suppressFalseConfigErrorNotice();
     });

@@ -1,0 +1,36 @@
+{% assign _lang_code = include.language | default: '' | downcase | split: '-' | first %}
+{% case _lang_code %}
+  {% when 'ar' %}🇸🇦
+  {% when 'bg' %}🇧🇬
+  {% when 'ca' %}🇪🇸
+  {% when 'cs' %}🇨🇿
+  {% when 'da' %}🇩🇰
+  {% when 'de' %}🇩🇪
+  {% when 'dv' %}🇲🇻
+  {% when 'el' %}🇬🇷
+  {% when 'en' %}🇺🇸
+  {% when 'es' %}🇪🇸
+  {% when 'fa' %}🇮🇷
+  {% when 'fi' %}🇫🇮
+  {% when 'fr' %}🇫🇷
+  {% when 'hu' %}🇭🇺
+  {% when 'id' %}🇮🇩
+  {% when 'it' %}🇮🇹
+  {% when 'ja' %}🇯🇵
+  {% when 'ko' %}🇰🇷
+  {% when 'ku' %}🇮🇶
+  {% when 'my' %}🇲🇲
+  {% when 'nl' %}🇳🇱
+  {% when 'ps' %}🇦🇫
+  {% when 'pt' %}🇧🇷
+  {% when 'ru' %}🇷🇺
+  {% when 'sl' %}🇸🇮
+  {% when 'sv' %}🇸🇪
+  {% when 'th' %}🇹🇭
+  {% when 'tr' %}🇹🇷
+  {% when 'uk' %}🇺🇦
+  {% when 'ur' %}🇵🇰
+  {% when 'vi' %}🇻🇳
+  {% when 'zh' %}🇨🇳
+  {% else %}🌐
+{% endcase %}
