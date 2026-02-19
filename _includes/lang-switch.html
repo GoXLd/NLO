@@ -4,6 +4,7 @@
   {% assign _base_path = _current_path %}
   {% assign _path_parts = _current_path | split: '/' %}
   {% assign _path_prefix = _path_parts[1] %}
+  {% assign _render_flags = available_langs.size <= 3 %}
 
   {% if available_langs contains _path_prefix %}
     {% capture _prefix %}/{{ _path_prefix }}{% endcapture %}
@@ -13,52 +14,109 @@
     {% endif %}
   {% endif %}
 
-  <label class="nlo-lang-switcher {{ include.class | default: '' }}">
-    <span class="nlo-lang-switcher__label">
-      {{ site.data.locales[include.lang].nlo.language | default: site.data.locales[default_lang].nlo.language | default: 'Language' }}
-    </span>
-    <select
-      class="nlo-lang-switcher__select"
-      aria-label="Language"
-      onchange="if (this.value) window.location.href = this.value;"
-    >
-      {% for _lang_code in available_langs %}
-        {% if _lang_code == default_lang %}
-          {% assign _target_candidate = _base_path %}
-        {% elsif _base_path == '/' %}
-          {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
-        {% else %}
-          {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
-        {% endif %}
+  {% assign _label = site.data.locales[include.lang].nlo.language | default: site.data.locales[default_lang].nlo.language | default: 'Language' %}
 
-        {% assign _target = _target_candidate %}
-        {% assign _target_exists = false %}
-
-        {% for _post in site.posts %}
-          {% if _post.url == _target_candidate %}
-            {% assign _target_exists = true %}
-            {% break %}
+  {% if _render_flags %}
+    <div class="nlo-lang-flags {{ include.class | default: '' }}">
+      <span class="nlo-lang-flags__label">{{ _label }}</span>
+      <div class="nlo-lang-flags__list" role="group" aria-label="{{ _label }}">
+        {% for _lang_code in available_langs %}
+          {% if _lang_code == default_lang %}
+            {% assign _target_candidate = _base_path %}
+          {% elsif _base_path == '/' %}
+            {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
+          {% else %}
+            {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
           {% endif %}
-        {% endfor %}
 
-        {% unless _target_exists %}
-          {% for _page in site.pages %}
-            {% if _page.url == _target_candidate %}
+          {% assign _target = _target_candidate %}
+          {% assign _target_exists = false %}
+
+          {% for _post in site.posts %}
+            {% if _post.url == _target_candidate %}
               {% assign _target_exists = true %}
               {% break %}
             {% endif %}
           {% endfor %}
-        {% endunless %}
 
-        {% unless _target_exists %}
-          {% assign _target = _base_path %}
-        {% endunless %}
+          {% unless _target_exists %}
+            {% for _page in site.pages %}
+              {% if _page.url == _target_candidate %}
+                {% assign _target_exists = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endunless %}
 
-        {% capture _flag %}{% include lang-flag.html language=_lang_code %}{% endcapture %}
-        <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>
-          {{ _flag | strip }} {{ _lang_code | split: '-' | first | upcase }}
-        </option>
-      {% endfor %}
-    </select>
-  </label>
+          {% unless _target_exists %}
+            {% assign _target = _base_path %}
+          {% endunless %}
+
+          {% assign _flag_file = _lang_code | downcase | append: '.svg' %}
+          <a
+            href="{{ _target | relative_url }}"
+            class="nlo-lang-flag{% if _lang_code == _current_lang %} is-active{% endif %}"
+            aria-label="{{ _label }} {{ _lang_code }}"
+            title="{{ _lang_code }}"
+          >
+            <img
+              src="{{ '/assets/img/flags/' | append: _flag_file | relative_url }}"
+              alt="{{ _lang_code }} flag"
+              width="24"
+              height="16"
+              loading="lazy"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';"
+            >
+            <span class="nlo-lang-flag__fallback">{{ _lang_code | split: '-' | first | upcase }}</span>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  {% else %}
+    <label class="nlo-lang-switcher {{ include.class | default: '' }}">
+      <span class="nlo-lang-switcher__label">{{ _label }}</span>
+      <select
+        class="nlo-lang-switcher__select"
+        aria-label="{{ _label }}"
+        onchange="if (this.value) window.location.href = this.value;"
+      >
+        {% for _lang_code in available_langs %}
+          {% if _lang_code == default_lang %}
+            {% assign _target_candidate = _base_path %}
+          {% elsif _base_path == '/' %}
+            {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
+          {% else %}
+            {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
+          {% endif %}
+
+          {% assign _target = _target_candidate %}
+          {% assign _target_exists = false %}
+
+          {% for _post in site.posts %}
+            {% if _post.url == _target_candidate %}
+              {% assign _target_exists = true %}
+              {% break %}
+            {% endif %}
+          {% endfor %}
+
+          {% unless _target_exists %}
+            {% for _page in site.pages %}
+              {% if _page.url == _target_candidate %}
+                {% assign _target_exists = true %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
+          {% endunless %}
+
+          {% unless _target_exists %}
+            {% assign _target = _base_path %}
+          {% endunless %}
+
+          <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>
+            {{ _lang_code | split: '-' | first | upcase }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+  {% endif %}
 {% endif %}

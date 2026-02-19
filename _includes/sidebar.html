@@ -73,6 +73,8 @@
   {% endif %}
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
+    {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
+
     <ul class="nav">
       <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
@@ -104,8 +106,6 @@
         <span>ADMIN</span>
       </a>
     {% endif %}
-
-    {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
 
     {% unless site.theme_mode %}
       <button type="button" class="btn btn-link nav-link" aria-label="Switch Mode" id="mode-toggle">
