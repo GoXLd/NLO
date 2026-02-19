@@ -28,7 +28,7 @@ panel:
   toc: Contents
 
 nlo:
-  language: Language
+  site_version: Site version
 
 copyright:
   # Shown at the bottom of the post

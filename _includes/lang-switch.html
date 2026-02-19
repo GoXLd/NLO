@@ -14,7 +14,8 @@
     {% endif %}
   {% endif %}
 
-  {% assign _label = site.data.locales[include.lang].nlo.language | default: site.data.locales[default_lang].nlo.language | default: 'Language' %}
+  {% assign _label = site.data.locales[include.lang].nlo.site_version | default: site.data.locales[default_lang].nlo.site_version | default: 'Site version' %}
+  {% assign _lang_ui = include.lang | default: default_lang | downcase | split: '-' | first %}
 
   {% if _render_flags %}
     <div class="nlo-lang-flags {{ include.class | default: '' }}">
@@ -49,15 +50,40 @@
           {% endunless %}
 
           {% unless _target_exists %}
-            {% assign _target = _base_path %}
+            {% if _lang_code == default_lang %}
+              {% assign _target = '/' %}
+            {% else %}
+              {% assign _target = '/' | append: _lang_code | append: '/' %}
+            {% endif %}
           {% endunless %}
 
           {% assign _flag_file = _lang_code | downcase | append: '.svg' %}
+          {% assign _lang_name = _lang_code | split: '-' | first | upcase %}
+          {% if _lang_ui == 'ru' %}
+            {% case _lang_code %}
+              {% when 'en' %}{% assign _lang_name = 'Английский' %}
+              {% when 'ru-RU' %}{% assign _lang_name = 'Русский' %}
+              {% when 'fr-FR' %}{% assign _lang_name = 'Французский' %}
+            {% endcase %}
+          {% elsif _lang_ui == 'fr' %}
+            {% case _lang_code %}
+              {% when 'en' %}{% assign _lang_name = 'Anglais' %}
+              {% when 'ru-RU' %}{% assign _lang_name = 'Russe' %}
+              {% when 'fr-FR' %}{% assign _lang_name = 'Francais' %}
+            {% endcase %}
+          {% else %}
+            {% case _lang_code %}
+              {% when 'en' %}{% assign _lang_name = 'English' %}
+              {% when 'ru-RU' %}{% assign _lang_name = 'Russian' %}
+              {% when 'fr-FR' %}{% assign _lang_name = 'French' %}
+            {% endcase %}
+          {% endif %}
+
           <a
             href="{{ _target | relative_url }}"
             class="nlo-lang-flag{% if _lang_code == _current_lang %} is-active{% endif %}"
-            aria-label="{{ _label }} {{ _lang_code }}"
-            title="{{ _lang_code }}"
+            aria-label="{{ _label }} {{ _lang_name }}"
+            title="{{ _lang_name }}"
           >
             <img
               src="{{ '/assets/img/flags/' | append: _flag_file | relative_url }}"
@@ -109,7 +135,11 @@
           {% endunless %}
 
           {% unless _target_exists %}
-            {% assign _target = _base_path %}
+            {% if _lang_code == default_lang %}
+              {% assign _target = '/' %}
+            {% else %}
+              {% assign _target = '/' | append: _lang_code | append: '/' %}
+            {% endif %}
           {% endunless %}
 
           <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>

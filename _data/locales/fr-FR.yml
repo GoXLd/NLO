@@ -27,6 +27,9 @@ panel:
   trending_tags: Tags tendance
   toc: Contenu
 
+nlo:
+  site_version: Version du site
+
 copyright:
   # Shown at the bottom of the post
   license:

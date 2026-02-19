@@ -15,8 +15,10 @@ layout: default
 
 <!-- Get pinned posts on current page -->
 
-{% assign visible_start = paginator.page | minus: 1 | times: paginator.per_page %}
-{% assign visible_end = visible_start | plus: paginator.per_page %}
+{% assign current_page = paginator.page | default: 1 %}
+{% assign per_page = paginator.per_page | default: site.posts | size %}
+{% assign visible_start = current_page | minus: 1 | times: per_page %}
+{% assign visible_end = visible_start | plus: per_page %}
 
 {% if all_pinned.size > visible_start %}
   {% if all_pinned.size > visible_end %}
@@ -34,7 +36,8 @@ layout: default
 
 <!-- Get normal posts on current page -->
 
-{% assign normal_size = paginator.posts | size | minus: pinned_size %}
+{% assign paginator_posts = paginator.posts | default: site.posts %}
+{% assign normal_size = paginator_posts | size | minus: pinned_size %}
 
 {% if normal_size > 0 %}
   {% if pinned_size > 0 %}
