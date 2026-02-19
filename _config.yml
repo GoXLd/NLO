@@ -9,7 +9,7 @@ theme: jekyll-theme-nlo
 # NLO extension: you can pass multiple languages as comma-separated list, for example:
 # lang: en, ru-RU, fr-FR
 # In this case a language switcher with country flags will appear in UI.
-lang: en
+lang: en, ru-RU, fr-FR
 
 # Change to your timezone › https://zones.arilyn.cc
 timezone: Europe/Paris
