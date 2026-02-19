@@ -6,11 +6,26 @@
 {% assign tag_list = '' | split: '' %}
 
 {% for tag in site.tags %}
-  {% assign size = tag | last | size %}
-  {% assign size_list = size_list | push: size %}
+  {% assign size = 0 %}
+  {% for post in tag | last %}
+    {% assign is_lang_match = false %}
+    {% if post.language == lang or post.lang == lang %}
+      {% assign is_lang_match = true %}
+    {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+      {% assign is_lang_match = true %}
+    {% endif %}
 
-  {% assign tag_str = tag | first | append: '::' | append: size %}
-  {% assign tag_list = tag_list | push: tag_str %}
+    {% if is_lang_match %}
+      {% assign size = size | plus: 1 %}
+    {% endif %}
+  {% endfor %}
+
+  {% if size > 0 %}
+    {% assign size_list = size_list | push: size %}
+
+    {% assign tag_str = tag | first | append: '::' | append: size %}
+    {% assign tag_list = tag_list | push: tag_str %}
+  {% endif %}
 {% endfor %}
 
 {% assign size_list = size_list | sort | reverse %}

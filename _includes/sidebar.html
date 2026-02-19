@@ -73,9 +73,11 @@
   {% endif %}
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
-    {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
-
     <ul class="nav">
+      <li class="nav-item nlo-lang-switcher-item">
+        {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
+      </li>
+
       <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">

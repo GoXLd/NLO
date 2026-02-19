@@ -3,19 +3,47 @@ layout: page
 # All the Tags of posts.
 ---
 
+{% include lang.html %}
+
 <div id="tags" class="d-flex flex-wrap mx-xl-2">
   {% assign tags = '' | split: '' %}
   {% for t in site.tags %}
-    {% assign tags = tags | push: t[0] %}
+    {% assign tag_size = 0 %}
+    {% for post in t[1] %}
+      {% assign is_lang_match = false %}
+      {% if post.language == lang or post.lang == lang %}
+        {% assign is_lang_match = true %}
+      {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+        {% assign is_lang_match = true %}
+      {% endif %}
+      {% if is_lang_match %}
+        {% assign tag_size = tag_size | plus: 1 %}
+      {% endif %}
+    {% endfor %}
+    {% if tag_size > 0 %}
+      {% assign tags = tags | push: t[0] %}
+    {% endif %}
   {% endfor %}
 
   {% assign sorted_tags = tags | sort_natural %}
 
   {% for t in sorted_tags %}
+    {% assign tag_size = 0 %}
+    {% for post in site.tags[t] %}
+      {% assign is_lang_match = false %}
+      {% if post.language == lang or post.lang == lang %}
+        {% assign is_lang_match = true %}
+      {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+        {% assign is_lang_match = true %}
+      {% endif %}
+      {% if is_lang_match %}
+        {% assign tag_size = tag_size | plus: 1 %}
+      {% endif %}
+    {% endfor %}
     <div>
       <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}">
         {{ t -}}
-        <span class="text-muted">{{ site.tags[t].size }}</span>
+        <span class="text-muted">{{ tag_size }}</span>
       </a>
     </div>
   {% endfor %}

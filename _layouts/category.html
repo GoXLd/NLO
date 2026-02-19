@@ -4,16 +4,28 @@ layout: page
 ---
 
 {% include lang.html %}
+{% assign localized_page_posts = '' | split: '' %}
+{% for post in page.posts %}
+  {% assign is_lang_match = false %}
+  {% if post.language == lang or post.lang == lang %}
+    {% assign is_lang_match = true %}
+  {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+    {% assign is_lang_match = true %}
+  {% endif %}
+  {% if is_lang_match %}
+    {% assign localized_page_posts = localized_page_posts | push: post %}
+  {% endif %}
+{% endfor %}
 
 <div id="page-category">
   <h1 class="ps-lg-2">
     <i class="far fa-folder-open fa-fw text-muted"></i>
     {{ page.title }}
-    <span class="lead text-muted ps-2">{{ page.posts | size }}</span>
+    <span class="lead text-muted ps-2">{{ localized_page_posts | size }}</span>
   </h1>
 
   <ul class="content ps-0">
-    {% for post in page.posts %}
+    {% for post in localized_page_posts %}
       <li class="d-flex justify-content-between px-md-3">
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <span class="dash flex-grow-1"></span>

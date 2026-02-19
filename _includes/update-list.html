@@ -1,10 +1,24 @@
 <!-- Get 5 last posted/updated posts -->
 
 {% assign MAX_SIZE = 5 %}
+{% assign localized_posts = '' | split: '' %}
+
+{% for post in site.posts %}
+  {% assign is_lang_match = false %}
+  {% if post.language == lang or post.lang == lang %}
+    {% assign is_lang_match = true %}
+  {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+    {% assign is_lang_match = true %}
+  {% endif %}
+
+  {% if is_lang_match %}
+    {% assign localized_posts = localized_posts | push: post %}
+  {% endif %}
+{% endfor %}
 
 {% assign all_list = '' | split: '' %}
 
-{% for post in site.posts %}
+{% for post in localized_posts %}
   {% assign datetime = post.last_modified_at | default: post.date %}
 
   {% capture elem %}
@@ -28,7 +42,7 @@
     <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
       {% for item in update_list %}
         {% assign index = item | split: '::' | last | plus: 0 %}
-        {% assign post = site.posts[index] %}
+        {% assign post = localized_posts[index] %}
         {% assign url = post.url | relative_url %}
         <li class="text-truncate lh-lg">
           <a href="{{ url }}">{{ post.title }}</a>

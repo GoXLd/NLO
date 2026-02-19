@@ -214,9 +214,7 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
 #sidebar .nlo-lang-switcher--sidebar {
   display: flex;
   width: 100%;
-  margin-bottom: 0.6rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
+  margin-bottom: 0;
   box-sizing: border-box;
 }
 
@@ -254,11 +252,4 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
 
 #sidebar .nlo-lang-switcher--sidebar .nlo-lang-flag__fallback {
   color: var(--sidebar-active-color);
-}
-
-@media all and (min-width: 1650px) {
-  #sidebar .nlo-lang-switcher--sidebar {
-    padding-left: 2.75rem;
-    padding-right: 2.75rem;
-  }
 }

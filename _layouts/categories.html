@@ -15,12 +15,29 @@ layout: page
 {% for category in sort_categories %}
   {% assign category_name = category | first %}
   {% assign posts_of_category = category | last %}
-  {% assign first_post = posts_of_category | first %}
+  {% assign posts_of_category_localized = '' | split: '' %}
+  {% for post in posts_of_category %}
+    {% assign is_lang_match = false %}
+    {% if post.language == lang or post.lang == lang %}
+      {% assign is_lang_match = true %}
+    {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+      {% assign is_lang_match = true %}
+    {% endif %}
+    {% if is_lang_match %}
+      {% assign posts_of_category_localized = posts_of_category_localized | push: post %}
+    {% endif %}
+  {% endfor %}
+
+  {% if posts_of_category_localized.size == 0 %}
+    {% continue %}
+  {% endif %}
+
+  {% assign first_post = posts_of_category_localized | first %}
 
   {% if category_name == first_post.categories[0] %}
     {% assign sub_categories = '' | split: '' %}
 
-    {% for post in posts_of_category %}
+    {% for post in posts_of_category_localized %}
       {% assign second_category = post.categories[1] %}
       {% if second_category %}
         {% unless sub_categories contains second_category %}
@@ -45,7 +62,7 @@ layout: page
           <a href="{{ _category_url | relative_url }}" class="mx-2">{{ category_name }}</a>
 
           <!-- content count -->
-          {% assign top_posts_size = site.categories[category_name] | size %}
+          {% assign top_posts_size = posts_of_category_localized | size %}
           <span class="text-muted small font-weight-light">
             {% if sub_categories_size > 0 %}
               {{ sub_categories_size }}
@@ -109,7 +126,18 @@ layout: page
                 {% capture _sub_ctg_url %}/categories/{{ sub_category | slugify | url_encode }}/{% endcapture %}
                 <a href="{{ _sub_ctg_url | relative_url }}" class="mx-2">{{ sub_category }}</a>
 
-                {% assign posts_size = site.categories[sub_category] | size %}
+                {% assign posts_size = 0 %}
+                {% for post in site.categories[sub_category] %}
+                  {% assign is_lang_match = false %}
+                  {% if post.language == lang or post.lang == lang %}
+                    {% assign is_lang_match = true %}
+                  {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+                    {% assign is_lang_match = true %}
+                  {% endif %}
+                  {% if is_lang_match %}
+                    {% assign posts_size = posts_size | plus: 1 %}
+                  {% endif %}
+                {% endfor %}
                 <span class="text-muted small font-weight-light">
                   {{ posts_size }}
 

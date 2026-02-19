@@ -4,8 +4,20 @@ layout: default
 
 {% include lang.html %}
 
-{% assign all_pinned = site.posts | where: 'pin', 'true' %}
-{% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
+{% assign localized_posts = '' | split: '' %}
+{% for post in site.posts %}
+  {% assign is_lang_match = false %}
+  {% if post.language == lang or post.lang == lang %}
+    {% assign is_lang_match = true %}
+  {% elsif post.language == nil and post.lang == nil and lang == default_lang %}
+    {% assign is_lang_match = true %}
+  {% endif %}
+  {% if is_lang_match %}
+    {% assign localized_posts = localized_posts | push: post %}
+  {% endif %}
+{% endfor %}
+{% assign all_pinned = localized_posts | where: 'pin', 'true' %}
+{% assign all_normal = localized_posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
 {% assign nlo_github_chart = site.nlo.github_chart %}
 {% assign nlo_home_chart = nlo_github_chart.home_image | default: '/assets/img/githubchart.svg' %}
 {% assign nlo_home_chart_dark = nlo_github_chart.home_image_dark | default: nlo_home_chart %}
@@ -13,45 +25,13 @@ layout: default
 
 {% assign posts = '' | split: '' %}
 
-<!-- Get pinned posts on current page -->
+{% for post in all_pinned %}
+  {% assign posts = posts | push: post %}
+{% endfor %}
 
-{% assign current_page = paginator.page | default: 1 %}
-{% assign per_page = paginator.per_page | default: site.posts | size %}
-{% assign visible_start = current_page | minus: 1 | times: per_page %}
-{% assign visible_end = visible_start | plus: per_page %}
-
-{% if all_pinned.size > visible_start %}
-  {% if all_pinned.size > visible_end %}
-    {% assign pinned_size = paginator.per_page %}
-  {% else %}
-    {% assign pinned_size = all_pinned.size | minus: visible_start %}
-  {% endif %}
-
-  {% for i in (visible_start..all_pinned.size) limit: pinned_size %}
-    {% assign posts = posts | push: all_pinned[i] %}
-  {% endfor %}
-{% else %}
-  {% assign pinned_size = 0 %}
-{% endif %}
-
-<!-- Get normal posts on current page -->
-
-{% assign paginator_posts = paginator.posts | default: site.posts %}
-{% assign normal_size = paginator_posts | size | minus: pinned_size %}
-
-{% if normal_size > 0 %}
-  {% if pinned_size > 0 %}
-    {% assign normal_start = 0 %}
-  {% else %}
-    {% assign normal_start = visible_start | minus: all_pinned.size %}
-  {% endif %}
-
-  {% assign normal_end = normal_start | plus: normal_size | minus: 1 %}
-
-  {% for i in (normal_start..normal_end) %}
-    {% assign posts = posts | push: all_normal[i] %}
-  {% endfor %}
-{% endif %}
+{% for post in all_normal %}
+  {% assign posts = posts | push: post %}
+{% endfor %}
 
 <div id="post-list" class="flex-grow-1 px-xl-1">
   {% if github_user and nlo_github_chart and nlo_github_chart.enabled %}
@@ -164,7 +144,3 @@ layout: default
   {% endfor %}
 </div>
 <!-- #post-list -->
-
-{% if paginator.total_pages > 1 %}
-  {% include post-paginator.html %}
-{% endif %}
