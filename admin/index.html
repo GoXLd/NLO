@@ -16,7 +16,23 @@
 
     <link rel="stylesheet" href="/admin/static/css/2.b74256fb.chunk.css">
     <link rel="stylesheet" href="/admin/static/css/main.913a54c0.chunk.css">
-    <link rel="stylesheet" href="/admin/nlo-admin.css?v=20260218-avatar-frame-1">
+    <link rel="stylesheet" href="/admin/nlo-admin.css?v=20260220-local-only-1">
+
+    <script>
+      (() => {
+        const host = (window.location.hostname || '').toLowerCase();
+        const isLocalHost =
+          host === 'localhost' ||
+          host === '127.0.0.1' ||
+          host === '::1' ||
+          host.endsWith('.local');
+
+        window.__nloAdminIsLocalHost = isLocalHost;
+        if (!isLocalHost) {
+          document.documentElement.setAttribute('data-nlo-admin-remote', '1');
+        }
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
@@ -24,6 +40,29 @@
 
     <script>
       (() => {
+        if (window.__nloAdminIsLocalHost) return;
+
+        const root = document.getElementById('root');
+        if (root) {
+          root.style.display = 'none';
+        }
+
+        const notice = document.createElement('main');
+        notice.className = 'nlo-admin-remote-notice';
+        notice.innerHTML =
+          '<h1>Админ-панель доступна только локально</h1>' +
+          '<p>The <code>/admin</code> route is disabled for production usage.</p>' +
+          '<p>Запустите проект локально и откройте <code>http://127.0.0.1:4000/admin</code>.</p>' +
+          '<pre><code>bash tools/run.sh --admin</code></pre>' +
+          '<p><a href="/">Вернуться на сайт</a></p>';
+        document.body.appendChild(notice);
+      })();
+    </script>
+
+    <script>
+      (() => {
+        if (!window.__nloAdminIsLocalHost) return;
+
         if (!window.fetch || !window.URL || !window.Response) return;
 
         const originalFetch = window.fetch.bind(window);
@@ -157,6 +196,6 @@
     <script src="/admin/static/js/runtime-main.95f94e60.js"></script>
     <script src="/admin/static/js/2.08ea13e0.chunk.js"></script>
     <script src="/admin/static/js/main.a0831f44.chunk.js"></script>
-    <script defer src="/admin/nlo-admin.js?v=20260218-avatar-frame-1"></script>
+    <script defer src="/admin/nlo-admin.js?v=20260220-local-only-1"></script>
   </body>
 </html>

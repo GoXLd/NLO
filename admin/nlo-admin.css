@@ -140,6 +140,42 @@ body {
     var(--admin-bg) !important;
 }
 
+.nlo-admin-remote-notice {
+  width: min(780px, calc(100vw - 2rem));
+  margin: clamp(2rem, 8vh, 5rem) auto;
+  padding: 1.2rem 1.2rem 1.1rem;
+  color: var(--admin-text);
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 14px;
+  box-shadow: var(--admin-shadow-card);
+}
+
+.nlo-admin-remote-notice h1 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.18rem, 2.2vw, 1.5rem);
+  line-height: 1.3;
+  color: var(--admin-heading);
+}
+
+.nlo-admin-remote-notice p {
+  margin: 0.55rem 0;
+  font-size: 1.02rem;
+  line-height: 1.45;
+}
+
+.nlo-admin-remote-notice pre {
+  margin: 0.75rem 0 0.55rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--admin-editor-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+}
+
+.nlo-admin-remote-notice code {
+  font-family: var(--admin-font-mono);
+}
+
 ::selection {
   color: var(--admin-heading);
   background: var(--admin-editor-selection);

@@ -1,4 +1,8 @@
 (() => {
+  if (window.__nloAdminIsLocalHost === false) {
+    return;
+  }
+
   const MODE_KEY = 'mode';
   const GH_PALETTE_KEY = 'gh_palette';
   const DEFAULT_GH_PALETTE = 'default';
