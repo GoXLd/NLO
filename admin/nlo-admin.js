@@ -166,6 +166,80 @@
     return adminConfigPromise;
   }
 
+  function resolveAdminPathPrefix() {
+    const pathname = String(window.location.pathname || '');
+    const adminIndex = pathname.indexOf('/admin');
+    if (adminIndex <= 0) {
+      return '';
+    }
+
+    return trimTrailingSlash(pathname.slice(0, adminIndex));
+  }
+
+  function endpointCandidates(path, baseurl) {
+    const target = path.startsWith('/') ? path : `/${path}`;
+    const candidates = [];
+    const push = (value) => {
+      if (value && !candidates.includes(value)) {
+        candidates.push(value);
+      }
+    };
+
+    const pathPrefix = resolveAdminPathPrefix();
+    const configPrefix = normalizeBaseurl(baseurl);
+
+    push(`/admin${target}`);
+    push(target);
+
+    if (pathPrefix) {
+      push(`${pathPrefix}/admin${target}`);
+      push(`${pathPrefix}${target}`);
+    }
+
+    if (configPrefix) {
+      push(`${configPrefix}/admin${target}`);
+      push(`${configPrefix}${target}`);
+    }
+
+    return candidates;
+  }
+
+  async function requestNloEndpoint(path, options = {}) {
+    const config = await fetchAdminConfig();
+    const candidates = endpointCandidates(path, config?.baseurl);
+    const requestOptions = {
+      credentials: 'same-origin',
+      cache: 'no-store',
+      ...options
+    };
+
+    let lastError = null;
+
+    for (const url of candidates) {
+      try {
+        const response = await fetch(url, requestOptions);
+        if (response.status === 404) {
+          lastError = new Error(`Endpoint not found at ${url}`);
+          continue;
+        }
+
+        return response;
+      } catch (error) {
+        lastError = error;
+      }
+    }
+
+    throw lastError || new Error('Endpoint not found (404). Restart local Jekyll server.');
+  }
+
+  async function parseJsonResponse(response) {
+    try {
+      return await response.json();
+    } catch {
+      return { ok: false, error: `Invalid server response (${response.status})` };
+    }
+  }
+
   function applySidebarBranding(config) {
     const logoLink = document.querySelector('.sidebar .logo');
     if (!logoLink || logoLink.dataset.nloBrandingApplied === '1') {
@@ -498,19 +572,15 @@
     setPaletteStatus('Updating workflow and rebuilding SVG...');
 
     try {
-      const response = await fetch('/admin/_nlo/githubchart/apply', {
+      const response = await requestNloEndpoint('/_nlo/githubchart/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'same-origin',
-        cache: 'no-store',
         body: JSON.stringify(payload)
       });
 
-      const data = await response
-        .json()
-        .catch(() => ({ ok: false, error: `Invalid server response (${response.status})` }));
+      const data = await parseJsonResponse(response);
 
       if (!response.ok || !data.ok) {
         throw new Error(data.error || `Request failed (${response.status})`);
@@ -552,19 +622,15 @@
     setAvatarFrameStatus('Updating _config.yml...');
 
     try {
-      const response = await fetch('/admin/_nlo/avatar-frame/apply', {
+      const response = await requestNloEndpoint('/_nlo/avatar-frame/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'same-origin',
-        cache: 'no-store',
         body: JSON.stringify({ style })
       });
 
-      const data = await response
-        .json()
-        .catch(() => ({ ok: false, error: `Invalid server response (${response.status})` }));
+      const data = await parseJsonResponse(response);
 
       if (!response.ok || !data.ok) {
         throw new Error(data.error || `Request failed (${response.status})`);
@@ -602,19 +668,15 @@
     setTranslationMatrixStatus('Generating translation matrix...');
 
     try {
-      const response = await fetch('/admin/_nlo/translation-matrix/generate', {
+      const response = await requestNloEndpoint('/_nlo/translation-matrix/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        credentials: 'same-origin',
-        cache: 'no-store',
         body: JSON.stringify({})
       });
 
-      const data = await response
-        .json()
-        .catch(() => ({ ok: false, error: `Invalid server response (${response.status})` }));
+      const data = await parseJsonResponse(response);
 
       if (!response.ok || !data.ok) {
         throw new Error(data.error || `Request failed (${response.status})`);
