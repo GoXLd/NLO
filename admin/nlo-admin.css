@@ -908,7 +908,8 @@ html[data-mode='dark'] .warning {
 }
 
 #nlo-admin-gh-palette-picker,
-#nlo-admin-avatar-frame-picker {
+#nlo-admin-avatar-frame-picker,
+#nlo-admin-translation-matrix-tool {
   min-width: 0;
   width: 100%;
   padding: 0.62rem 0.7rem;
@@ -926,9 +927,32 @@ html[data-mode='dark'] .warning {
   letter-spacing: 0.01em;
 }
 
+.nlo-admin-translation-label {
+  margin: 0 0 0.28rem;
+  color: var(--admin-heading);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.nlo-admin-translation-note {
+  margin: 0 0 0.46rem;
+  color: var(--admin-text-muted);
+  font-size: 0.68rem;
+  line-height: 1.35;
+}
+
 .nlo-admin-avatar-frame-controls {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.38rem;
+}
+
+.nlo-admin-translation-controls {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: start;
   align-items: center;
   gap: 0.38rem;
 }
@@ -943,6 +967,47 @@ html[data-mode='dark'] .warning {
   border-radius: 8px;
   background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-strong));
   cursor: pointer;
+}
+
+#nlo-admin-translation-generate {
+  min-height: 30px;
+  padding: 0 0.62rem;
+  color: #f5f9ff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border: 1px solid var(--admin-accent);
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--admin-accent), var(--admin-accent-strong));
+  cursor: pointer;
+}
+
+#nlo-admin-translation-generate:hover {
+  filter: brightness(1.05);
+}
+
+#nlo-admin-translation-generate:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.nlo-admin-translation-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 0.55rem;
+  color: var(--admin-heading) !important;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--admin-border);
+  border-radius: 8px;
+  background: var(--admin-surface-muted);
+}
+
+.nlo-admin-translation-link:hover {
+  color: var(--admin-accent-strong) !important;
+  border-color: var(--admin-accent);
 }
 
 #nlo-admin-avatar-frame-apply:hover {
@@ -961,7 +1026,18 @@ html[data-mode='dark'] .warning {
   color: var(--admin-text-muted);
 }
 
+.nlo-admin-translation-status {
+  margin: 0.42rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.3;
+  color: var(--admin-text-muted);
+}
+
 .nlo-admin-avatar-frame-status[data-state='error'] {
+  color: var(--admin-danger);
+}
+
+.nlo-admin-translation-status[data-state='error'] {
   color: var(--admin-danger);
 }
 

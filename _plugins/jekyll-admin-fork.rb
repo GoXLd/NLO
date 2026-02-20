@@ -17,6 +17,9 @@ if defined?(JekyllAdmin::Server)
       set :static, true
       CHART_WORKFLOW_PATH = File.expand_path("../.github/workflows/update-githubchart.yml", __dir__)
       CHART_GENERATOR_PATH = File.expand_path("../tools/generate-githubchart.sh", __dir__)
+      TRANSLATION_MATRIX_GENERATOR_PATH = File.expand_path("../tools/generate-translation-matrix.rb", __dir__)
+      TRANSLATION_MATRIX_DOC_PATH = File.expand_path("../docs/translation-matrix.md", __dir__)
+      TRANSLATION_MATRIX_CSV_PATH = File.expand_path("../docs/translation-matrix.csv", __dir__)
       CONFIG_PATH = File.expand_path("../_config.yml", __dir__)
       COLOR_RE = /\A#[0-9a-fA-F]{6}\z/
       AVATAR_FRAME_STYLES = %w[round discord].freeze
@@ -95,6 +98,23 @@ if defined?(JekyllAdmin::Server)
         end
 
         JSON.generate(ok: true, style: validation[:style], config_path: CONFIG_PATH)
+      end
+
+      post "/_nlo/translation-matrix/generate" do
+        content_type :json
+
+        result = rebuild_translation_matrix
+        unless result[:ok]
+          status 500
+          return JSON.generate(ok: false, error: result[:error], output: result[:output])
+        end
+
+        JSON.generate(
+          ok: true,
+          markdown_path: TRANSLATION_MATRIX_DOC_PATH,
+          csv_path: TRANSLATION_MATRIX_CSV_PATH,
+          output: result[:output]
+        )
       end
 
       get "/*" do
@@ -252,6 +272,45 @@ if defined?(JekyllAdmin::Server)
             output: output
           }
         end
+      end
+
+      def rebuild_translation_matrix
+        unless File.file?(TRANSLATION_MATRIX_GENERATOR_PATH)
+          return {
+            ok: false,
+            error: "Translation matrix generator not found: #{TRANSLATION_MATRIX_GENERATOR_PATH}"
+          }
+        end
+
+        project_root = File.expand_path("..", __dir__)
+        env = {}
+        env["PATH"] = [Gem.bindir, File.dirname(RbConfig.ruby), ENV.fetch("PATH", "")].reject(&:empty?).join(":")
+
+        stdout, stderr, status = Open3.capture3(
+          env,
+          RbConfig.ruby,
+          TRANSLATION_MATRIX_GENERATOR_PATH,
+          chdir: project_root
+        )
+        output = [stdout, stderr].compact.join("\n").strip
+
+        unless status.success?
+          return {
+            ok: false,
+            error: "Failed to generate translation matrix",
+            output: output
+          }
+        end
+
+        unless File.file?(TRANSLATION_MATRIX_DOC_PATH) && File.file?(TRANSLATION_MATRIX_CSV_PATH)
+          return {
+            ok: false,
+            error: "Translation matrix files were not created",
+            output: output
+          }
+        end
+
+        { ok: true, output: output }
       end
 
       def write_avatar_frame_to_config(config_path:, style:)
