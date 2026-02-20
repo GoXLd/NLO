@@ -117,6 +117,22 @@ if defined?(JekyllAdmin::Server)
         )
       end
 
+      get "/_nlo/translation-matrix.md" do
+        serve_translation_matrix_file(
+          file_path: TRANSLATION_MATRIX_DOC_PATH,
+          mime_type: "text/markdown",
+          file_name: "translation-matrix.md"
+        )
+      end
+
+      get "/_nlo/translation-matrix.csv" do
+        serve_translation_matrix_file(
+          file_path: TRANSLATION_MATRIX_CSV_PATH,
+          mime_type: "text/csv",
+          file_name: "translation-matrix.csv"
+        )
+      end
+
       get "/*" do
         requested = params.fetch("splat", []).first.to_s
 
@@ -311,6 +327,18 @@ if defined?(JekyllAdmin::Server)
         end
 
         { ok: true, output: output }
+      end
+
+      def serve_translation_matrix_file(file_path:, mime_type:, file_name:)
+        unless File.file?(file_path)
+          status 404
+          content_type :json
+          return JSON.generate(ok: false, error: "File not found: #{file_name}")
+        end
+
+        content_type mime_type, charset: "utf-8"
+        headers "Content-Disposition" => %(inline; filename="#{file_name}")
+        send_file file_path
       end
 
       def write_avatar_frame_to_config(config_path:, style:)

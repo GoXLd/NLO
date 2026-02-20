@@ -204,6 +204,11 @@
     return candidates;
   }
 
+  function resolveNloLink(path, baseurl) {
+    const candidates = endpointCandidates(path, baseurl);
+    return candidates[0] || path;
+  }
+
   async function requestNloEndpoint(path, options = {}) {
     const config = await fetchAdminConfig();
     const candidates = endpointCandidates(path, config?.baseurl);
@@ -683,8 +688,8 @@
       }
 
       const config = await fetchAdminConfig();
-      const markdownUrl = withBaseurl('/docs/translation-matrix.md', config?.baseurl || '');
-      const csvUrl = withBaseurl('/docs/translation-matrix.csv', config?.baseurl || '');
+      const markdownUrl = resolveNloLink('/_nlo/translation-matrix.md', config?.baseurl || '');
+      const csvUrl = resolveNloLink('/_nlo/translation-matrix.csv', config?.baseurl || '');
 
       if (markdownLink) {
         markdownLink.href = markdownUrl;
@@ -923,14 +928,14 @@
 
     const markdownLink = document.createElement('a');
     markdownLink.className = 'nlo-admin-translation-link';
-    markdownLink.href = '/docs/translation-matrix.md';
+    markdownLink.href = '/admin/_nlo/translation-matrix.md';
     markdownLink.target = '_blank';
     markdownLink.rel = 'noopener noreferrer';
     markdownLink.textContent = 'Open .md';
 
     const csvLink = document.createElement('a');
     csvLink.className = 'nlo-admin-translation-link';
-    csvLink.href = '/docs/translation-matrix.csv';
+    csvLink.href = '/admin/_nlo/translation-matrix.csv';
     csvLink.target = '_blank';
     csvLink.rel = 'noopener noreferrer';
     csvLink.textContent = 'Open .csv';
