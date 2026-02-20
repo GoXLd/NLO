@@ -1,6 +1,7 @@
 ---
 title: Customize the Favicon
 language: en
+translation_key: customize-the-favicon
 author: GoXLd
 date: '2019-08-11 00:34:00 +0800'
 categories:

@@ -71,6 +71,19 @@ Fork entry points:
 
 Use the checklist in [`MIGRATION_CHECKLIST.md`](MIGRATION_CHECKLIST.md).
 
+## Translation Matrix
+
+To generate a machine-readable translation status table for AI translation workflows:
+
+```bash
+ruby tools/generate-translation-matrix.rb
+```
+
+Generated files:
+
+- `docs/translation-matrix.md`
+- `docs/translation-matrix.csv`
+
 ## License
 
 This project remains under the MIT license.

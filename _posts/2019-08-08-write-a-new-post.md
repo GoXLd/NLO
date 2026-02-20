@@ -1,6 +1,7 @@
 ---
 title: Writing a New Post
 language: en
+translation_key: write-a-new-post
 author: cotes
 date: 2019-08-08 14:10:00 +0800
 categories: [Blogging, Tutorial]

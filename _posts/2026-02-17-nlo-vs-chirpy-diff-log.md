@@ -1,6 +1,7 @@
 ---
 title: 'NLO vs Chirpy: Diff Log'
 language: ru-RU
+translation_key: nlo-vs-chirpy-diff-log
 description: Объективный список отличий темы NLO от оригинального jekyll-theme-chirpy.
   Пост обновляется по мере миграции и развития темы.
 date: '2026-02-17 12:30:00 +0100'
