@@ -4,9 +4,20 @@
   {% assign _base_path = _current_path %}
   {% assign _path_parts = _current_path | split: '/' %}
   {% assign _path_prefix = _path_parts[1] %}
+  {% assign _path_prefix_down = _path_prefix | downcase %}
+  {% assign _prefix_lang = '' %}
   {% assign _render_flags = available_langs.size <= 3 %}
 
-  {% if available_langs contains _path_prefix %}
+  {% for _locale in available_langs %}
+    {% assign _locale_down = _locale | downcase %}
+    {% assign _locale_alias = _locale_down | split: '-' | first %}
+    {% if _path_prefix_down == _locale_down or _path_prefix_down == _locale_alias %}
+      {% assign _prefix_lang = _locale %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if _prefix_lang != '' %}
     {% capture _prefix %}/{{ _path_prefix }}{% endcapture %}
     {% assign _base_path = _current_path | replace_first: _prefix, '' %}
     {% if _base_path == '' %}
@@ -22,12 +33,13 @@
       <span class="nlo-lang-flags__label">{{ _label }}</span>
       <div class="nlo-lang-flags__list" role="group" aria-label="{{ _label }}">
         {% for _lang_code in available_langs %}
+          {% assign _lang_prefix = _lang_code | downcase | split: '-' | first %}
           {% if _lang_code == default_lang %}
             {% assign _target_candidate = _base_path %}
           {% elsif _base_path == '/' %}
-            {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
+            {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
           {% else %}
-            {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
+            {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
           {% endif %}
 
           {% assign _target = _target_candidate %}
@@ -53,7 +65,7 @@
             {% if _lang_code == default_lang %}
               {% assign _target = '/' %}
             {% else %}
-              {% assign _target = '/' | append: _lang_code | append: '/' %}
+              {% assign _target = '/' | append: _lang_prefix | append: '/' %}
             {% endif %}
           {% endunless %}
 
@@ -107,12 +119,13 @@
         onchange="if (this.value) window.location.href = this.value;"
       >
         {% for _lang_code in available_langs %}
+          {% assign _lang_prefix = _lang_code | downcase | split: '-' | first %}
           {% if _lang_code == default_lang %}
             {% assign _target_candidate = _base_path %}
           {% elsif _base_path == '/' %}
-            {% assign _target_candidate = '/' | append: _lang_code | append: '/' %}
+            {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
           {% else %}
-            {% assign _target_candidate = '/' | append: _lang_code | append: _base_path %}
+            {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
           {% endif %}
 
           {% assign _target = _target_candidate %}
@@ -138,7 +151,7 @@
             {% if _lang_code == default_lang %}
               {% assign _target = '/' %}
             {% else %}
-              {% assign _target = '/' | append: _lang_code | append: '/' %}
+              {% assign _target = '/' | append: _lang_prefix | append: '/' %}
             {% endif %}
           {% endunless %}
 

@@ -51,9 +51,15 @@
 {% assign _url_lang = '' %}
 {% assign _url_parts = page.url | default: '/' | split: '/' %}
 {% assign _url_prefix = _url_parts[1] %}
-{% if available_langs contains _url_prefix %}
-  {% assign _url_lang = _url_prefix %}
-{% endif %}
+{% assign _url_prefix_down = _url_prefix | downcase %}
+{% for _locale in available_langs %}
+  {% assign _locale_down = _locale | downcase %}
+  {% assign _locale_alias = _locale_down | split: '-' | first %}
+  {% if _url_prefix_down == _locale_down or _url_prefix_down == _locale_alias %}
+    {% assign _url_lang = _locale %}
+    {% break %}
+  {% endif %}
+{% endfor %}
 
 {% if page.lang and available_langs contains page.lang %}
   {% assign lang = page.lang %}
