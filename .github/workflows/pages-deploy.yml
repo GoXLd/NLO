@@ -49,10 +49,9 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: lts/*
-          cache: npm
 
       - name: Install Node dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build frontend assets
         run: npm run build
