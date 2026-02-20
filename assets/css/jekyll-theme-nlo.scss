@@ -184,6 +184,7 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
   display: block;
   width: 100%;
   height: 100%;
+  opacity: 0.8;
   object-fit: cover;
   image-rendering: -webkit-optimize-contrast;
   pointer-events: none;
@@ -208,6 +209,10 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
 }
 
 .nlo-lang-flag.is-active {
+  img {
+    opacity: 1;
+  }
+
   box-shadow: rgb(138 180 248 / 22%) 0 0 0 1px inset;
 }
 
