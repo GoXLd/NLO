@@ -1247,6 +1247,67 @@ html[data-mode='dark'] .warning {
   margin-left: 0.52rem;
 }
 
+#nlo-admin-posts-i18n-controls {
+  display: inline-flex;
+  gap: 0.4rem;
+  align-items: center;
+  margin-left: 0.52rem;
+}
+
+#nlo-admin-posts-i18n-filter {
+  min-height: 34px;
+  padding: 0 0.62rem;
+  color: var(--admin-heading);
+  font-size: 0.76rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 9px;
+  background: var(--admin-surface);
+}
+
+#nlo-admin-posts-i18n-summary {
+  margin: 0.35rem 0 0;
+  color: var(--admin-text-muted);
+  font-size: 0.72rem;
+}
+
+.nlo-admin-post-status {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.45rem;
+  padding: 0.14rem 0.45rem;
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+  background: var(--admin-surface);
+}
+
+.nlo-admin-post-status.is-source {
+  color: #7ab6ff;
+  border-color: rgb(122 182 255 / 45%);
+  background: rgb(75 137 210 / 15%);
+}
+
+.nlo-admin-post-status.is-up-to-date {
+  color: #7ad89a;
+  border-color: rgb(122 216 154 / 42%);
+  background: rgb(73 149 93 / 16%);
+}
+
+.nlo-admin-post-status.is-outdated {
+  color: #ffc27e;
+  border-color: rgb(255 194 126 / 50%);
+  background: rgb(177 121 42 / 20%);
+}
+
+.nlo-admin-post-status.is-untracked {
+  color: #b7bfd0;
+  border-color: rgb(183 191 208 / 38%);
+  background: rgb(139 150 177 / 14%);
+}
+
 .nlo-admin-matrix-body {
   min-height: 100vh;
   margin: 0;
@@ -1333,6 +1394,12 @@ html[data-mode='dark'] .warning {
   background: var(--admin-surface);
 }
 
+.nlo-admin-matrix-badge.is-warning {
+  color: #ffc27e;
+  border-color: rgb(255 194 126 / 45%);
+  background: rgb(177 121 42 / 18%);
+}
+
 .nlo-admin-matrix-table-wrap {
   overflow: auto;
   border: 1px solid var(--admin-border);
@@ -1372,13 +1439,55 @@ html[data-mode='dark'] .warning {
   color: var(--admin-text);
 }
 
-.nlo-admin-matrix-lang.is-available {
-  color: var(--admin-success);
-  font-weight: 700;
+.nlo-admin-matrix-source {
+  color: var(--admin-heading);
+  font-family: 'Source Code Pro', ui-monospace, Menlo, monospace;
 }
 
-.nlo-admin-matrix-lang.is-missing {
+.nlo-admin-matrix-lang {
+  white-space: nowrap;
+}
+
+.nlo-admin-matrix-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--admin-border);
+  border-radius: 999px;
+  background: var(--admin-surface-muted);
+}
+
+.nlo-admin-matrix-pill.is-source {
+  color: #7ab6ff;
+  border-color: rgb(122 182 255 / 45%);
+  background: rgb(75 137 210 / 16%);
+}
+
+.nlo-admin-matrix-pill.is-up_to_date {
+  color: #7ad89a;
+  border-color: rgb(122 216 154 / 42%);
+  background: rgb(73 149 93 / 16%);
+}
+
+.nlo-admin-matrix-pill.is-outdated {
+  color: #ffc27e;
+  border-color: rgb(255 194 126 / 50%);
+  background: rgb(177 121 42 / 21%);
+}
+
+.nlo-admin-matrix-pill.is-untracked {
+  color: #b7bfd0;
+  border-color: rgb(183 191 208 / 38%);
+  background: rgb(139 150 177 / 14%);
+}
+
+.nlo-admin-matrix-pill.is-missing {
   color: var(--admin-text-muted);
+  border-color: var(--admin-border);
+  background: var(--admin-surface);
 }
 
 .nlo-admin-matrix-status {
@@ -1443,6 +1552,11 @@ html[data-mode='dark'] .warning {
 
 @media (max-width: 640px) {
   #nlo-admin-translation-matrix-nav {
+    margin-top: 0.35rem;
+    margin-left: 0;
+  }
+
+  #nlo-admin-posts-i18n-controls {
     margin-top: 0.35rem;
     margin-left: 0;
   }

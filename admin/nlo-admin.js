@@ -7,6 +7,9 @@
   const GH_PALETTE_KEY = 'gh_palette';
   const DEFAULT_GH_PALETTE = 'default';
   const AVATAR_FRAME_DEFAULT = 'round';
+  const POSTS_I18N_FILTER_KEY = 'nlo_posts_i18n_filter';
+  const POSTS_I18N_FILTER_ALL = 'all';
+  const POSTS_I18N_FILTER_OUTDATED = '__outdated__';
   const avatarFrameOptions = {
     round: 'Round',
     discord: 'Discord Style'
@@ -85,6 +88,9 @@
   };
   let adminConfigCache = null;
   let adminConfigPromise = null;
+  let translationMatrixDataCache = null;
+  let translationMatrixDataPromise = null;
+  let postsI18nRefreshTimer = null;
 
   function trimTrailingSlash(value) {
     return String(value || '').replace(/\/+$/, '');
@@ -268,6 +274,37 @@
     } catch {
       return { ok: false, error: `Invalid server response (${response.status})` };
     }
+  }
+
+  async function fetchTranslationMatrixData() {
+    if (translationMatrixDataCache) {
+      return translationMatrixDataCache;
+    }
+
+    if (translationMatrixDataPromise) {
+      return translationMatrixDataPromise;
+    }
+
+    translationMatrixDataPromise = (async () => {
+      const response = await requestNloEndpoint('/_nlo/translation-matrix/data');
+      const payload = await parseJsonResponse(response);
+
+      if (!response.ok || !payload.ok || !payload.data) {
+        throw new Error(payload.error || `Translation matrix request failed (${response.status})`);
+      }
+
+      translationMatrixDataCache = payload.data;
+      return translationMatrixDataCache;
+    })()
+      .catch((error) => {
+        translationMatrixDataCache = null;
+        throw error;
+      })
+      .finally(() => {
+        translationMatrixDataPromise = null;
+      });
+
+    return translationMatrixDataPromise;
   }
 
   function applySidebarBranding(config) {
@@ -849,13 +886,18 @@
     void syncAvatarFrameSelect(select);
   }
 
-  async function ensurePostsTranslationMatrixNav() {
-    const existing = document.getElementById('nlo-admin-translation-matrix-nav');
+  function findNewPostButton() {
     const candidates = Array.from(document.querySelectorAll('a,button')).filter((element) => {
       const text = (element.textContent || '').trim().toLowerCase();
       return text === 'new post';
     });
-    const newPostButton = candidates[0] || null;
+
+    return candidates[0] || null;
+  }
+
+  async function ensurePostsTranslationMatrixNav() {
+    const existing = document.getElementById('nlo-admin-translation-matrix-nav');
+    const newPostButton = findNewPostButton();
 
     if (!newPostButton) {
       existing?.remove();
@@ -889,6 +931,317 @@
     link.title = 'Open matrix of posts and available languages';
 
     newPostButton.insertAdjacentElement('afterend', link);
+  }
+
+  function normalizeMatrixFilePath(filePath) {
+    const decoded = decodeURIComponent(String(filePath || '').trim());
+    if (!decoded) {
+      return '';
+    }
+
+    return decoded.replace(/^\//, '');
+  }
+
+  function filePathVariants(filePath) {
+    const normalized = normalizeMatrixFilePath(filePath);
+    if (!normalized) {
+      return [];
+    }
+
+    const variants = new Set();
+    variants.add(normalized);
+    variants.add(normalized.replace(/^_posts\//, ''));
+    const parts = normalized.split('/');
+    variants.add(parts[parts.length - 1]);
+
+    return Array.from(variants).filter(Boolean);
+  }
+
+  function statusBadgeClass(status) {
+    const key = String(status || 'missing').toLowerCase();
+    if (key === 'source' || key === 'up_to_date' || key === 'outdated' || key === 'untracked') {
+      return key;
+    }
+    return 'untracked';
+  }
+
+  function statusBadgeText(meta) {
+    if (!meta) {
+      return '';
+    }
+
+    if (meta.status === 'source') {
+      return `source · ${meta.language} · r${meta.sourceRevision}`;
+    }
+
+    if (meta.status === 'up_to_date') {
+      const revision = meta.revision || meta.sourceRevision;
+      return `ok · ${meta.language} · r${revision}`;
+    }
+
+    if (meta.status === 'outdated') {
+      const revision = meta.revision ? `r${meta.revision}` : 'r?';
+      return `stale · ${meta.language} · ${revision}/r${meta.sourceRevision}`;
+    }
+
+    return `untracked · ${meta.language}`;
+  }
+
+  function statusBadgeTitle(meta) {
+    if (!meta) {
+      return '';
+    }
+
+    const lines = [];
+    lines.push(`Translation key: ${meta.translationKey}`);
+    lines.push(`Language: ${meta.language}`);
+    lines.push(`Status: ${meta.status}`);
+    lines.push(`Source: ${meta.sourceLanguage} r${meta.sourceRevision}`);
+    if (meta.file) {
+      lines.push(`File: ${meta.file}`);
+    }
+    if (meta.primaryFile && meta.primaryFile !== meta.file) {
+      lines.push(`Primary file: ${meta.primaryFile}`);
+    }
+
+    return lines.join('\n');
+  }
+
+  function extractPostFileFromAnchor(anchor) {
+    if (!anchor || !(anchor instanceof HTMLAnchorElement)) {
+      return '';
+    }
+
+    const href = decodeURIComponent(anchor.getAttribute('href') || '');
+    if (!href.includes('entries')) {
+      return '';
+    }
+
+    const match = href.match(/(\d{4}-\d{2}-\d{2}-[^/?#]+\.(?:md|markdown))/i);
+    if (!match) {
+      return '';
+    }
+
+    return `_posts/${match[1]}`;
+  }
+
+  function buildTranslationFileIndex(matrixData) {
+    const index = new Map();
+    const languages = Array.isArray(matrixData?.languages) ? matrixData.languages : [];
+    const items = Array.isArray(matrixData?.items) ? matrixData.items : [];
+
+    items.forEach((item) => {
+      const sourceLanguage = item.source_language || languages[0] || 'en';
+      const sourceRevision = Number(item.source_revision) > 0 ? Number(item.source_revision) : 1;
+
+      languages.forEach((language) => {
+        const entry = item.by_language?.[language];
+        const files = Array.isArray(entry?.files) ? entry.files : [];
+        if (!files.length) {
+          return;
+        }
+
+        files.forEach((filePath) => {
+          const normalized = normalizeMatrixFilePath(filePath);
+          const payload = {
+            translationKey: item.translation_key || '',
+            title: item.title || '',
+            language,
+            status: entry?.status || (entry?.available ? 'up_to_date' : 'missing'),
+            revision: Number(entry?.revision) > 0 ? Number(entry.revision) : null,
+            sourceLanguage,
+            sourceRevision,
+            file: normalized,
+            primaryFile: normalizeMatrixFilePath(entry?.primary_file || files[0] || ''),
+            missingLanguages: Array.isArray(item.missing_languages) ? item.missing_languages : [],
+            outdatedLanguages: Array.isArray(item.outdated_languages) ? item.outdated_languages : [],
+            untrackedLanguages: Array.isArray(item.untracked_languages) ? item.untracked_languages : []
+          };
+
+          filePathVariants(normalized).forEach((variant) => {
+            index.set(variant, payload);
+          });
+        });
+      });
+    });
+
+    return index;
+  }
+
+  function matchRowContainer(anchor) {
+    return (
+      anchor.closest('tr') ||
+      anchor.closest('[role="row"]') ||
+      anchor.closest('li') ||
+      anchor.closest('.list-group-item') ||
+      anchor.parentElement
+    );
+  }
+
+  function collectPostRows() {
+    const result = [];
+    const visited = new Set();
+    const anchors = Array.from(document.querySelectorAll('.content a[href*="entries"]'));
+
+    anchors.forEach((anchor) => {
+      const file = extractPostFileFromAnchor(anchor);
+      if (!file) {
+        return;
+      }
+
+      const row = matchRowContainer(anchor);
+      if (!row || visited.has(row)) {
+        return;
+      }
+
+      visited.add(row);
+      result.push({ row, anchor, file });
+    });
+
+    return result;
+  }
+
+  function ensurePostsI18nControls(newPostButton, matrixData) {
+    const controlsId = 'nlo-admin-posts-i18n-controls';
+    const summaryId = 'nlo-admin-posts-i18n-summary';
+    let controls = document.getElementById(controlsId);
+    const languages = Array.isArray(matrixData?.languages) ? matrixData.languages : [];
+
+    if (!controls) {
+      controls = document.createElement('div');
+      controls.id = controlsId;
+
+      const select = document.createElement('select');
+      select.id = 'nlo-admin-posts-i18n-filter';
+      controls.appendChild(select);
+
+      newPostButton.insertAdjacentElement('afterend', controls);
+
+      select.addEventListener('change', () => {
+        sessionStorage.setItem(POSTS_I18N_FILTER_KEY, select.value);
+        schedulePostsI18nRefresh();
+      });
+    }
+
+    const select = controls.querySelector('#nlo-admin-posts-i18n-filter');
+    if (!select) {
+      return null;
+    }
+
+    const currentValue =
+      sessionStorage.getItem(POSTS_I18N_FILTER_KEY) || POSTS_I18N_FILTER_ALL;
+    const options = [
+      { value: POSTS_I18N_FILTER_ALL, label: 'All language versions' },
+      ...languages.map((language) => ({ value: language, label: `Language: ${language}` })),
+      { value: POSTS_I18N_FILTER_OUTDATED, label: 'Outdated only' }
+    ];
+
+    select.innerHTML = '';
+    options.forEach((optionData) => {
+      const option = document.createElement('option');
+      option.value = optionData.value;
+      option.textContent = optionData.label;
+      option.selected = optionData.value === currentValue;
+      select.appendChild(option);
+    });
+
+    let summary = document.getElementById(summaryId);
+    if (!summary) {
+      summary = document.createElement('p');
+      summary.id = summaryId;
+      summary.textContent = '';
+      controls.insertAdjacentElement('afterend', summary);
+    }
+
+    return { filter: select.value, summary };
+  }
+
+  function applyRowVisibility(row, isVisible) {
+    row.style.display = isVisible ? '' : 'none';
+  }
+
+  function shouldShowRow(meta, filter) {
+    if (filter === POSTS_I18N_FILTER_ALL) {
+      return true;
+    }
+
+    if (filter === POSTS_I18N_FILTER_OUTDATED) {
+      return Boolean(meta && meta.status === 'outdated');
+    }
+
+    return Boolean(meta && meta.language === filter);
+  }
+
+  function renderPostStatusBadge(rowEntry, meta) {
+    const existing = rowEntry.anchor.parentElement?.querySelector('.nlo-admin-post-status');
+    if (!meta) {
+      existing?.remove();
+      return;
+    }
+
+    const badge = existing || document.createElement('span');
+    badge.className = `nlo-admin-post-status is-${statusBadgeClass(meta.status)}`;
+    badge.textContent = statusBadgeText(meta);
+    badge.title = statusBadgeTitle(meta);
+
+    if (!existing) {
+      rowEntry.anchor.insertAdjacentElement('afterend', badge);
+    }
+  }
+
+  async function refreshPostsI18nUI() {
+    const newPostButton = findNewPostButton();
+    if (!newPostButton) {
+      document.getElementById('nlo-admin-posts-i18n-controls')?.remove();
+      document.getElementById('nlo-admin-posts-i18n-summary')?.remove();
+      return;
+    }
+
+    try {
+      const matrixData = await fetchTranslationMatrixData();
+      const controls = ensurePostsI18nControls(newPostButton, matrixData);
+      if (!controls) {
+        return;
+      }
+
+      const fileIndex = buildTranslationFileIndex(matrixData);
+      const rows = collectPostRows();
+      let visibleCount = 0;
+      let staleCount = 0;
+
+      rows.forEach((rowEntry) => {
+        const variants = filePathVariants(rowEntry.file);
+        const meta = variants.map((variant) => fileIndex.get(variant)).find(Boolean) || null;
+        const visible = shouldShowRow(meta, controls.filter);
+
+        renderPostStatusBadge(rowEntry, meta);
+        applyRowVisibility(rowEntry.row, visible);
+
+        if (visible) {
+          visibleCount += 1;
+        }
+        if (meta && meta.status === 'outdated') {
+          staleCount += 1;
+        }
+      });
+
+      controls.summary.textContent = `Visible: ${visibleCount}/${rows.length} · Outdated: ${staleCount}`;
+    } catch (error) {
+      const summary = document.getElementById('nlo-admin-posts-i18n-summary');
+      if (summary) {
+        summary.textContent = `Translation status unavailable: ${error.message}`;
+      }
+    }
+  }
+
+  function schedulePostsI18nRefresh() {
+    if (postsI18nRefreshTimer) {
+      window.clearTimeout(postsI18nRefreshTimer);
+    }
+    postsI18nRefreshTimer = window.setTimeout(() => {
+      postsI18nRefreshTimer = null;
+      void refreshPostsI18nUI();
+    }, 90);
   }
 
   function fieldScore(input, hints) {
@@ -1226,6 +1579,7 @@
     ensureGhPalettePicker();
     ensureAvatarFramePicker();
     void ensurePostsTranslationMatrixNav();
+    schedulePostsI18nRefresh();
     void ensureSidebarBranding();
     ensurePathAutofill();
     ensureAuthorHint();
@@ -1237,6 +1591,7 @@
       ensureGhPalettePicker();
       ensureAvatarFramePicker();
       void ensurePostsTranslationMatrixNav();
+      schedulePostsI18nRefresh();
       void ensureSidebarBranding();
       ensurePathAutofill();
       ensureAuthorHint();

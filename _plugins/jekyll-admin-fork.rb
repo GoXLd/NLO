@@ -399,26 +399,78 @@ if defined?(JekyllAdmin::Server)
         raw.map { |entry| entry.to_s.strip }.reject(&:empty?).uniq
       end
 
+      def parse_integer(value)
+        Integer(value)
+      rescue StandardError
+        nil
+      end
+
+      def csv_list(value)
+        value.to_s.split(";").map(&:strip).reject(&:empty?)
+      end
+
       def build_translation_matrix_row(row, languages)
         by_language = {}
+        source_language = row["source_language"].to_s.strip
+        source_language = languages.first.to_s if source_language.empty?
+        source_revision = parse_integer(row["source_revision"]) || 1
 
         languages.each do |language|
           token = language.gsub(/[^a-zA-Z0-9]/, "_")
-          files = row["files_#{token}"].to_s.split(";").map(&:strip).reject(&:empty?)
-          available = row["has_#{token}"].to_s == "1"
+          files = csv_list(row["files_#{token}"])
+          legacy_available = row["has_#{token}"].to_s == "1"
+          status_token = row["status_#{token}"].to_s.strip
+          revision_token = parse_integer(row["revision_#{token}"])
+
+          status =
+            if status_token.empty?
+              if legacy_available
+                language == source_language ? "source" : "up_to_date"
+              else
+                "missing"
+              end
+            else
+              status_token
+            end
+
+          available = status != "missing"
+          revision = available ? revision_token : nil
+
           by_language[language] = {
             available: available,
-            files: files
+            files: files,
+            status: status,
+            revision: revision,
+            primary_file: row["primary_file_#{token}"].to_s.strip.empty? ? files.first.to_s : row["primary_file_#{token}"].to_s.strip
           }
         end
 
-        missing_languages = row["missing_languages"].to_s.split(";").map(&:strip).reject(&:empty?)
+        missing_languages = csv_list(row["missing_languages"])
+        outdated_languages = csv_list(row["outdated_languages"])
+        untracked_languages = csv_list(row["untracked_languages"])
+
+        if outdated_languages.empty?
+          outdated_languages = by_language
+            .select { |_lang, data| data[:status] == "outdated" }
+            .keys
+        end
+
+        if untracked_languages.empty?
+          untracked_languages = by_language
+            .select { |_lang, data| data[:status] == "untracked" }
+            .keys
+        end
 
         {
           translation_key: row["translation_key"].to_s,
           title: row["title"].to_s,
+          source_language: source_language,
+          source_revision: source_revision,
+          source_file: row["source_file"].to_s,
           by_language: by_language,
-          missing_languages: missing_languages
+          missing_languages: missing_languages,
+          outdated_languages: outdated_languages,
+          untracked_languages: untracked_languages
         }
       end
 

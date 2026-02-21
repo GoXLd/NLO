@@ -1,5 +1,12 @@
 (() => {
   const MODE_KEY = 'mode';
+  const STATUS_LABELS = {
+    source: 'Source',
+    up_to_date: 'Up-to-date',
+    outdated: 'Outdated',
+    untracked: 'Untracked',
+    missing: 'Missing'
+  };
 
   function trimTrailingSlash(value) {
     return String(value || '').replace(/\/+$/, '');
@@ -105,6 +112,23 @@
     }
 
     const langs = (data.languages || []).join(', ');
+    let outdatedCount = 0;
+    let missingCount = 0;
+    let untrackedCount = 0;
+
+    (data.items || []).forEach((item) => {
+      (data.languages || []).forEach((lang) => {
+        const status = item.by_language?.[lang]?.status || 'missing';
+        if (status === 'outdated') {
+          outdatedCount += 1;
+        } else if (status === 'missing') {
+          missingCount += 1;
+        } else if (status === 'untracked') {
+          untrackedCount += 1;
+        }
+      });
+    });
+
     meta.innerHTML = '';
 
     const badge1 = document.createElement('span');
@@ -119,9 +143,63 @@
     badge3.className = 'nlo-admin-matrix-badge';
     badge3.textContent = `Updated: ${humanDate(data.generated_at)}`;
 
+    const badge4 = document.createElement('span');
+    badge4.className = 'nlo-admin-matrix-badge is-warning';
+    badge4.textContent = `Outdated: ${outdatedCount}`;
+
+    const badge5 = document.createElement('span');
+    badge5.className = 'nlo-admin-matrix-badge';
+    badge5.textContent = `Missing: ${missingCount}`;
+
+    const badge6 = document.createElement('span');
+    badge6.className = 'nlo-admin-matrix-badge';
+    badge6.textContent = `Untracked: ${untrackedCount}`;
+
     meta.appendChild(badge1);
     meta.appendChild(badge2);
     meta.appendChild(badge3);
+    meta.appendChild(badge4);
+    meta.appendChild(badge5);
+    meta.appendChild(badge6);
+  }
+
+  function statusText(entry, item) {
+    const status = entry?.status || 'missing';
+    if (status === 'source') {
+      return `${STATUS_LABELS.source} r${item.source_revision || 1}`;
+    }
+
+    if (status === 'up_to_date') {
+      const revision = entry.revision || item.source_revision || 1;
+      return `${STATUS_LABELS.up_to_date} r${revision}`;
+    }
+
+    if (status === 'outdated') {
+      const revision = entry.revision ? `r${entry.revision}` : 'r?';
+      return `${STATUS_LABELS.outdated} ${revision}/r${item.source_revision || 1}`;
+    }
+
+    return STATUS_LABELS[status] || status;
+  }
+
+  function statusTitle(entry, item) {
+    const files = Array.isArray(entry?.files) ? entry.files : [];
+    const lines = [];
+    lines.push(`Status: ${statusText(entry, item)}`);
+    if (item.source_language) {
+      lines.push(`Source: ${item.source_language} (r${item.source_revision || 1})`);
+    }
+    if (entry?.primary_file) {
+      lines.push(`Primary file: ${entry.primary_file}`);
+    }
+    if (files.length) {
+      lines.push(`Files:\n${files.join('\n')}`);
+    }
+    return lines.join('\n');
+  }
+
+  function statusClass(status) {
+    return String(status || 'missing').replace(/[^a-z0-9_-]/gi, '-').toLowerCase();
   }
 
   function renderTable(data) {
@@ -139,7 +217,7 @@
     thead.innerHTML = '';
     tbody.innerHTML = '';
 
-    const headers = ['Translation Key', 'Title', ...(data.languages || [])];
+    const headers = ['Translation Key', 'Title', 'Source', ...(data.languages || [])];
     const headerRow = document.createElement('tr');
     headers.forEach((text) => {
       const th = document.createElement('th');
@@ -161,21 +239,23 @@
       titleCell.textContent = item.title || '-';
       row.appendChild(titleCell);
 
+      const sourceCell = document.createElement('td');
+      sourceCell.className = 'nlo-admin-matrix-source';
+      sourceCell.textContent = `${item.source_language || '-'} · r${item.source_revision || 1}`;
+      if (item.source_file) {
+        sourceCell.title = item.source_file;
+      }
+      row.appendChild(sourceCell);
+
       (data.languages || []).forEach((lang) => {
         const langCell = document.createElement('td');
-        const entry = item.by_language?.[lang] || { available: false, files: [] };
-        const files = Array.isArray(entry.files) ? entry.files : [];
-
-        if (entry.available) {
-          langCell.className = 'nlo-admin-matrix-lang is-available';
-          langCell.textContent = 'Yes';
-          if (files.length) {
-            langCell.title = files.join('\n');
-          }
-        } else {
-          langCell.className = 'nlo-admin-matrix-lang is-missing';
-          langCell.textContent = '—';
-        }
+        const entry = item.by_language?.[lang] || { available: false, files: [], status: 'missing' };
+        const pill = document.createElement('span');
+        pill.className = `nlo-admin-matrix-pill is-${statusClass(entry.status)}`;
+        pill.textContent = statusText(entry, item);
+        pill.title = statusTitle(entry, item);
+        langCell.className = 'nlo-admin-matrix-lang';
+        langCell.appendChild(pill);
 
         row.appendChild(langCell);
       });
