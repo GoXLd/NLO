@@ -65,14 +65,14 @@
     const prefixFromConfig = normalizeBaseurl(baseurl);
 
     if (prefixFromPath) {
-      return `${prefixFromPath}/admin/posts`;
+      return `${prefixFromPath}/admin/#/posts`;
     }
 
     if (prefixFromConfig) {
-      return `${prefixFromConfig}/admin/posts`;
+      return `${prefixFromConfig}/admin/#/posts`;
     }
 
-    return '/admin/posts';
+    return '/admin/#/posts';
   }
 
   function setStatus(message, isError = false) {
