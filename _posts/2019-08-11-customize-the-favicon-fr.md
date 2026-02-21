@@ -1,9 +1,9 @@
 ---
-title: 'Personnaliser le favicon'
-language: 'fr-FR'
+title: Personnaliser le Favicon
+language: fr-FR
 translation_key: customize-the-favicon
 author: GoXLd
-date: '2019-08-11 00:34:00 +0800'
+date: 2019-08-11 00:34:00 +0800
 categories:
 - Blogging
 - Tutorial
@@ -11,33 +11,33 @@ tags:
 - favicon
 ---
 
-The [favicons](https://www.favicon-generator.org/about/) of [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) are placed in the directory `assets/img/favicons/`{: .filepath}. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons.
+Les [favicons](https://www.favicon-generator.org/about/) de [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) sont placés dans le répertoire `assets/img/favicons/`{: .filepath}. Vous souhaiterez peut-être les remplacer par les vôtres. Les sections suivantes vous guideront pour créer et remplacer les favicons par défaut.
 
-## Generate the favicon
+## Générer le favicon
 
-Prepare a square image (PNG, JPG, or SVG) with a size of 512x512 or more, and then go to the online tool [**Real Favicon Generator**](https://realfavicongenerator.net/) and click the button <kbd>Pick your favicon image</kbd> to upload your image file.
+Préparez une image carrée (PNG, JPG ou SVG) d'une taille de 512x512 ou plus, puis accédez à l'outil en ligne [**Real Favicon Generator**](https://realfavicongenerator.net/) et cliquez sur le bouton <kbd>Choisissez votre image favicon</kbd> pour télécharger votre fichier image.
 
-In the next step, the webpage will show all usage scenarios. You can keep the default options, scroll to the bottom of the page, and click the button <kbd>Next →</kbd> to generate the favicon.
+À l'étape suivante, la page Web affichera tous les scénarios d'utilisation. Vous pouvez conserver les options par défaut, faire défiler vers le bas de la page et cliquer sur le bouton <kbd>Suivant →</kbd> pour générer le favicon.
 
-## Download & Replace
+## Télécharger et remplacer
 
-Download the generated package, unzip and delete the following file(s) from the extracted files:
+Téléchargez le package généré, décompressez et supprimez le(s) fichier(s) suivant(s) des fichiers extraits :
 
-- `site.webmanifest`{: .filepath}
+- `site.webmanifest`{ : .filepath}
 
-And then copy the remaining image files (`.PNG`{: .filepath}, `.ICO`{: .filepath} and `.SVG`{: .filepath}) to cover the original files in the directory `assets/img/favicons/`{: .filepath} of your Jekyll site. If your Jekyll site doesn't have this directory yet, just create one.
+Et puis copiez les fichiers image restants (`.PNG`{: .filepath}, `.ICO`{: .filepath} et `.SVG`{: .filepath}) pour couvrir les fichiers originaux dans le répertoire `assets/img/favicons/`{: .filepath} de votre site Jekyll. Si votre site Jekyll ne dispose pas encore de ce répertoire, créez-en simplement un.
 
-The following table will help you understand the changes to the favicon files:
+Le tableau suivant vous aidera à comprendre les modifications apportées aux fichiers favicon :
 
-| File(s) | From Online Tool | From Chirpy |
+| Fichier(s) | Depuis l'outil en ligne | De Chirpy |
 | ------- | :--------------: | :---------: |
-| `*.PNG` |        ✓         |      ✗      |
-| `*.ICO` |        ✓         |      ✗      |
-| `*.SVG` |        ✓         |      ✗      |
+| `*.PNG` | None | None |
+| `*.ICO` | None | None |
+| `*.SVG` | None | None |
 
 
 <!-- markdownlint-disable-next-line -->
->  ✓ means keep, ✗ means delete.
+>  ✓ signifie conserver, ✗ signifie supprimer.
 {: .prompt-info }
 
-The next time you build the site, the favicon will be replaced with a customized edition.
+La prochaine fois que vous créerez le site, le favicon sera remplacé par une édition personnalisée.

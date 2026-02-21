@@ -1,12 +1,16 @@
 ---
-title: 'Текст и типографика'
-language: 'ru-RU'
+title: Текст и типографика
+language: ru-RU
 translation_key: text-and-typography
-description: Examples of text, typography, math equations, diagrams, flowcharts, pictures, videos, and more.
+description: Примеры текста, типографики, математических уравнений, диаграмм, блок-схем,
+  изображений, видео и многого другого.
 author: cotes
 date: 2019-08-08 11:33:00 +0800
-categories: [Blogging, Demo]
-tags: [typography]
+categories:
+- Blogging
+- Demo
+tags:
+- typography
 pin: true
 math: true
 mermaid: true
@@ -16,110 +20,110 @@ image:
   alt: Responsive rendering of Chirpy theme on multiple devices.
 ---
 
-## Headings
+## Заголовки
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-# H1 — heading
+# H1 — заголовок
 {: .mt-4 .mb-0 }
 
-## H2 — heading
+## H2 — заголовок
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-### H3 — heading
+### H3 — заголовок
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-#### H4 — heading
+#### H4 — заголовок
 {: data-toc-skip='' .mt-4 }
 <!-- markdownlint-restore -->
 
-## Paragraph
+## Параграф
 
-Quisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas interdum malesuada egestas. Duis consectetur porta risus, sit amet vulputate urna facilisis ac. Phasellus semper dui non purus ultrices sodales. Aliquam ante lorem, ornare a feugiat ac, finibus nec mauris. Vivamus ut tristique nisi. Sed vel leo vulputate, efficitur risus non, posuere mi. Nullam tincidunt bibendum rutrum. Proin commodo ornare sapien. Vivamus interdum diam sed sapien blandit, sit amet aliquam risus mattis. Nullam arcu turpis, mollis quis laoreet at, placerat id nibh. Suspendisse venenatis eros eros.
+Quisque egestas convallis ipsum, ut sollicitudin risustincidunt a. Maecenas interdum Malesuada egestas. Duis consectetur porta risus, sit amet vulputate urna facilisis ac. Phasellus semper dui non purus ultrices sodales. Aliquam ante lorem, ornare a feugiat ac, finibus nec mauris. Vivamus ut tristique nisi. Sed vel leo vulputate, efficitur risus not, posuere mi. Нуллам тинцидунт бибендум рутрум. Proin commodo ornare sapien. Vivamus interdum diam sed sapien blandit, sit amet aliquam risus mattis. Nullam arcu turpis, mollis quis laoreet at, Placerat id nibh. Suspendisse venenatis eros eros.
 
-## Lists
+## Списки
 
-### Ordered list
+### Упорядоченный список
 
-1. Firstly
-2. Secondly
-3. Thirdly
+1. Во-первых
+2. Во-вторых
+3. В-третьих
 
-### Unordered list
+### Неупорядоченный список
 
-- Chapter
-  - Section
-    - Paragraph
+- Глава
+  - Раздел
+    - Параграф
 
-### ToDo list
+### Список дел
 
-- [ ] Job
-  - [x] Step 1
-  - [x] Step 2
-  - [ ] Step 3
+- [ ] Работа
+  - [x] Шаг 1
+  - [x] Шаг 2
+  - [ ] Шаг 3
 
-### Description list
+### Список описаний
 
-Sun
-: the star around which the earth orbits
+Солнце
+: звезда, вокруг которой вращается Земля
 
-Moon
-: the natural satellite of the earth, visible by reflected light from the sun
+Луна
+: естественный спутник Земли, видимый в отраженном свете Солнца.
 
-## Block Quote
+## Блокировать цитату
 
-> This line shows the _block quote_.
+> Эта строка показывает _блочную цитату_.
 
-## Prompts
+## Подсказки
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-> An example showing the `tip` type prompt.
+> Пример, показывающий приглашение типа `tip`.
 {: .prompt-tip }
 
-> An example showing the `info` type prompt.
+> Пример, показывающий приглашение типа `info`.
 {: .prompt-info }
 
-> An example showing the `warning` type prompt.
+> Пример, показывающий приглашение типа `warning`.
 {: .prompt-warning }
 
-> An example showing the `danger` type prompt.
+> Пример, показывающий приглашение типа `danger`.
 {: .prompt-danger }
 <!-- markdownlint-restore -->
 
-## Tables
+## Таблицы
 
-| Company                      | Contact          | Country |
+| Компания | Контакт | Страна |
 | :--------------------------- | :--------------- | ------: |
-| Alfreds Futterkiste          | Maria Anders     | Germany |
-| Island Trading               | Helen Bennett    |      UK |
-| Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
+| Альфредс Футтеркисте | Мария Андерс | Германия |
+| Островная торговля | Хелен Беннетт | Великобритания |
+| Магазин Алиментари Риунити | Джованни Ровелли | Италия |
 
-## Links
+## Ссылки
 
 <http://127.0.0.1:4000>
 
-## Footnote
+## Сноска
 
-Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
+Нажмите на крючок, чтобы найти сноску[^footnote], а вот еще одну сноску[^fn-nth-2].
 
-## Inline code
+## Встроенный код
 
-This is an example of `Inline Code`.
+Это пример `Inline Code`.
 
-## Filepath
+## Путь к файлу
 
-Here is the `/path/to/the/file.extend`{: .filepath}.
+Вот `/path/to/the/file.extend`{: .filepath}.
 
-## Code blocks
+## Блоки кода
 
-### Common
+### Общий
 
 ```text
 This is a common code snippet, without syntax highlight and line number.
 ```
 
-### Specific Language
+### Конкретный язык
 
 ```bash
 if [ $? -ne 0 ]; then
@@ -128,7 +132,7 @@ if [ $? -ne 0 ]; then
 fi;
 ```
 
-### Specific filename
+### Конкретное имя файла
 
 ```sass
 @import
@@ -137,24 +141,24 @@ fi;
 ```
 {: file='_sass/jekyll-theme-chirpy.scss'}
 
-## Mathematics
+## Математика
 
-The mathematics powered by [**MathJax**](https://www.mathjax.org/):
+Математика, основанная на [**MathJax**](https://www.mathjax.org/):
 
-$$
-\begin{equation}
+None
+\begin{уравнение}
   \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}
   \label{eq:series}
-\end{equation}
-$$
+\end{уравнение}
+None
 
-We can reference the equation as \eqref{eq:series}.
+Мы можем ссылаться на уравнение как \eqref{eq:series}.
 
-When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are
+Когда $a \ne 0$, существует два решения $ax^2 + bx + c = 0$:
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-## Mermaid SVG
+## Русалка SVG
 
 ```mermaid
  gantt
@@ -164,39 +168,39 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
   cherry :active, c, after b a, 1d
 ```
 
-## Images
+## Изображения
 
-### Default (with caption)
+### По умолчанию (с подписью)
 
 ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
-_Full screen width and center alignment_
+_Полная ширина экрана и выравнивание по центру_
 
-### Left aligned
+### Выровнено по левому краю
 
 ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-75 .normal}
 
-### Float to left
+### Плыть влево
 
 ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .left}
-Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
+Praesent maximus aliquam sapien. Сед вел neque в горе pulvinar Auctor. Maecenas pharetra, sem sit amet interdum posuere, Tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amettincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Нуллам максимус улламкорпер либеро нон максимус. Целочисленные ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Маурис ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae Malesuada ligula condimentum.
 
-### Float to right
+### Плыть вправо
 
 ![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .right}
-Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
+Praesent maximus aliquam sapien. Сед вел neque в горе pulvinar Auctor. Maecenas pharetra, sem sit amet interdum posuere, Tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amettincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Нуллам максимус улламкорпер либеро нон максимус. Целочисленные ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Маурис ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae Malesuada ligula condimentum.
 
-### Dark/Light mode & Shadow
+### Режим «Темный/Светлый» и «Тень»
 
-The image below will toggle dark/light mode based on theme preference, notice it has shadows.
+Изображение ниже переключает темный/светлый режим в зависимости от предпочтений темы. Обратите внимание, что на нем есть тени.
 
 ![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
 ![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
 
-## Video
+## Видео
 
 {% include embed/youtube.html id='Balreaj8Yqs' %}
 
-## Reverse Footnote
+## Обратная сноска
 
-[^footnote]: The footnote source
-[^fn-nth-2]: The 2nd footnote source
+[^footnote]: источник сноски.
+[^fn-nth-2]: второй источник сноски.

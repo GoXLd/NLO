@@ -1,151 +1,154 @@
 ---
-title: 'Bien demarrer'
-language: 'fr-FR'
+title: Commencer
+language: fr-FR
 translation_key: getting-started
-description: >-
-  Get started with Chirpy basics in this comprehensive overview.
-  You will learn how to install, configure, and use your first Chirpy-based website, as well as deploy it to a web server.
+description: Commencez avec les bases de Chirpy dans cet aperçu complet. Vous apprendrez
+  à installer, configurer et utiliser votre premier site Web basé sur Chirpy, ainsi
+  qu'à le déployer sur un serveur Web.
 author: cotes
 date: 2019-08-09 20:55:00 +0800
-categories: [Blogging, Tutorial]
-tags: [getting started]
+categories:
+- Blogging
+- Tutorial
+tags:
+- getting started
 pin: true
-media_subpath: '/posts/20180809'
+media_subpath: /posts/20180809
 ---
 
-## Creating a Site Repository
+## Création d'un référentiel de site
 
-When creating your site repository, you have two options depending on your needs:
+Lors de la création de votre référentiel de site, vous disposez de deux options en fonction de vos besoins :
 
-### Option 1. Using the Starter (Recommended)
+### Option 1. Utilisation du démarreur (recommandé)
 
-This approach simplifies upgrades, isolates unnecessary files, and is perfect for users who want to focus on writing with minimal configuration.
+Cette approche simplifie les mises à niveau, isole les fichiers inutiles et convient parfaitement aux utilisateurs qui souhaitent se concentrer sur l'écriture avec une configuration minimale.
 
-1. Sign in to GitHub and navigate to the [**starter**][starter].
-2. Click the <kbd>Use this template</kbd> button and then select <kbd>Create a new repository</kbd>.
-3. Name the new repository `<username>.github.io`, replacing `username` with your lowercase GitHub username.
+1. Connectez-vous à GitHub et accédez au [**starter**][starter].
+2. Cliquez sur le bouton <kbd>Utiliser ce modèle</kbd>, puis sélectionnez <kbd>Créer un nouveau référentiel</kbd>.
+3. Nommez le nouveau référentiel `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub minuscule.
 
-### Option 2. Forking the Theme
+### Option 2. Forker le thème
 
-This approach is convenient for modifying features or UI design, but presents challenges during upgrades. So don't try this unless you are familiar with Jekyll and plan to heavily modify this theme.
+Cette approche est pratique pour modifier des fonctionnalités ou la conception de l’interface utilisateur, mais présente des défis lors des mises à niveau. N'essayez donc pas ceci à moins que vous ne soyez familier avec Jekyll et que vous envisagez de modifier fortement ce thème.
 
-1. Sign in to GitHub.
+1. Connectez-vous à GitHub.
 2. [Fork the theme repository](https://github.com/cotes2020/jekyll-theme-chirpy/fork).
-3. Name the new repository `<username>.github.io`, replacing `username` with your lowercase GitHub username.
+3. Nommez le nouveau référentiel `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub minuscule.
 
-## Setting up the Environment
+## Configuration de l'environnement
 
-Once your repository is created, it's time to set up your development environment. There are two primary methods:
+Une fois votre référentiel créé, il est temps de configurer votre environnement de développement. Il existe deux méthodes principales :
 
-### Using Dev Containers (Recommended for Windows)
+### Utilisation de conteneurs de développement (recommandé pour Windows)
 
-Dev Containers offer an isolated environment using Docker, which prevents conflicts with your system and ensures all dependencies are managed within the container.
+Les conteneurs de développement offrent un environnement isolé utilisant Docker, qui évite les conflits avec votre système et garantit que toutes les dépendances sont gérées au sein du conteneur.
 
-**Steps**:
+**Mesures**:
 
-1. Install Docker:
-   - On Windows/macOS, install [Docker Desktop][docker-desktop].
-   - On Linux, install [Docker Engine][docker-engine].
-2. Install [VS Code][vscode] and the [Dev Containers extension][dev-containers].
-3. Clone your repository:
-   - For Docker Desktop: Start VS Code and [clone your repo in a container volume][dc-clone-in-vol].
-   - For Docker Engine: Clone your repo locally, then [open it in a container][dc-open-in-container] via VS Code.
-4. Wait for the Dev Containers setup to complete.
+1. Installez Docker :
+   - Sous Windows/macOS, installez [Docker Desktop][docker-desktop].
+   - Sous Linux, installez [Docker Engine][docker-engine].
+2. Installez [VS Code][vscode] et l'[extension Dev Containers][dev-containers].
+3. Clonez votre dépôt :
+   - Pour Docker Desktop : démarrez VS Code et [clonez votre dépôt dans un volume conteneur] [dc-clone-in-vol].
+   - Pour Docker Engine : clonez votre dépôt localement, puis [ouvrez-le dans un conteneur] [dc-open-in-container] via VS Code.
+4. Attendez la fin de la configuration des conteneurs de développement.
 
-### Setting up Natively (Recommended for Unix-like OS)
+### Configuration native (recommandée pour les systèmes d'exploitation de type Unix)
 
-For Unix-like systems, you can set up the environment natively for optimal performance, though you can also use Dev Containers as an alternative.
+Pour les systèmes de type Unix, vous pouvez configurer l'environnement de manière native pour des performances optimales, mais vous pouvez également utiliser des conteneurs de développement comme alternative.
 
-**Steps**:
+**Mesures**:
 
-1. Follow the [Jekyll installation guide](https://jekyllrb.com/docs/installation/) to install Jekyll and ensure [Git](https://git-scm.com/) is installed.
-2. Clone your repository to your local machine.
-3. If you forked the theme, install [Node.js][nodejs] and run `bash tools/init.sh` in the root directory to initialize the repository.
-4. Run command `bundle` in the root of your repository to install the dependencies.
+1. Suivez le [Jekyll installation guide](https://jekyllrb.com/docs/installation/) pour installer Jekyll et assurez-vous que [Git](https://git-scm.com/) est installé.
+2. Clonez votre référentiel sur votre machine locale.
+3. Si vous avez créé le thème, installez [Node.js][nodejs] et exécutez `bash tools/init.sh` dans le répertoire racine pour initialiser le référentiel.
+4. Exécutez la commande `bundle` à la racine de votre référentiel pour installer les dépendances.
 
 ## Usage
 
-### Start the Jekyll Server
+### Démarrez le serveur Jekyll
 
-To run the site locally, use the following command:
+Pour exécuter le site localement, utilisez la commande suivante :
 
 ```terminal
 $ bundle exec jekyll serve
 ```
 
-> If you are using Dev Containers, you must run that command in the **VS Code** Terminal.
+> Si vous utilisez des conteneurs de développement, vous devez exécuter cette commande dans le terminal **VS Code**.
 {: .prompt-info }
 
-After a few seconds, the local server will be available at <http://127.0.0.1:4000>.
+Après quelques secondes, le serveur local sera disponible à <http://127.0.0.1:4000>.
 
 ### Configuration
 
-Update the variables in `_config.yml`{: .filepath} as needed. Some typical options include:
+Mettez à jour les variables dans `_config.yml`{: .filepath} si nécessaire. Certaines options typiques incluent :
 
 - `url`
 - `avatar`
 - `timezone`
 - `lang`
 
-### Social Contact Options
+### Options de contact social
 
-Social contact options are displayed at the bottom of the sidebar. You can enable or disable specific contacts in the `_data/contact.yml`{: .filepath} file.
+Les options de contact social sont affichées en bas de la barre latérale. Vous pouvez activer ou désactiver des contacts spécifiques dans le fichier `_data/contact.yml`{: .filepath}.
 
-### Customizing the Stylesheet
+### Personnalisation de la feuille de style
 
-To customize the stylesheet, copy the theme's `assets/css/jekyll-theme-chirpy.scss`{: .filepath} file to the same path in your Jekyll site, and add your custom styles at the end of the file.
+Pour personnaliser la feuille de style, copiez le fichier `assets/css/jekyll-theme-chirpy.scss`{: .filepath} du thème dans le même chemin de votre site Jekyll et ajoutez vos styles personnalisés à la fin du fichier.
 
-### Customizing Static Assets
+### Personnalisation des actifs statiques
 
-Static assets configuration was introduced in version `5.1.0`. The CDN of the static assets is defined in `_data/origin/cors.yml`{: .filepath }. You can replace some of them based on the network conditions in the region where your website is published.
+La configuration des actifs statiques a été introduite dans la version `5.1.0`. Le CDN des actifs statiques est défini dans `_data/origin/cors.yml`{: .filepath }. Vous pouvez en remplacer certains en fonction des conditions du réseau dans la région où votre site Web est publié.
 
-If you prefer to self-host the static assets, refer to the [_chirpy-static-assets_](https://github.com/cotes2020/chirpy-static-assets#readme) repository.
+Si vous préférez auto-héberger les actifs statiques, référez-vous au référentiel [_chirpy-static-assets_](https://github.com/cotes2020/chirpy-static-assets#readme).
 
-## Deployment
+## Déploiement
 
 Before deploying, check the `_config.yml`{: .filepath} file and ensure the `url` is configured correctly. If you prefer a [**project site**](https://help.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites) and don't use a custom domain, or if you want to visit your website with a base URL on a web server other than **GitHub Pages**, remember to set the `baseurl` to your project name, starting with a slash, e.g., `/project-name`.
 
-Now you can choose _ONE_ of the following methods to deploy your Jekyll site.
+Vous pouvez désormais choisir _UNE_ des méthodes suivantes pour déployer votre site Jekyll.
 
-### Deploy Using Github Actions
+### Déployer à l'aide des actions Github
 
-Prepare the following:
+Préparez ce qui suit :
 
-- If you're on the GitHub Free plan, keep your site repository public.
-- If you have committed `Gemfile.lock`{: .filepath} to the repository, and your local machine is not running Linux, update the platform list of the lock file:
+- Si vous bénéficiez du forfait GitHub Free, gardez le référentiel de votre site public.
+- Si vous avez validé `Gemfile.lock`{: .filepath} dans le référentiel et que votre machine locale n'exécute pas Linux, mettez à jour la liste des plates-formes du fichier de verrouillage :
 
   ```console
   $ bundle lock --add-platform x86_64-linux
   ```
 
-Next, configure the _Pages_ service:
+Ensuite, configurez le service _Pages_ :
 
-1. Go to your repository on GitHub. Select the _Settings_ tab, then click _Pages_ in the left navigation bar. In the **Source** section (under _Build and deployment_), select [**GitHub Actions**][pages-workflow-src] from the dropdown menu.  
-   ![Build source](pages-source-light.png){: .light .border .normal w='375' h='140' }
-   ![Build source](pages-source-dark.png){: .dark .normal w='375' h='140' }
+1. Accédez à votre référentiel sur GitHub. Sélectionnez l'onglet _Paramètres_, puis cliquez sur _Pages_ dans la barre de navigation de gauche. Dans la section **Source** (sous _Build et déploiement_), sélectionnez [**GitHub Actions**][pages-workflow-src] dans le menu déroulant.
+   ![Build source](pages-source-light.png){ : .light .border .normal w='375' h='140' }
+   ![Build source](pages-source-dark.png){ : .dark .normal w='375' h='140' }
 
-2. Push any commits to GitHub to trigger the _Actions_ workflow. In the _Actions_ tab of your repository, you should see the workflow _Build and Deploy_ running. Once the build is complete and successful, the site will be deployed automatically.
+2. Envoyez tous les commits vers GitHub pour déclencher le workflow _Actions_. Dans l'onglet _Actions_ de votre référentiel, vous devriez voir le workflow _Build and Deploy_ en cours d'exécution. Une fois la construction terminée et réussie, le site sera déployé automatiquement.
 
-You can now visit the URL provided by GitHub to access your site.
+Vous pouvez maintenant visiter l'URL fournie par GitHub pour accéder à votre site.
 
-### Manual Build and Deployment
+### Construction et déploiement manuels
 
-For self-hosted servers, you will need to build the site on your local machine and then upload the site files to the server.
+Pour les serveurs auto-hébergés, vous devrez créer le site sur votre ordinateur local, puis télécharger les fichiers du site sur le serveur.
 
-Navigate to the root of the source project, and build your site with the following command:
+Accédez à la racine du projet source et créez votre site avec la commande suivante :
 
 ```console
 $ JEKYLL_ENV=production bundle exec jekyll b
 ```
 
-Unless you specified the output path, the generated site files will be placed in the `_site`{: .filepath} folder of the project's root directory. Upload these files to your target server.
+Sauf si vous avez spécifié le chemin de sortie, les fichiers du site générés seront placés dans le dossier `_site`{: .filepath} du répertoire racine du projet. Téléchargez ces fichiers sur votre serveur cible.
 
-[nodejs]: https://nodejs.org/
-[starter]: https://github.com/cotes2020/chirpy-starter
-[pages-workflow-src]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
-[docker-desktop]: https://www.docker.com/products/docker-desktop/
-[docker-engine]: https://docs.docker.com/engine/install/
-[vscode]: https://code.visualstudio.com/
-[dev-containers]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
-[dc-clone-in-vol]: https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume
-[dc-open-in-container]: https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-an-existing-folder-in-a-container
+[nodejs] : https://nodejs.org/
+[entrée] : https://github.com/cotes2020/chirpy-starter
+[pages-workflow-src] : https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
+[docker-desktop] : https://www.docker.com/products/docker-desktop/
+[moteur-docker] : https://docs.docker.com/engine/install/
+[vscode] : https://code.visualstudio.com/
+[conteneurs de développement] : https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+[dc-clone-in-vol] : https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume
+[dc-open-in-container] : https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-an-existing-folder-in-a-container

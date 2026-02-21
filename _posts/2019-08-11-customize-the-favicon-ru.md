@@ -1,9 +1,9 @@
 ---
-title: 'Настройка favicon'
-language: 'ru-RU'
+title: Настройте фавиконку
+language: ru-RU
 translation_key: customize-the-favicon
 author: GoXLd
-date: '2019-08-11 00:34:00 +0800'
+date: 2019-08-11 00:34:00 +0800
 categories:
 - Blogging
 - Tutorial
@@ -11,33 +11,33 @@ tags:
 - favicon
 ---
 
-The [favicons](https://www.favicon-generator.org/about/) of [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) are placed in the directory `assets/img/favicons/`{: .filepath}. You may want to replace them with your own. The following sections will guide you to create and replace the default favicons.
+Файлы [favicons](https://www.favicon-generator.org/about/) из [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) располагаются в каталоге `assets/img/favicons/`{: .filepath}. Возможно, вы сможете заменить их своими силами. Следующие разделы помогут вам создать и заменить значки по умолчанию.
 
-## Generate the favicon
+## Создать значок
 
-Prepare a square image (PNG, JPG, or SVG) with a size of 512x512 or more, and then go to the online tool [**Real Favicon Generator**](https://realfavicongenerator.net/) and click the button <kbd>Pick your favicon image</kbd> to upload your image file.
+Подготовьте квадратное изображение (PNG, JPG или SVG) размером 512x512 или более, затем включите в онлайн-инструмент [**Real Favicon Generator**](https://realfavicongenerator.net/) и нажмите кнопку <kbd>Выбрать значка изображения</kbd>, чтобы загрузить изображение файла.
 
-In the next step, the webpage will show all usage scenarios. You can keep the default options, scroll to the bottom of the page, and click the button <kbd>Next →</kbd> to generate the favicon.
+На следующем шаге на веб-странице будут показаны все сценарии использования. Вы можете сохранить параметры по умолчанию, прокрутить страницу вниз и нажать кнопку <kbd>Далее →</kbd>, чтобы создать значок.
 
-## Download & Replace
+## Скачать и заменить
 
-Download the generated package, unzip and delete the following file(s) from the extracted files:
+Загрузите сгенерированный пакет, разархивируйте и удалите из извлеченных файлов следующие файлы:
 
 - `site.webmanifest`{: .filepath}
 
-And then copy the remaining image files (`.PNG`{: .filepath}, `.ICO`{: .filepath} and `.SVG`{: .filepath}) to cover the original files in the directory `assets/img/favicons/`{: .filepath} of your Jekyll site. If your Jekyll site doesn't have this directory yet, just create one.
+А затем скопируйте содержимое файлов изображений (`.PNG`{: .filepath}, `.ICO`{: .filepath} и ​​`.SVG`{: .filepath}), чтобы закрыть файлы в каталоге `assets/img/favicons/`{: .filepath} вашего сайта Jekyll. Если на вашем сайте Jekyll еще нет этого каталога, просто создайте его.
 
-The following table will help you understand the changes to the favicon files:
+Следующая таблица поможет вам понять изменения в файлах значков:
 
-| File(s) | From Online Tool | From Chirpy |
+| Файл(ы) | Из онлайн-инструмента | От Чирпи |
 | ------- | :--------------: | :---------: |
-| `*.PNG` |        ✓         |      ✗      |
-| `*.ICO` |        ✓         |      ✗      |
-| `*.SVG` |        ✓         |      ✗      |
+| `*.PNG` | None | None |
+| `*.ICO` | None | None |
+| `*.SVG` | None | None |
 
 
 <!-- markdownlint-disable-next-line -->
->  ✓ means keep, ✗ means delete.
+>  ✓ означает сохранить, ✗ означает удалить.
 {: .prompt-info }
 
-The next time you build the site, the favicon will be replaced with a customized edition.
+В следующий раз, когда вы создадите сайт, значок будет заменен на настроенную версию.

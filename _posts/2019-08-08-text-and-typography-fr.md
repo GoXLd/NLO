@@ -1,12 +1,16 @@
 ---
-title: 'Texte et typographie'
-language: 'fr-FR'
+title: Texte et typographie
+language: fr-FR
 translation_key: text-and-typography
-description: Examples of text, typography, math equations, diagrams, flowcharts, pictures, videos, and more.
+description: Exemples de texte, typographie, équations mathématiques, diagrammes,
+  organigrammes, images, vidéos et bien plus encore.
 author: cotes
 date: 2019-08-08 11:33:00 +0800
-categories: [Blogging, Demo]
-tags: [typography]
+categories:
+- Blogging
+- Demo
+tags:
+- typography
 pin: true
 math: true
 mermaid: true
@@ -16,110 +20,110 @@ image:
   alt: Responsive rendering of Chirpy theme on multiple devices.
 ---
 
-## Headings
+## Rubriques
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-# H1 — heading
+# H1 — titre
 {: .mt-4 .mb-0 }
 
-## H2 — heading
+## H2 — titre
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-### H3 — heading
+### H3 — titre
 {: data-toc-skip='' .mt-4 .mb-0 }
 
-#### H4 — heading
+#### H4 — titre
 {: data-toc-skip='' .mt-4 }
 <!-- markdownlint-restore -->
 
-## Paragraph
+## Paragraphe
 
 Quisque egestas convallis ipsum, ut sollicitudin risus tincidunt a. Maecenas interdum malesuada egestas. Duis consectetur porta risus, sit amet vulputate urna facilisis ac. Phasellus semper dui non purus ultrices sodales. Aliquam ante lorem, ornare a feugiat ac, finibus nec mauris. Vivamus ut tristique nisi. Sed vel leo vulputate, efficitur risus non, posuere mi. Nullam tincidunt bibendum rutrum. Proin commodo ornare sapien. Vivamus interdum diam sed sapien blandit, sit amet aliquam risus mattis. Nullam arcu turpis, mollis quis laoreet at, placerat id nibh. Suspendisse venenatis eros eros.
 
-## Lists
+## Listes
 
-### Ordered list
+### Liste ordonnée
 
-1. Firstly
-2. Secondly
-3. Thirdly
+1. Premièrement
+2. Deuxièmement
+3. Troisièmement
 
-### Unordered list
+### Liste non ordonnée
 
-- Chapter
+- Chapitre
   - Section
-    - Paragraph
+    - Paragraphe
 
-### ToDo list
+### Liste de tâches
 
-- [ ] Job
-  - [x] Step 1
-  - [x] Step 2
-  - [ ] Step 3
+- [ ] Emploi
+  - [x] Étape 1
+  - [x] Étape 2
+  - [ ] Étape 3
 
-### Description list
+### Liste descriptive
 
-Sun
-: the star around which the earth orbits
+Soleil
+: l'étoile autour de laquelle la Terre tourne
 
-Moon
-: the natural satellite of the earth, visible by reflected light from the sun
+Lune
+: le satellite naturel de la terre, visible par la lumière réfléchie du soleil
 
-## Block Quote
+## Bloquer le devis
 
-> This line shows the _block quote_.
+> Cette ligne montre le _block quote_.
 
-## Prompts
+## Invites
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable -->
-> An example showing the `tip` type prompt.
+> Un exemple montrant l'invite de type `tip`.
 {: .prompt-tip }
 
-> An example showing the `info` type prompt.
+> Un exemple montrant l'invite de type `info`.
 {: .prompt-info }
 
-> An example showing the `warning` type prompt.
+> Un exemple montrant l'invite de type `warning`.
 {: .prompt-warning }
 
-> An example showing the `danger` type prompt.
+> Un exemple montrant l'invite de type `danger`.
 {: .prompt-danger }
 <!-- markdownlint-restore -->
 
-## Tables
+## Tableaux
 
-| Company                      | Contact          | Country |
+| Entreprise | Contact | Pays |
 | :--------------------------- | :--------------- | ------: |
-| Alfreds Futterkiste          | Maria Anders     | Germany |
-| Island Trading               | Helen Bennett    |      UK |
-| Magazzini Alimentari Riuniti | Giovanni Rovelli |   Italy |
+| Alfreds Futterkiste | Marie Anders | Allemagne |
+| Commerce insulaire | Hélène Bennett | ROYAUME-UNI |
+| Magazzini Alimentari Riuniti | Giovanni Rovelli | Italie |
 
 ## Links
 
 <http://127.0.0.1:4000>
 
-## Footnote
+## Note de bas de page
 
-Click the hook will locate the footnote[^footnote], and here is another footnote[^fn-nth-2].
+Cliquez sur le crochet pour localiser la note de bas de page[^footnote], et voici une autre note de bas de page[^fn-nth-2].
 
-## Inline code
+## Code en ligne
 
-This is an example of `Inline Code`.
+Ceci est un exemple de `Inline Code`.
 
-## Filepath
+## Chemin du fichier
 
-Here is the `/path/to/the/file.extend`{: .filepath}.
+Voici le `/path/to/the/file.extend`{: .filepath}.
 
-## Code blocks
+## Blocs de code
 
-### Common
+### Commun
 
 ```text
 This is a common code snippet, without syntax highlight and line number.
 ```
 
-### Specific Language
+### Langue spécifique
 
 ```bash
 if [ $? -ne 0 ]; then
@@ -128,7 +132,7 @@ if [ $? -ne 0 ]; then
 fi;
 ```
 
-### Specific filename
+### Nom de fichier spécifique
 
 ```sass
 @import
@@ -137,24 +141,24 @@ fi;
 ```
 {: file='_sass/jekyll-theme-chirpy.scss'}
 
-## Mathematics
+## Mathématiques
 
-The mathematics powered by [**MathJax**](https://www.mathjax.org/):
+Les mathématiques propulsées par [**MathJax**](https://www.mathjax.org/) :
 
-$$
-\begin{equation}
+None
+\begin{équation}
   \sum_{n=1}^\infty 1/n^2 = \frac{\pi^2}{6}
-  \label{eq:series}
-\end{equation}
-$$
+  \label{eq:série}
+\fin{équation}
+None
 
-We can reference the equation as \eqref{eq:series}.
+Nous pouvons référencer l’équation comme \eqref{eq:series}.
 
-When $a \ne 0$, there are two solutions to $ax^2 + bx + c = 0$ and they are
+Lorsque $a \ne 0$, il existe deux solutions à $ax^2 + bx + c = 0$ et elles sont
 
 $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
-## Mermaid SVG
+## Sirène SVG
 
 ```mermaid
  gantt
@@ -166,37 +170,37 @@ $$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
 
 ## Images
 
-### Default (with caption)
+### Par défaut (avec légende)
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" }
-_Full screen width and center alignment_
+![Desktop View](/posts/20190808/mockup.png){ : largeur="972" hauteur="589" }
+_Largeur plein écran et alignement central_
 
-### Left aligned
+### Aligné à gauche
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-75 .normal}
+![Desktop View](/posts/20190808/mockup.png){ : width="972" height="589" .w-75 .normal}
 
-### Float to left
+### Flotter vers la gauche
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .left}
+![Desktop View](/posts/20190808/mockup.png){ : width="972" height="589" .w-50 .left}
 Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
 
-### Float to right
+### Flottez vers la droite
 
-![Desktop View](/posts/20190808/mockup.png){: width="972" height="589" .w-50 .right}
+![Desktop View](/posts/20190808/mockup.png){ : width="972" height="589" .w-50 .right}
 Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecenas pharetra, sem sit amet interdum posuere, tellus lacus eleifend magna, ac lobortis felis ipsum id sapien. Proin ornare rutrum metus, ac convallis diam volutpat sit amet. Phasellus volutpat, elit sit amet tincidunt mollis, felis mi scelerisque mauris, ut facilisis leo magna accumsan sapien. In rutrum vehicula nisl eget tempor. Nullam maximus ullamcorper libero non maximus. Integer ultricies velit id convallis varius. Praesent eu nisl eu urna finibus ultrices id nec ex. Mauris ac mattis quam. Fusce aliquam est nec sapien bibendum, vitae malesuada ligula condimentum.
 
-### Dark/Light mode & Shadow
+### Mode sombre/clair et ombre
 
-The image below will toggle dark/light mode based on theme preference, notice it has shadows.
+L'image ci-dessous basculera en mode sombre/clair en fonction des préférences de thème, remarquez qu'elle comporte des ombres.
 
-![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
-![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
+![light mode only](/posts/20190808/devtools-light.png){ : .light .w-75 .shadow .rounded-10 w='1212' h='668' }
+![dark mode only](/posts/20190808/devtools-dark.png){ : .dark .w-75 .shadow .rounded-10 w='1212' h='668' }
 
-## Video
+## Vidéo
 
 {% include embed/youtube.html id='Balreaj8Yqs' %}
 
-## Reverse Footnote
+## Note de bas de page inversée
 
-[^footnote]: The footnote source
-[^fn-nth-2]: The 2nd footnote source
+[^footnote] : la source de la note de bas de page
+[^fn-nth-2] : la deuxième source de note de bas de page

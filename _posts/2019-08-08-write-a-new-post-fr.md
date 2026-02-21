@@ -1,23 +1,26 @@
 ---
-title: 'Ecrire un nouvel article'
-language: 'fr-FR'
+title: Écrire un nouveau message
+language: fr-FR
 translation_key: write-a-new-post
 author: cotes
 date: 2019-08-08 14:10:00 +0800
-categories: [Blogging, Tutorial]
-tags: [writing]
+categories:
+- Blogging
+- Tutorial
+tags:
+- writing
 render_with_liquid: false
 ---
 
-This tutorial will guide you how to write a post in the _Chirpy_ template, and it's worth reading even if you've used Jekyll before, as many features require specific variables to be set.
+Ce tutoriel vous expliquera comment rédiger un article dans le modèle _Chirpy_, et il vaut la peine d'être lu même si vous avez déjà utilisé Jekyll, car de nombreuses fonctionnalités nécessitent la définition de variables spécifiques.
 
-## Naming and Path
+## Nom et chemin
 
 Create a new file named `YYYY-MM-DD-TITLE.EXTENSION`{: .filepath} and put it in the `_posts`{: .filepath} of the root directory. Please note that the `EXTENSION`{: .filepath} must be one of `md`{: .filepath} and `markdown`{: .filepath}. If you want to save time of creating files, please consider using the plugin [`Jekyll-Compose`](https://github.com/jekyll/jekyll-compose) to accomplish this.
 
-## Front Matter
+## Questions préliminaires
 
-Basically, you need to fill the [Front Matter](https://jekyllrb.com/docs/front-matter/) as below at the top of the post:
+En gros, vous devez remplir le [Front Matter](https://jekyllrb.com/docs/front-matter/) comme ci-dessous en haut du message :
 
 ```yaml
 ---
@@ -28,16 +31,16 @@ tags: [TAG]     # TAG names should always be lowercase
 ---
 ```
 
-> The posts' _layout_ has been set to `post` by default, so there is no need to add the variable _layout_ in the Front Matter block.
+> Le _layout_ des articles a été défini sur `post` par défaut, il n'est donc pas nécessaire d'ajouter la variable _layout_ dans le bloc Front Matter.
 {: .prompt-tip }
 
-### Timezone of Date
+### Fuseau horaire de la date
 
-To accurately record the release date of a post, you should not only set up the `timezone` of `_config.yml`{: .filepath} but also provide the post's timezone in variable `date` of its Front Matter block. Format: `+/-TTTT`, e.g. `+0800`.
+Pour enregistrer avec précision la date de sortie d'une publication, vous devez non seulement configurer le `timezone` de `_config.yml`{: .filepath} mais également fournir le fuseau horaire de la publication dans la variable `date` de son bloc Front Matter. Format : `+/-TTTT`, par ex. `+0800`.
 
-### Categories and Tags
+### Catégories et balises
 
-The `categories` of each post are designed to contain up to two elements, and the number of elements in `tags` can be zero to infinity. For instance:
+Les `categories` de chaque message sont conçus pour contenir jusqu'à deux éléments, et le nombre d'éléments dans `tags` peut être compris entre zéro et l'infini. Par exemple:
 
 ```yaml
 ---
@@ -46,11 +49,11 @@ tags: [bee]
 ---
 ```
 
-### Author Information
+### Informations sur l'auteur
 
-The author information of the post usually does not need to be filled in the _Front Matter_ , they will be obtained from variables `social.name` and the first entry of `social.links` of the configuration file by default. But you can also override it as follows:
+Les informations sur l'auteur du message n'ont généralement pas besoin d'être renseignées dans le _Front Matter_ , elles seront obtenues à partir des variables `social.name` et de la première entrée de `social.links` du fichier de configuration par défaut. Mais vous pouvez également le remplacer comme suit :
 
-Adding author information in `_data/authors.yml` (If your website doesn't have this file, don't hesitate to create one).
+Ajout des informations sur l'auteur en `_data/authors.yml` (Si votre site internet ne possède pas ce fichier, n'hésitez pas à en créer un).
 
 ```yaml
 <author_id>:
@@ -60,7 +63,7 @@ Adding author information in `_data/authors.yml` (If your website doesn't have t
 ```
 {: file="_data/authors.yml" }
 
-And then use `author` to specify a single entry or `authors` to specify multiple entries:
+Et puis utilisez `author` pour spécifier une seule entrée ou `authors` pour spécifier plusieurs entrées :
 
 ```yaml
 ---
@@ -70,12 +73,12 @@ authors: [<author1_id>, <author2_id>]   # for multiple entries
 ---
 ```
 
-Having said that, the key `author` can also identify multiple entries.
+Cela dit, la clé `author` peut également identifier plusieurs entrées.
 
-> The benefit of reading the author information from the file `_data/authors.yml`{: .filepath } is that the page will have the meta tag `twitter:creator`, which enriches the [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started#card-and-content-attribution) and is good for SEO.
+> L'avantage de lire les informations sur l'auteur du fichier `_data/authors.yml`{: .filepath } est que la page aura la balise méta `twitter:creator`, qui enrichit le [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started#card-and-content-attribution) et est bonne pour le référencement.
 {: .prompt-info }
 
-### Post Description
+### Description du poste
 
 By default, the first words of the post are used to display on the home page for a list of posts, in the _Further Reading_ section, and in the XML of the RSS feed. If you don't want to display the auto-generated description for the post, you can customize it using the `description` field in the _Front Matter_ as follows:
 
@@ -85,9 +88,9 @@ description: Short summary of the post.
 ---
 ```
 
-Additionally, the `description` text will also be displayed under the post title on the post's page.
+De plus, le texte `description` sera également affiché sous le titre du message sur la page du message.
 
-## Table of Contents
+## Table des matières
 
 By default, the **T**able **o**f **C**ontents (TOC) is displayed on the right panel of the post. If you want to turn it off globally, go to `_config.yml`{: .filepath} and set the value of variable `toc` to `false`. If you want to turn off TOC for a specific post, add the following to the post's [Front Matter](https://jekyllrb.com/docs/front-matter/):
 
@@ -97,11 +100,11 @@ toc: false
 ---
 ```
 
-## Comments
+## Commentaires
 
-The global setting for comments is defined by the `comments.provider` option in the `_config.yml`{: .filepath} file. Once a comment system is selected for this variable, comments will be enabled for all posts.
+Le paramètre global des commentaires est défini par l'option `comments.provider` dans le fichier `_config.yml`{: .filepath}. Une fois qu'un système de commentaires est sélectionné pour cette variable, les commentaires seront activés pour toutes les publications.
 
-If you want to close the comment for a specific post, add the following to the **Front Matter** of the post:
+Si vous souhaitez fermer le commentaire d'une publication spécifique, ajoutez ce qui suit au **Front Matter** de la publication :
 
 ```yaml
 ---
@@ -109,22 +112,22 @@ comments: false
 ---
 ```
 
-## Media
+## Médias
 
-We refer to images, audio and video as media resources in _Chirpy_.
+Nous faisons référence aux images, à l'audio et à la vidéo comme ressources multimédias dans _Chirpy_.
 
-### URL Prefix
+### Préfixe d'URL
 
-From time to time we have to define duplicate URL prefixes for multiple resources in a post, which is a boring task that you can avoid by setting two parameters.
+De temps en temps, nous devons définir des préfixes d'URL en double pour plusieurs ressources dans une publication, ce qui est une tâche ennuyeuse que vous pouvez éviter en définissant deux paramètres.
 
-- If you are using a CDN to host media files, you can specify the `cdn` in `_config.yml`{: .filepath }. The URLs of media resources for site avatar and posts are then prefixed with the CDN domain name.
+- Si vous utilisez un CDN pour héberger des fichiers multimédias, vous pouvez spécifier le `cdn` dans `_config.yml`{: .filepath }. Les URL des ressources multimédias pour l'avatar du site et les publications sont ensuite préfixées par le nom de domaine CDN.
 
   ```yaml
   cdn: https://cdn.com
   ```
   {: file='_config.yml' .nolineno }
 
-- To specify the resource path prefix for the current post/page range, set `media_subpath` in the _front matter_ of the post:
+- Pour spécifier le préfixe du chemin de ressource pour la plage de publications/pages actuelle, définissez `media_subpath` dans le _avant-plan_ de la publication :
 
   ```yaml
   ---
@@ -133,13 +136,13 @@ From time to time we have to define duplicate URL prefixes for multiple resource
   ```
   {: .nolineno }
 
-The option `site.cdn` and `page.media_subpath` can be used individually or in combination to flexibly compose the final resource URL: `[site.cdn/][page.media_subpath/]file.ext`
+Les options `site.cdn` et `page.media_subpath` peuvent être utilisées individuellement ou en combinaison pour composer de manière flexible l'URL finale de la ressource : `[site.cdn/][page.media_subpath/]file.ext`
 
 ### Images
 
-#### Caption
+#### Légende
 
-Add italics to the next line of an image, then it will become the caption and appear at the bottom of the image:
+Ajoutez de l'italique à la ligne suivante d'une image, elle deviendra alors la légende et apparaîtra en bas de l'image :
 
 ```markdown
 ![img-description](/path/to/image)
@@ -147,19 +150,19 @@ _Image Caption_
 ```
 {: .nolineno}
 
-#### Size
+#### Taille
 
-To prevent the page content layout from shifting when the image is loaded, we should set the width and height for each image.
+Pour éviter que la présentation du contenu de la page ne change lorsque l'image est chargée, nous devons définir la largeur et la hauteur de chaque image.
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: width="700" height="400" }
 ```
 {: .nolineno}
 
-> For an SVG, you have to at least specify its _width_, otherwise it won't be rendered.
+> Pour un SVG, vous devez au moins spécifier sa _width_, sinon il ne sera pas rendu.
 {: .prompt-info }
 
-Starting from _Chirpy v5.0.0_, `height` and `width` support abbreviations (`height` → `h`, `width` → `w`). The following example has the same effect as the above:
+À partir de _Chirpy v5.0.0_, `height` et `width` prennent en charge les abréviations (`height` → `h`, `width` → `w`). L'exemple suivant a le même effet que celui ci-dessus :
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: w="700" h="400" }
@@ -168,57 +171,57 @@ Starting from _Chirpy v5.0.0_, `height` and `width` support abbreviations (`heig
 
 #### Position
 
-By default, the image is centered, but you can specify the position by using one of the classes `normal`, `left`, and `right`.
+Par défaut, l'image est centrée, mais vous pouvez spécifier la position en utilisant l'une des classes `normal`, `left` et `right`.
 
-> Once the position is specified, the image caption should not be added.
+> Une fois la position spécifiée, la légende de l’image ne doit pas être ajoutée.
 {: .prompt-warning }
 
-- **Normal position**
+- **Position normale**
 
-  Image will be left aligned in below sample:
+  L'image sera alignée à gauche dans l'exemple ci-dessous :
 
   ```markdown
   ![Desktop View](/assets/img/sample/mockup.png){: .normal }
   ```
   {: .nolineno}
 
-- **Float to the left**
+- **Flottez vers la gauche**
 
   ```markdown
   ![Desktop View](/assets/img/sample/mockup.png){: .left }
   ```
   {: .nolineno}
 
-- **Float to the right**
+- **Flottez vers la droite**
 
   ```markdown
   ![Desktop View](/assets/img/sample/mockup.png){: .right }
   ```
   {: .nolineno}
 
-#### Dark/Light mode
+#### Mode sombre/clair
 
-You can make images follow theme preferences in dark/light mode. This requires you to prepare two images, one for dark mode and one for light mode, and then assign them a specific class (`dark` or `light`):
+Vous pouvez faire en sorte que les images suivent les préférences de thème en mode sombre/clair. Cela nécessite de préparer deux images, une pour le mode sombre et une pour le mode clair, puis de leur attribuer une classe spécifique (`dark` ou `light`) :
 
 ```markdown
 ![Light mode only](/path/to/light-mode.png){: .light }
 ![Dark mode only](/path/to/dark-mode.png){: .dark }
 ```
 
-#### Shadow
+#### Ombre
 
-The screenshots of the program window can be considered to show the shadow effect:
+Les captures d'écran de la fenêtre du programme peuvent être considérées comme montrant l'effet d'ombre :
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: .shadow }
 ```
 {: .nolineno}
 
-#### Preview Image
+#### Image d'aperçu
 
-If you want to add an image at the top of the post, please provide an image with a resolution of `1200 x 630`. Please note that if the image aspect ratio does not meet `1.91 : 1`, the image will be scaled and cropped.
+Si vous souhaitez ajouter une image en haut de la publication, veuillez fournir une image avec une résolution de `1200 x 630`. Veuillez noter que si le rapport hauteur/largeur de l'image n'atteint pas `1.91 : 1`, l'image sera redimensionnée et recadrée.
 
-Knowing these prerequisites, you can start setting the image's attribute:
+Connaissant ces prérequis, vous pouvez commencer à définir l'attribut de l'image :
 
 ```yaml
 ---
@@ -228,9 +231,9 @@ image:
 ---
 ```
 
-Note that the [`media_subpath`](#url-prefix) can also be passed to the preview image, that is, when it has been set, the attribute `path` only needs the image file name.
+Notez que le [`media_subpath`](#url-prefix) peut également être transmis à l'image d'aperçu, c'est-à-dire que lorsqu'il a été défini, l'attribut `path` n'a besoin que du nom du fichier image.
 
-For simple use, you can also just use `image` to define the path.
+Pour une utilisation simple, vous pouvez également simplement utiliser `image` pour définir le chemin.
 
 ```yml
 ---
@@ -240,7 +243,7 @@ image: /path/to/image
 
 #### LQIP
 
-For preview images:
+Pour les images d'aperçu :
 
 ```yaml
 ---
@@ -249,59 +252,59 @@ image:
 ---
 ```
 
-> You can observe LQIP in the preview image of post \"[Text and Typography](../text-and-typography/)\".
+> Vous pouvez observer LQIP dans l'image d'aperçu du message \"[Text and Typography](../text-and-typography/)\".
 
-For normal images:
+Pour les images normales :
 
 ```markdown
 ![Image description](/path/to/image){: lqip="/path/to/lqip-file" }
 ```
 {: .nolineno }
 
-### Social Media Platforms
+### Plateformes de médias sociaux
 
-You can embed video/audio from social media platforms with the following syntax:
+Vous pouvez intégrer de la vidéo/audio à partir de plateformes de réseaux sociaux avec la syntaxe suivante :
 
 ```liquid
 {% include embed/{Platform}.html id='{ID}' %}
 ```
 
-Where `Platform` is the lowercase of the platform name, and `ID` is the video ID.
+Où `Platform` est la minuscule du nom de la plateforme et `ID` est l'identifiant de la vidéo.
 
-The following table shows how to get the two parameters we need in a given video/audio URL, and you can also know the currently supported video platforms.
+Le tableau suivant montre comment obtenir les deux paramètres dont nous avons besoin dans une URL vidéo/audio donnée, et vous pouvez également connaître les plates-formes vidéo actuellement prises en charge.
 
-| Video URL                                                                                                                  | Platform   | ID                       |
+| URL de la vidéo | Plate-forme | IDENTIFIANT |
 | -------------------------------------------------------------------------------------------------------------------------- | ---------- | :----------------------- |
-| [https://www.**youtube**.com/watch?v=**H-B46URT4mg**](https://www.youtube.com/watch?v=H-B46URT4mg)                         | `youtube`  | `H-B46URT4mg`            |
-| [https://www.**twitch**.tv/videos/**1634779211**](https://www.twitch.tv/videos/1634779211)                                 | `twitch`   | `1634779211`             |
-| [https://www.**bilibili**.com/video/**BV1Q44y1B7Wf**](https://www.bilibili.com/video/BV1Q44y1B7Wf)                         | `bilibili` | `BV1Q44y1B7Wf`           |
-| [https://www.open.**spotify**.com/track/**3OuMIIFP5TxM8tLXMWYPGV**](https://open.spotify.com/track/3OuMIIFP5TxM8tLXMWYPGV) | `spotify`  | `3OuMIIFP5TxM8tLXMWYPGV` |
+| [https://www.**youtube**.com/watch?v=**H-B46URT4mg**](https://www.youtube.com/watch?v=H-B46URT4mg) | `youtube` | `H-B46URT4mg` |
+| [https://www.**twitch**.tv/videos/**1634779211**](https://www.twitch.tv/videos/1634779211) | `twitch` | `1634779211` |
+| [https://www.**bilibili**.com/video/**BV1Q44y1B7Wf**](https://www.bilibili.com/video/BV1Q44y1B7Wf) | `bilibili` | `BV1Q44y1B7Wf` |
+| [https://www.open.**spotify**.com/track/**3OuMIIFP5TxM8tLXMWYPGV**](https://open.spotify.com/track/3OuMIIFP5TxM8tLXMWYPGV) | `spotify` | `3OuMIIFP5TxM8tLXMWYPGV` |
 
-Spotify supports some additional parameters:
+Spotify prend en charge certains paramètres supplémentaires :
 
-- `compact` - to display compact player instead (ex. `{% include embed/spotify.html id='3OuMIIFP5TxM8tLXMWYPGV' compact=1 %}`);
-- `dark` - to force dark theme (ex. `{% include embed/spotify.html id='3OuMIIFP5TxM8tLXMWYPGV' dark=1 %}`).
+- `compact` - pour afficher le lecteur compact à la place (ex. `{% include embed/spotify.html id='3OuMIIFP5TxM8tLXMWYPGV' compact=1 %}`) ;
+- `dark` - pour forcer le thème sombre (ex. `{% include embed/spotify.html id='3OuMIIFP5TxM8tLXMWYPGV' dark=1 %}`).
 
-### Video Files
+### Fichiers vidéo
 
-If you want to embed a video file directly, use the following syntax:
+Si vous souhaitez intégrer directement un fichier vidéo, utilisez la syntaxe suivante :
 
 ```liquid
 {% include embed/video.html src='{URL}' %}
 ```
 
-Where `URL` is a URL to a video file e.g. `/path/to/sample/video.mp4`.
+Où `URL` est une URL vers un fichier vidéo, par ex. `/path/to/sample/video.mp4`.
 
-You can also specify additional attributes for the embedded video file. Here is a full list of attributes allowed.
+Vous pouvez également spécifier des attributs supplémentaires pour le fichier vidéo intégré. Voici une liste complète des attributs autorisés.
 
-- `poster='/path/to/poster.png'` — poster image for a video that is shown while video is downloading
-- `title='Text'` — title for a video that appears below the video and looks same as for images
-- `autoplay=true` — video automatically begins to play back as soon as it can
-- `loop=true` — automatically seek back to the start upon reaching the end of the video
-- `muted=true` — audio will be initially silenced
-- `types` — specify the extensions of additional video formats separated by `|`. Ensure these files exist in the same directory as your primary video file.
+- `poster='/path/to/poster.png'` — image d'affiche pour une vidéo qui s'affiche pendant le téléchargement de la vidéo
+- `title='Text'` — titre d'une vidéo qui apparaît sous la vidéo et ressemble à celui des images
+- `autoplay=true` — la lecture de la vidéo commence automatiquement dès que possible
+- `loop=true` — revient automatiquement au début une fois la fin de la vidéo atteinte
+- `muted=true` — le son sera initialement réduit au silence
+- `types` — spécifiez les extensions de formats vidéo supplémentaires séparées par `|`. Assurez-vous que ces fichiers existent dans le même répertoire que votre fichier vidéo principal.
 
-Consider an example using all of the above:
+Prenons un exemple utilisant tout ce qui précède :
 
 ```liquid
 {%
@@ -316,22 +319,22 @@ Consider an example using all of the above:
 %}
 ```
 
-### Audio Files
+### Fichiers audio
 
-If you want to embed an audio file directly, use the following syntax:
+Si vous souhaitez intégrer directement un fichier audio, utilisez la syntaxe suivante :
 
 ```liquid
 {% include embed/audio.html src='{URL}' %}
 ```
 
-Where `URL` is a URL to an audio file e.g. `/path/to/audio.mp3`.
+Où `URL` est une URL vers un fichier audio, par ex. `/path/to/audio.mp3`.
 
-You can also specify additional attributes for the embedded audio file. Here is a full list of attributes allowed.
+Vous pouvez également spécifier des attributs supplémentaires pour le fichier audio intégré. Voici une liste complète des attributs autorisés.
 
-- `title='Text'` — title for an audio that appears below the audio and looks same as for images
-- `types` — specify the extensions of additional audio formats separated by `|`. Ensure these files exist in the same directory as your primary audio file.
+- `title='Text'` — titre d'un audio qui apparaît sous l'audio et ressemble à celui des images
+- `types` — spécifiez les extensions de formats audio supplémentaires séparées par `|`. Assurez-vous que ces fichiers existent dans le même répertoire que votre fichier audio principal.
 
-Consider an example using all of the above:
+Prenons un exemple utilisant tout ce qui précède :
 
 ```liquid
 {%
@@ -342,9 +345,9 @@ Consider an example using all of the above:
 %}
 ```
 
-## Pinned Posts
+## Messages épinglés
 
-You can pin one or more posts to the top of the home page, and the fixed posts are sorted in reverse order according to their release date. Enable by:
+Vous pouvez épingler une ou plusieurs publications en haut de la page d'accueil, et les publications corrigées sont triées dans l'ordre inverse en fonction de leur date de publication. Activer par :
 
 ```yaml
 ---
@@ -352,9 +355,9 @@ pin: true
 ---
 ```
 
-## Prompts
+## Invites
 
-There are several types of prompts: `tip`, `info`, `warning`, and `danger`. They can be generated by adding the class `prompt-{type}` to the blockquote. For example, define a prompt of type `info` as follows:
+Il existe plusieurs types d'invites : `tip`, `info`, `warning` et `danger`. Ils peuvent être générés en ajoutant la classe `prompt-{type}` au blockquote. Par exemple, définissez une invite de type `info` comme suit :
 
 ```md
 > Example line for prompt.
@@ -362,88 +365,88 @@ There are several types of prompts: `tip`, `info`, `warning`, and `danger`. They
 ```
 {: .nolineno }
 
-## Syntax
+## Syntaxe
 
-### Inline Code
+### Code en ligne
 
 ```md
 `inline code part`
 ```
 {: .nolineno }
 
-### Filepath Highlight
+### Point culminant du chemin de fichier
 
 ```md
 `/path/to/a/file.extend`{: .filepath}
 ```
 {: .nolineno }
 
-### Code Block
+### Bloc de code
 
-Markdown symbols ```` ``` ```` can easily create a code block as follows:
+Les symboles Markdown ```` ``` ```` peuvent facilement créer un bloc de code comme suit :
 
 ````md
 ```
-This is a plaintext code snippet.
+Il s'agit d'un extrait de code en texte brut.
 ```
 ````
 
-#### Specifying Language
+#### Spécification de la langue
 
-Using ```` ```{language} ```` you will get a code block with syntax highlight:
+En utilisant ```` ```{language} ````, vous obtiendrez un bloc de code avec une coloration syntaxique :
 
 ````markdown
 ```yaml
-key: value
+clé : valeur
 ```
 ````
 
-> The Jekyll tag `{% highlight %}` is not compatible with this theme.
+> Le tag Jekyll `{% highlight %}` n'est pas compatible avec ce thème.
 {: .prompt-danger }
 
-#### Line Number
+#### Numéro de ligne
 
-By default, all languages except `plaintext`, `console`, and `terminal` will display line numbers. When you want to hide the line number of a code block, add the class `nolineno` to it:
+Par défaut, toutes les langues sauf `plaintext`, `console` et `terminal` afficheront les numéros de ligne. Lorsque vous souhaitez masquer le numéro de ligne d'un bloc de code, ajoutez-y la classe `nolineno` :
 
 ````markdown
 ```shell
-echo 'No more line numbers!'
+echo 'Plus de numéros de ligne !'
 ```
 {: .nolineno }
 ````
 
-#### Specifying the Filename
+#### Spécification du nom de fichier
 
-You may have noticed that the code language will be displayed at the top of the code block. If you want to replace it with the file name, you can add the attribute `file` to achieve this:
+Vous avez peut-être remarqué que le langage du code sera affiché en haut du bloc de code. Si vous souhaitez le remplacer par le nom du fichier, vous pouvez ajouter l'attribut `file` pour obtenir cela :
 
 ````markdown
 ```shell
-# content
+# contenu
 ```
 {: file="path/to/file" }
 ````
 
-#### Liquid Codes
+#### Codes liquides
 
-If you want to display the **Liquid** snippet, surround the liquid code with `{% raw %}` and `{% endraw %}`:
+Si vous souhaitez afficher l'extrait **Liquide**, entourez le code liquide entre `{% raw %}` et `{% endraw %}` :
 
 ````markdown
 {% raw %}
 ```liquid
 {% if product.title contains 'Pack' %}
-  This product's title contains the word Pack.
+  Le titre de ce produit contient le mot Pack.
 {% endif %}
 ```
 {% endraw %}
 ````
 
-Or adding `render_with_liquid: false` (Requires Jekyll 4.0 or higher) to the post's YAML block.
+Ou en ajoutant `render_with_liquid: false` (nécessite Jekyll 4.0 ou supérieur) au bloc YAML de la publication.
 
-## Mathematics
+## Mathématiques
 
-We use [**MathJax**][mathjax] to generate mathematics. For website performance reasons, the mathematical feature won't be loaded by default. But it can be enabled by:
+Nous utilisons [**MathJax**][mathjax] pour générer des mathématiques. Pour des raisons de performances du site Web, la fonctionnalité mathématique ne sera pas chargée par défaut. Mais il peut être activé par :
 
-[mathjax]: https://www.mathjax.org/
+[mathjax] : https://www.mathjax.org/
 
 ```yaml
 ---
@@ -451,13 +454,13 @@ math: true
 ---
 ```
 
-After enabling the mathematical feature, you can add math equations with the following syntax:
+Après avoir activé la fonctionnalité mathématique, vous pouvez ajouter des équations mathématiques avec la syntaxe suivante :
 
-- **Block math** should be added with `$$ math $$` with **mandatory** blank lines before and after `$$`
-  - **Inserting equation numbering** should be added with `$$\begin{equation} math \end{equation}$$`
-  - **Referencing equation numbering** should be done with `\label{eq:label_name}` in the equation block and `\eqref{eq:label_name}` inline with text (see example below)
-- **Inline math** (in lines) should be added with `$$ math $$` without any blank line before or after `$$`
-- **Inline math** (in lists) should be added with `\$$ math $$`
+- **Le bloc mathématique** doit être ajouté avec `$$ math $$` avec des lignes vides **obligatoires** avant et après `$$`
+  - **Insérer la numérotation de l'équation** doit être ajouté avec `$$\begin{equation} math \end{equation}$$`
+  - **La numérotation des équations de référence** doit être effectuée avec `\label{eq:label_name}` dans le bloc d'équation et `\eqref{eq:label_name}` en ligne avec le texte (voir exemple ci-dessous)
+- **Les calculs en ligne** (en lignes) doivent être ajoutés avec `$$ math $$` sans aucune ligne vide avant ou après `$$`
+- **Les mathématiques en ligne** (dans les listes) doivent être ajoutées avec `\$$ math $$`
 
 ```markdown
 <!-- Block math, keep all blank lines -->
@@ -488,15 +491,15 @@ Can be referenced as \eqref{eq:label_name}.
 3. \$$ LaTeX_math_expression $$
 ```
 
-> Starting with `v7.0.0`, configuration options for **MathJax** have been moved to file `assets/js/data/mathjax.js`{: .filepath }, and you can change the options as needed, such as adding [extensions][mathjax-exts].  
-> If you are building the site via `chirpy-starter`, copy that file from the gem installation directory (check with command `bundle info --path jekyll-theme-chirpy`) to the same directory in your repository.
+> À partir de `v7.0.0`, les options de configuration pour **MathJax** ont été déplacées vers le fichier `assets/js/data/mathjax.js`{: .filepath }, et vous pouvez modifier les options selon vos besoins, par exemple en ajoutant des [extensions][mathjax-exts].
+> Si vous créez le site via `chirpy-starter`, copiez ce fichier du répertoire d'installation de gem (vérifiez avec la commande `bundle info --path jekyll-theme-chirpy`) dans le même répertoire de votre référentiel.
 {: .prompt-tip }
 
-[mathjax-exts]: https://docs.mathjax.org/en/latest/input/tex/extensions/index.html
+[mathjax-exts] : https://docs.mathjax.org/en/latest/input/tex/extensions/index.html
 
-## Mermaid
+## Sirène
 
-[**Mermaid**](https://github.com/mermaid-js/mermaid) is a great diagram generation tool. To enable it on your post, add the following to the YAML block:
+[**Mermaid**](https://github.com/mermaid-js/mermaid) est un excellent outil de génération de diagrammes. Pour l'activer sur votre publication, ajoutez ce qui suit au bloc YAML :
 
 ```yaml
 ---
@@ -504,8 +507,8 @@ mermaid: true
 ---
 ```
 
-Then you can use it like other markdown languages: surround the graph code with ```` ```mermaid ```` and ```` ``` ````.
+Ensuite, vous pouvez l'utiliser comme d'autres langages de démarque : entourez le code graphique avec ```` ```mermaid ```` and ```` ``` ````.
 
-## Learn More
+## Apprendre encore plus
 
-For more knowledge about Jekyll posts, visit the [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).
+Pour plus d'informations sur les publications Jekyll, visitez le [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).

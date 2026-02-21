@@ -1,10 +1,11 @@
 ---
 title: 'NLO vs Chirpy: Diff Log'
-language: 'en'
+language: en
 translation_key: nlo-vs-chirpy-diff-log
-description: Объективный список отличий темы NLO от оригинального jekyll-theme-chirpy.
-  Пост обновляется по мере миграции и развития темы.
-date: '2026-02-17 12:30:00 +0100'
+description: An objective list of differences between the NLO theme and the original
+  jekyll-theme-chirpy. The post is updated as the migration progresses and the topic
+  develops.
+date: 2026-02-17 12:30:00 +0100
 categories:
 - NLO
 - Migration
@@ -15,64 +16,64 @@ tags:
 ---
 
 ![](assets/img/logo_nlo.png)
-Этот пост фиксирует **конкретные технические отличия** от оригинальной темы.
-Формат простой: добавляем пункт, когда он реализован и проверен.
+This post documents **specific technical differences** from the original thread.
+The format is simple: we add an item when it is implemented and verified.
 
-## Чеклист различий
+## Checklist of differences
 
-- [x] Личная статистика GitHub contribution graph (home + sidebar) с автообновлением через workflow
-- [x] Локальная админка для редактирования контента, основанная на `jekyll-admin`, с форком UI внутри проекта
-- [x] Быстрый вход в локальную админку через отдельную кнопку в sidebar (только dev)
-- [x] Расширенное брендирование sidebar: разные аватары для light/dark + выбор стиля рамки
-- [x] Мультиязычный режим в `lang` с переключателем языков и флагами в sidebar
-- [x] Короткие URL-префиксы локалей (`/ru/`, `/fr/`) вместо длинных (`/ru-RU/`, `/fr-FR/`)
-- [x] Фильтрация контента по языку поста (`language`/`lang` во front matter)
+- [x] Personal statistics GitHub contribution graph (home + sidebar) with auto-update via workflow
+- [x] Local admin panel for content editing, based on `jekyll-admin`, with UI fork inside the project
+- [x] Quick login to the local admin panel via a separate button in the sidebar (dev only)
+- [x] Extended sidebar branding: different avatars for light/dark + choice of frame style
+- [x] Multilingual mode in `lang` with language switcher and flags in the sidebar
+- [x] Short locale URL prefixes (`/ru/`, `/fr/`) instead of long ones (`/ru-RU/`, `/fr-FR/`)
+- [x] Content filtering by post language (`language`/`lang` in front matter)
 
-## 1) Личная статистика контрибутов GitHub
+## 1) Personal statistics of GitHub contributions
 
-Что добавлено:
+What's added:
 
-- Отображение GitHub contribution chart в двух местах: на главной странице и в sidebar.
-- Отдельные SVG для светлой и темной темы.
+- Display GitHub contribution chart in two places: on the main page and in the sidebar.
+- Separate SVGs for light and dark themes.
 
-Где настраивается:
+Where is it configured:
 
 - `_config.yml` -> `nlo.github_chart`.
-- Ключи:
+- Keys:
   - `home_image`
   - `home_image_dark`
   - `sidebar_image`
   - `sidebar_image_dark`
 
-Как обновляется автоматически:
+How it updates automatically:
 
 - Workflow: `.github/workflows/update-githubchart.yml`
-- Запуск по расписанию: `0 3 * * *` (ежедневно) и вручную через `workflow_dispatch`.
-- Генерация: `tools/generate-githubchart.sh`
-- При изменениях коммитятся файлы:
+- Scheduled launch: `0 3 * * *` (daily) and manually after `workflow_dispatch`.
+- Generation: `tools/generate-githubchart.sh`
+- When changes are made, the following files are committed:
   - `assets/img/githubchart.svg`
   - `assets/img/githubchart-sidebar.svg`
   - `assets/img/githubchart-dark.svg`
   - `assets/img/githubchart-sidebar-dark.svg`
 
-## 2) Локальная админка (только для разработки)
+## 2) Local admin panel (for development only)
 
-На чем основано:
+What is it based on:
 
-- Базовый функционал редактирования: гем `jekyll-admin`.
-- UI форкнут внутрь репозитория в папку `admin/` для кастомизации под NLO.
+- Basic editing functionality: gem `jekyll-admin`.
+- The UI will be forked inside the repository into the `admin/` folder for customization for NLO.
 
-Как это работает:
+How does this work:
 
-- Плагин `_plugins/jekyll-admin-fork.rb` монтирует:
-  - `/admin` -> локальный UI из `admin/`
-  - `/_api` -> API от `JekyllAdmin::Server`
-- Файлы кастомного интерфейса:
+- Plugin `_plugins/jekyll-admin-fork.rb` mounts:
+  - `/admin` -> local UI from `admin/`
+  - `/_api` -> API from `JekyllAdmin::Server`
+- Custom interface files:
   - `admin/index.html`
   - `admin/nlo-admin.css`
   - `admin/nlo-admin.js`
 
-Локальный запуск:
+Local launch:
 
 ```bash
 bash tools/run.sh --admin
@@ -84,81 +85,81 @@ URL:
 http://127.0.0.1:4000/admin
 ```
 
-Почему не в проде:
+Why not in production:
 
-- Функция админки предназначена для локального контура разработки.
-- Гем `jekyll-admin` подключен как development dependency (`Gemfile`, группа `:development`).
-- Публичный production-сайт должен оставаться только контентным слоем без открытого editor/API контура.
+- The admin function is intended for the local development circuit.
+- The gem `jekyll-admin` is connected as a development dependency (`Gemfile`, group `:development`).
+- A public production site should remain only a content layer without an open editor/API loop.
 
-## 3) Sidebar и UX-улучшения редактора
+## 3) Sidebar and editor UX improvements
 
-Что добавлено:
+What's added:
 
-- В `sidebar` добавлена заметная кнопка `ADMIN` в нижнем блоке навигации (показывается только в `development`).
-- Блок аватара в sidebar увеличен на ~30% для лучшего визуального баланса.
-- Для аватара используются отдельные источники под светлую и тёмную темы:
+- `sidebar` added a prominent `ADMIN` button in the bottom navigation block (only shown in `development`).
+- The avatar block in the sidebar has been increased by ~30% for better visual balance.
+- For the avatar, separate sources are used for light and dark themes:
   - `nlo.branding.avatar_light`
   - `nlo.branding.avatar_dark`
-- Настройка рамки аватара вынесена в конфиг (`nlo.branding.avatar_frame`) и поддерживает стили:
+- The avatar frame setting is included in the config (`nlo.branding.avatar_frame`) and supports styles:
   - `round`
   - `discord`
-- В тёмной теме рамка аватара затемнена под общий тон интерфейса.
+- In a dark theme, the avatar frame is darkened to match the overall tone of the interface.
 
-Что изменено в админке:
+What has been changed in the admin panel:
 
-- Настройки `GitHub Chart Palette` и `Avatar Frame` встроены в страницу `Configuration` как обычные пункты.
-- Оба блока настроек отображаются в одну строку на десктопе (две колонки), а на узких экранах складываются в одну колонку.
-- Для поля `author` добавлен tooltip-пояснитель:
-  - если указать ключ из `_data/authors.yml`, автор выводится как ссылка на профиль;
-  - если ключ не найден, значение `author` отображается как обычный текст.
+- The settings `GitHub Chart Palette` and `Avatar Frame` are built into the `Configuration` page as normal items.
+- Both settings blocks are displayed in one line on the desktop (two columns), and on narrow screens they are folded into one column.
+- A tooltip explanation has been added for the `author` field:
+  - if you specify a key from `_data/authors.yml`, the author is displayed as a link to the profile;
+  - if the key is not found, the value `author` is displayed as plain text.
 
-## 4) Мультиязычность и переключатель языка
+## 4) Multilingual and language switch
 
-Что добавлено:
+What's added:
 
-- `lang` в `_config.yml` теперь поддерживает несколько языков через запятую:
-  - пример: `lang: en, ru-RU, fr-FR`
-- Если указан один язык, селектор языка не отображается.
-- Если указано несколько языков:
-  - до 3 языков отображаются флаги;
-  - при большем количестве автоматически показывается компактный `select`.
-- Подпись селектора локализуется (`Site version`) через locale-файлы.
-- Флаги хранятся локально в `assets/img/flags/`.
-- В `title` у флагов показывается человекочитаемое имя языка (а не технический код вроде `ru-RU`).
+- `lang` in `_config.yml` now supports multiple languages ​​separated by commas:
+  - example: `lang: en, ru-RU, fr-FR`
+- If one language is specified, the language selector is not displayed.
+- If multiple languages ​​are specified:
+  - up to 3 languages ​​flags are displayed;
+  - if the quantity is larger, the compact `select` is automatically displayed.
+- The selector signature is localized (`Site version`) via locale files.
+- Flags are stored locally in `assets/img/flags/`.
+- In `title` flags show the human-readable name of the language (rather than technical code like `ru-RU`).
 
-Технически:
+Technically:
 
-- Нормализация языков и выбор активного языка вынесены в `_includes/lang.html`.
-- UI селектора реализован в `_includes/lang-switch.html` и встроен первым пунктом в sidebar-навигацию (визуально как `HOME`).
-- Для флагов добавлена мягкая прозрачность (`opacity: 0.7`) и выделение активного языка (hover/active -> `opacity: 1`).
+- Language normalization and active language selection are included in `_includes/lang.html`.
+- The selector UI is implemented in `_includes/lang-switch.html` and is built as the first item in the sidebar navigation (visually as `HOME`).
+- Added soft transparency (`opacity: 0.7`) and active language highlighting (hover/active -> `opacity: 1`) to flags.
 
-## 5) Языковые URL и видимость контента
+## 5) Language URLs and content visibility
 
-Что изменено в URL:
+What's changed in the URL:
 
-- Переключение языка теперь использует короткие префиксы:
+- Language switching now uses short prefixes:
   - `http://127.0.0.1:4000/ru/`
   - `http://127.0.0.1:4000/fr/`
-- Для локализованных home-страниц заданы короткие permalink:
+- For localized home pages, short permalinks are specified:
   - `ru-RU/index.md` -> `/ru/`
   - `fr-FR/index.md` -> `/fr/`
-- Детектор языка в `_includes/lang.html` теперь понимает и полный код локали, и короткий alias префикса.
+- The language detector in `_includes/lang.html` now understands both the full locale code and the short prefix alias.
 
-Что изменено в контенте:
+What's changed in the content:
 
-- В посты добавлен `language` во front matter (например `language: en`, `language: ru-RU`).
-- Посты показываются только для текущего языка интерфейса.
-- Посты без `language`/`lang` считаются контентом `default_lang` (обратная совместимость).
+- Added `language` in front matter to posts (for example `language: en`, `language: ru-RU`).
+- Posts are shown only for the current interface language.
+- Posts without `language`/`lang` are considered `default_lang` content (backwards compatible).
 
-Где работает фильтрация:
+Where filtering works:
 
-- Главная (`home`)
-- Архивы (`archives`)
-- Списки категорий/тегов (`categories`, `tags`)
-- Страницы конкретной категории/тега
-- Боковая панель: последние обновления и trending tags
-- Related posts внутри статьи
+- Home (`home`)
+- Archives (`archives`)
+- Lists of categories/tags (`categories`, `tags`)
+- Pages of a specific category/tag
+- Sidebar: latest updates and trending tags
+- Related posts inside the article
 
-## Что дальше
+## What's next
 
-Следующие отличия будем добавлять в этот же пост по мере реализации, чтобы сохранять прозрачный и проверяемый список изменений.
+We will add the following differences to the same post as we implement them in order to maintain a transparent and verifiable list of changes.
