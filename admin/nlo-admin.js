@@ -1128,22 +1128,33 @@
       return null;
     }
 
-    const currentValue =
-      sessionStorage.getItem(POSTS_I18N_FILTER_KEY) || POSTS_I18N_FILTER_ALL;
+    const storedValue = sessionStorage.getItem(POSTS_I18N_FILTER_KEY) || POSTS_I18N_FILTER_ALL;
     const options = [
       { value: POSTS_I18N_FILTER_ALL, label: 'All language versions' },
       ...languages.map((language) => ({ value: language, label: `Language: ${language}` })),
       { value: POSTS_I18N_FILTER_OUTDATED, label: 'Outdated only' }
     ];
+    const allowedValues = new Set(options.map((option) => option.value));
+    const currentValue = allowedValues.has(storedValue) ? storedValue : POSTS_I18N_FILTER_ALL;
+    if (currentValue !== storedValue) {
+      sessionStorage.setItem(POSTS_I18N_FILTER_KEY, currentValue);
+    }
+    const optionsSignature = options.map((option) => `${option.value}:${option.label}`).join('|');
 
-    select.innerHTML = '';
-    options.forEach((optionData) => {
-      const option = document.createElement('option');
-      option.value = optionData.value;
-      option.textContent = optionData.label;
-      option.selected = optionData.value === currentValue;
-      select.appendChild(option);
-    });
+    if (select.dataset.nloOptionsSignature !== optionsSignature) {
+      select.innerHTML = '';
+      options.forEach((optionData) => {
+        const option = document.createElement('option');
+        option.value = optionData.value;
+        option.textContent = optionData.label;
+        select.appendChild(option);
+      });
+      select.dataset.nloOptionsSignature = optionsSignature;
+    }
+
+    if (select.value !== currentValue) {
+      select.value = currentValue;
+    }
 
     let summary = document.getElementById(summaryId);
     if (!summary) {
@@ -1242,6 +1253,53 @@
       postsI18nRefreshTimer = null;
       void refreshPostsI18nUI();
     }, 90);
+  }
+
+  function isNloPostsI18nNode(node) {
+    if (!(node instanceof Element)) {
+      return false;
+    }
+
+    if (
+      node.id === 'nlo-admin-posts-i18n-controls' ||
+      node.id === 'nlo-admin-posts-i18n-summary' ||
+      node.id === 'nlo-admin-posts-i18n-filter'
+    ) {
+      return true;
+    }
+
+    if (node.classList.contains('nlo-admin-post-status')) {
+      return true;
+    }
+
+    return Boolean(
+      node.closest('#nlo-admin-posts-i18n-controls, #nlo-admin-posts-i18n-summary, .nlo-admin-post-status')
+    );
+  }
+
+  function hasRelevantPostsMutation(records) {
+    for (const record of records) {
+      const changedNodes = [...record.addedNodes, ...record.removedNodes];
+
+      for (const changed of changedNodes) {
+        if (!(changed instanceof Element)) {
+          continue;
+        }
+
+        if (isNloPostsI18nNode(changed)) {
+          continue;
+        }
+
+        if (
+          changed.matches('a[href*="entries"], .content-header a, .content-header button') ||
+          changed.querySelector('a[href*="entries"], .content-header a, .content-header button')
+        ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   function fieldScore(input, hints) {
@@ -1586,12 +1644,14 @@
     scanEditors();
     suppressFalseConfigErrorNotice();
 
-    const observer = new MutationObserver(() => {
+    const observer = new MutationObserver((records) => {
       ensureThemeToggle();
       ensureGhPalettePicker();
       ensureAvatarFramePicker();
       void ensurePostsTranslationMatrixNav();
-      schedulePostsI18nRefresh();
+      if (hasRelevantPostsMutation(records)) {
+        schedulePostsI18nRefresh();
+      }
       void ensureSidebarBranding();
       ensurePathAutofill();
       ensureAuthorHint();
