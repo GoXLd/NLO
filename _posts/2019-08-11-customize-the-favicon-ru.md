@@ -1,5 +1,5 @@
 ---
-title: Настройте фавиконку
+title: Настройка favicon
 language: ru-RU
 translation_key: customize-the-favicon
 author: GoXLd
@@ -13,9 +13,9 @@ tags:
 
 Файлы [favicons](https://www.favicon-generator.org/about/) из [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) располагаются в каталоге `assets/img/favicons/`{: .filepath}. Возможно, вы сможете заменить их своими силами. Следующие разделы помогут вам создать и заменить значки по умолчанию.
 
-## Создать значок
+## Генерация favicon
 
-Подготовьте квадратное изображение (PNG, JPG или SVG) размером 512x512 или более, затем включите в онлайн-инструмент [**Real Favicon Generator**](https://realfavicongenerator.net/) и нажмите кнопку <kbd>Выбрать значка изображения</kbd>, чтобы загрузить изображение файла.
+Подготовьте квадратное изображение (PNG, JPG или SVG) размером 512x512 или более, затем перейдите в [**Real Favicon Generator**](https://realfavicongenerator.net/) и нажмите <kbd>Pick your favicon image</kbd>, чтобы загрузить файл изображения.
 
 На следующем шаге на веб-странице будут показаны все сценарии использования. Вы можете сохранить параметры по умолчанию, прокрутить страницу вниз и нажать кнопку <kbd>Далее →</kbd>, чтобы создать значок.
 

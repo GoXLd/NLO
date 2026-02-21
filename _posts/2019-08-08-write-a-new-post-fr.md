@@ -1,5 +1,5 @@
 ---
-title: Écrire un nouveau message
+title: Rédiger un nouvel article
 language: fr-FR
 translation_key: write-a-new-post
 author: cotes
@@ -16,9 +16,9 @@ Ce tutoriel vous expliquera comment rédiger un article dans le modèle _Chirpy_
 
 ## Nom et chemin
 
-Create a new file named `YYYY-MM-DD-TITLE.EXTENSION`{: .filepath} and put it in the `_posts`{: .filepath} of the root directory. Please note that the `EXTENSION`{: .filepath} must be one of `md`{: .filepath} and `markdown`{: .filepath}. If you want to save time of creating files, please consider using the plugin [`Jekyll-Compose`](https://github.com/jekyll/jekyll-compose) to accomplish this.
+Créez un nouveau fichier nommé `YYYY-MM-DD-TITLE.EXTENSION`{: .filepath} et placez-le dans le dossier `_posts`{: .filepath} à la racine du projet. Notez que `EXTENSION`{: .filepath} doit être `md`{: .filepath} ou `markdown`{: .filepath}. Pour gagner du temps, vous pouvez utiliser le plugin [`Jekyll-Compose`](https://github.com/jekyll/jekyll-compose).
 
-## Questions préliminaires
+## Front Matter
 
 En gros, vous devez remplir le [Front Matter](https://jekyllrb.com/docs/front-matter/) comme ci-dessous en haut du message :
 
@@ -80,7 +80,7 @@ Cela dit, la clé `author` peut également identifier plusieurs entrées.
 
 ### Description du poste
 
-By default, the first words of the post are used to display on the home page for a list of posts, in the _Further Reading_ section, and in the XML of the RSS feed. If you don't want to display the auto-generated description for the post, you can customize it using the `description` field in the _Front Matter_ as follows:
+Par défaut, les premiers mots du post sont utilisés sur la page d'accueil, dans la section _Further Reading_ et dans le flux RSS. Si vous ne souhaitez pas utiliser cette description générée automatiquement, définissez `description` dans le _Front Matter_ :
 
 ```yaml
 ---
@@ -92,7 +92,7 @@ De plus, le texte `description` sera également affiché sous le titre du messag
 
 ## Table des matières
 
-By default, the **T**able **o**f **C**ontents (TOC) is displayed on the right panel of the post. If you want to turn it off globally, go to `_config.yml`{: .filepath} and set the value of variable `toc` to `false`. If you want to turn off TOC for a specific post, add the following to the post's [Front Matter](https://jekyllrb.com/docs/front-matter/):
+Par défaut, la table des matières (TOC) est affichée dans le panneau droit du post. Pour la désactiver globalement, définissez `toc: false` dans `_config.yml`{: .filepath}. Pour la désactiver uniquement pour un post, ajoutez ceci dans son [Front Matter](https://jekyllrb.com/docs/front-matter/) :
 
 ```yaml
 ---
@@ -117,6 +117,7 @@ comments: false
 Nous faisons référence aux images, à l'audio et à la vidéo comme ressources multimédias dans _Chirpy_.
 
 ### Préfixe d'URL
+{: #url-prefix }
 
 De temps en temps, nous devons définir des préfixes d'URL en double pour plusieurs ressources dans une publication, ce qui est une tâche ennuyeuse que vous pouvez éviter en définissant deux paramètres.
 
@@ -127,7 +128,7 @@ De temps en temps, nous devons définir des préfixes d'URL en double pour plusi
   ```
   {: file='_config.yml' .nolineno }
 
-- Pour spécifier le préfixe du chemin de ressource pour la plage de publications/pages actuelle, définissez `media_subpath` dans le _avant-plan_ de la publication :
+- Pour spécifier le préfixe du chemin de ressource pour la plage de publications/pages actuelle, définissez `media_subpath` dans le _Front Matter_ de la publication :
 
   ```yaml
   ---
@@ -492,10 +493,10 @@ Can be referenced as \eqref{eq:label_name}.
 ```
 
 > À partir de `v7.0.0`, les options de configuration pour **MathJax** ont été déplacées vers le fichier `assets/js/data/mathjax.js`{: .filepath }, et vous pouvez modifier les options selon vos besoins, par exemple en ajoutant des [extensions][mathjax-exts].
-> Si vous créez le site via `chirpy-starter`, copiez ce fichier du répertoire d'installation de gem (vérifiez avec la commande `bundle info --path jekyll-theme-chirpy`) dans le même répertoire de votre référentiel.
+> Si vous créez le site via `chirpy-starter`, copiez ce fichier depuis le répertoire d'installation de la gem (vérifiez avec `bundle info --path jekyll-theme-chirpy`) dans le même répertoire de votre dépôt.
 {: .prompt-tip }
 
-[mathjax-exts] : https://docs.mathjax.org/en/latest/input/tex/extensions/index.html
+[mathjax-exts]: https://docs.mathjax.org/en/latest/input/tex/extensions/index.html
 
 ## Sirène
 

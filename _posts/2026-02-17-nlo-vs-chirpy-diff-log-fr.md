@@ -1,5 +1,5 @@
 ---
-title: 'NLO vs Chirpy : journal des différences'
+title: 'NLO vs Chirpy : journal des différences'
 language: fr-FR
 translation_key: nlo-vs-chirpy-diff-log
 description: Une liste objective des différences entre le thème NLO et le thème jekyll-chirpy
@@ -16,7 +16,7 @@ tags:
 ---
 
 ![](assets/img/logo_nlo.png)
-Cet article documente les **différences techniques spécifiques** par rapport au fil de discussion d'origine.
+Cet article documente les **différences techniques spécifiques** par rapport au thème original.
 Le format est simple : on ajoute un élément lorsqu'il est implémenté et vérifié.
 
 ## Liste de contrôle des différences
@@ -27,7 +27,7 @@ Le format est simple : on ajoute un élément lorsqu'il est implémenté et vér
 - [x] Branding de la barre latérale étendue : différents avatars pour le clair/foncé + choix du style de cadre
 - [x] Mode multilingue en `lang` avec sélecteur de langue et drapeaux dans la barre latérale
 - [x] Préfixes d'URL de paramètres régionaux courts (`/ru/`, `/fr/`) au lieu de longs (`/ru-RU/`, `/fr-FR/`)
-- [x] Filtrage du contenu par langue de publication (`language`/`lang` en introduction)
+- [x] Filtrage du contenu par langue de publication (`language`/`lang` dans le front matter)
 
 ## 1) Statistiques personnelles des contributions GitHub
 
@@ -48,7 +48,7 @@ Où est-il configuré :
 Comment il se met à jour automatiquement :
 
 - Flux de travail : `.github/workflows/update-githubchart.yml`
-- Lancement programmé : 0¤¤¤ (quotidiennement) et manuellement après 1¤¤¤.
+- Lancement planifié : `0 3 * * *` (quotidiennement) et manuellement via `workflow_dispatch`.
 - Génération : `tools/generate-githubchart.sh`
 - Lorsque des modifications sont apportées, les fichiers suivants sont validés :
   - `assets/img/githubchart.svg`
@@ -61,7 +61,7 @@ Comment il se met à jour automatiquement :
 Sur quoi est-il basé :
 
 - Fonctionnalité d'édition de base : gem `jekyll-admin`.
-- L'interface utilisateur sera transférée à l'intérieur du référentiel dans le dossier `admin/` pour la personnalisation pour NLO.
+- L'interface utilisateur est forkée dans le dépôt, dans le dossier `admin/`, pour les personnalisations NLO.
 
 Comment cela marche-t-il:
 
@@ -129,7 +129,7 @@ Ce qui est ajouté :
 
 Techniquement:
 
-- La normalisation de la langue et la sélection active de la langue sont incluses dans 0¤¤¤.
+- La normalisation des langues et la détection de la langue active sont implémentées dans `_includes/lang.html`.
 - L'interface utilisateur du sélecteur est implémentée dans `_includes/lang-switch.html` et est construite comme premier élément de la barre de navigation latérale (visuellement sous la forme `HOME`).
 - Ajout d'une transparence douce (`opacity: 0.7`) et d'une mise en évidence de la langue active (survol/actif -> `opacity: 1`) aux drapeaux.
 

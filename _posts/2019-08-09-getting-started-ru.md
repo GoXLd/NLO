@@ -1,5 +1,5 @@
 ---
-title: Начиная
+title: Быстрый старт
 language: ru-RU
 translation_key: getting-started
 description: Начните работу с основами Chirpy из этого подробного обзора. Вы узнаете,
@@ -28,12 +28,12 @@ media_subpath: /posts/20180809
 2. Нажмите кнопку <kbd>Использовать этот шаблон</kbd> и выберите <kbd>Создать новый репозиторий</kbd>.
 3. Назовите новый репозиторий `<username>.github.io`, заменив `username` своим именем пользователя GitHub в нижнем регистре.
 
-### Вариант 2. Формирование темы
+### Вариант 2. Форк темы
 
 Этот подход удобен для изменения функций или дизайна пользовательского интерфейса, но создает проблемы во время обновлений. Так что не пытайтесь сделать это, если вы не знакомы с Jekyll и не планируете существенно изменить эту тему.
 
 1. Войдите в GitHub.
-2. [Fork the theme repository](https://github.com/cotes2020/jekyll-theme-chirpy/fork).
+2. [Сделайте форк репозитория темы](https://github.com/cotes2020/jekyll-theme-chirpy/fork).
 3. Назовите новый репозиторий `<username>.github.io`, заменив `username` своим именем пользователя GitHub в нижнем регистре.
 
 ## Настройка среды
@@ -46,12 +46,12 @@ media_subpath: /posts/20180809
 
 **Шаги**:
 
-1. Установите Докер:
+1. Установите Docker:
    - В Windows/macOS установите [Docker Desktop][docker-desktop].
    - В Linux установите [Docker Engine][docker-engine].
 2. Установите [VS Code][vscode] и [расширение Dev Containers][dev-containers].
 3. Клонируйте свой репозиторий:
-   - Для Docker Desktop: запустите VS Code и [клонируйте репозиторий в том контейнера][dc-clone-in-vol].
+   - Для Docker Desktop: запустите VS Code и [клонируйте репозиторий в том контейнере][dc-clone-in-vol].
    - Для Docker Engine: клонируйте репозиторий локально, затем [откройте его в контейнере][dc-open-in-container] через VS Code.
 4. Дождитесь завершения настройки Dev Containers.
 
@@ -61,7 +61,7 @@ media_subpath: /posts/20180809
 
 **Шаги**:
 
-1. Следуйте за людьми [Jekyll installation guide](https://jekyllrb.com/docs/installation/), чтобы установить Jekyll, и убедитесь, что установлен [Git](https://git-scm.com/).
+1. Следуйте [руководству по установке Jekyll](https://jekyllrb.com/docs/installation/), чтобы установить Jekyll, и убедитесь, что [Git](https://git-scm.com/) установлен.
 2. Клонируйте свой репозиторий на локальный компьютер.
 3. Если вы разветвили тему, установите [Node.js][nodejs] и запустите `bash tools/init.sh` в корневом каталоге, чтобы инициализировать репозиторий.
 4. Запустите команду `bundle` в корне вашего репозитория, чтобы установить зависимости.
@@ -79,7 +79,7 @@ $ bundle exec jekyll serve
 > Если вы используете Dev-контейнеры, вам необходимо запустить эту команду в терминале **VS Code**.
 {: .prompt-info }
 
-Через несколько секунд локальный сервер будет доступен по адресу <http://127.0.0.1:4000>..
+Через несколько секунд локальный сервер будет доступен по адресу <http://127.0.0.1:4000>.
 
 ### Конфигурация
 
@@ -96,7 +96,7 @@ $ bundle exec jekyll serve
 
 ### Настройка таблицы стилей
 
-Чтобы настроить таблицу стилей, скопируйте темы файлов `assets/css/jekyll-theme-chirpy.scss`{: .filepath} по тому же пути на своем сайте Jekyll и добавьте свои собственные стили в конец файла.
+Чтобы настроить стили, скопируйте файл темы `assets/css/jekyll-theme-chirpy.scss`{: .filepath} в тот же путь вашего сайта Jekyll и добавьте свои стили в конец файла.
 
 ### Настройка статических ресурсов
 
@@ -110,7 +110,7 @@ $ bundle exec jekyll serve
 
 Теперь вы можете выбрать _ОДИН_ из следующих методов для развертывания сайта Jekyll.
 
-### Развертывание с использованием действий Github
+### Развертывание с использованием GitHub Actions
 
 Подготовьте следующее:
 
@@ -144,11 +144,11 @@ $ JEKYLL_ENV=production bundle exec jekyll b
 Если вы не указали выходной путь, созданные файлы сайта будут помещены в папку `_site`{: .filepath} корневого каталога проекта. Загрузите эти файлы на целевой сервер.
 
 [nodejs]: https://nodejs.org/
-[стартер]: https://github.com/cotes2020/chirpy-starter
+[starter]: https://github.com/cotes2020/chirpy-starter
 [pages-workflow-src]: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
-[docker-рабочий стол]: https://www.docker.com/products/docker-desktop/
+[docker-desktop]: https://www.docker.com/products/docker-desktop/
 [docker-engine]: https://docs.docker.com/engine/install/
 [vscode]: https://code.visualstudio.com/
-[dev-контейнеры]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+[dev-containers]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
 [dc-clone-in-vol]: https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-a-git-repository-or-github-pr-in-an-isolated-container-volume
 [dc-open-in-container]: https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-an-existing-folder-in-a-container

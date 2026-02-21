@@ -1,5 +1,5 @@
 ---
-title: Personnaliser le Favicon
+title: Personnaliser le favicon
 language: fr-FR
 translation_key: customize-the-favicon
 author: GoXLd
