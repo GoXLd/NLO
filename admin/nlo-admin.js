@@ -204,9 +204,34 @@
     return candidates;
   }
 
-  function resolveNloLink(path, baseurl) {
-    const candidates = endpointCandidates(path, baseurl);
-    return candidates[0] || path;
+  function adminPageCandidates(path, baseurl) {
+    const target = path.startsWith('/') ? path : `/${path}`;
+    const candidates = [];
+    const push = (value) => {
+      if (value && !candidates.includes(value)) {
+        candidates.push(value);
+      }
+    };
+
+    const pathPrefix = resolveAdminPathPrefix();
+    const configPrefix = normalizeBaseurl(baseurl);
+
+    push(`/admin${target}`);
+
+    if (pathPrefix) {
+      push(`${pathPrefix}/admin${target}`);
+    }
+
+    if (configPrefix) {
+      push(`${configPrefix}/admin${target}`);
+    }
+
+    return candidates;
+  }
+
+  function resolveAdminPageLink(path, baseurl) {
+    const candidates = adminPageCandidates(path, baseurl);
+    return candidates[0] || `/admin${path.startsWith('/') ? path : `/${path}`}`;
   }
 
   async function requestNloEndpoint(path, options = {}) {
@@ -550,16 +575,6 @@
     status.dataset.state = isError ? 'error' : 'ok';
   }
 
-  function setTranslationMatrixStatus(message, isError = false) {
-    const status = document.getElementById('nlo-admin-translation-matrix-status');
-    if (!status) {
-      return;
-    }
-
-    status.textContent = message || '';
-    status.dataset.state = isError ? 'error' : 'ok';
-  }
-
   async function applyPaletteToWorkflow(button) {
     if (!button) {
       return;
@@ -654,58 +669,6 @@
     } catch (error) {
       button.textContent = 'Failed';
       setAvatarFrameStatus(`Error: ${error.message}`, true);
-      window.setTimeout(() => {
-        button.textContent = previous;
-      }, 2200);
-    } finally {
-      button.disabled = false;
-    }
-  }
-
-  async function generateTranslationMatrix(button, markdownLink, csvLink) {
-    if (!button) {
-      return;
-    }
-
-    const previous = button.textContent;
-    button.disabled = true;
-    button.textContent = 'Generating...';
-    setTranslationMatrixStatus('Generating translation matrix...');
-
-    try {
-      const response = await requestNloEndpoint('/_nlo/translation-matrix/generate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({})
-      });
-
-      const data = await parseJsonResponse(response);
-
-      if (!response.ok || !data.ok) {
-        throw new Error(data.error || `Request failed (${response.status})`);
-      }
-
-      const config = await fetchAdminConfig();
-      const markdownUrl = resolveNloLink('/_nlo/translation-matrix.md', config?.baseurl || '');
-      const csvUrl = resolveNloLink('/_nlo/translation-matrix.csv', config?.baseurl || '');
-
-      if (markdownLink) {
-        markdownLink.href = markdownUrl;
-      }
-      if (csvLink) {
-        csvLink.href = csvUrl;
-      }
-
-      button.textContent = 'Done';
-      setTranslationMatrixStatus('Done: docs/translation-matrix.md and .csv updated.');
-      window.setTimeout(() => {
-        button.textContent = previous;
-      }, 1400);
-    } catch (error) {
-      button.textContent = 'Failed';
-      setTranslationMatrixStatus(`Error: ${error.message}`, true);
       window.setTimeout(() => {
         button.textContent = previous;
       }, 2200);
@@ -886,77 +849,46 @@
     void syncAvatarFrameSelect(select);
   }
 
-  function ensureTranslationMatrixTool() {
-    const showOnConfiguration = isConfigurationRoute();
-    const existingTool = document.getElementById('nlo-admin-translation-matrix-tool');
-
-    if (!showOnConfiguration) {
-      existingTool?.remove();
-      cleanupConfigSettingsHost();
-      return;
-    }
-
-    if (existingTool) {
-      return;
-    }
-
-    const host = resolveConfigSettingsHost();
-    if (!host) {
-      return;
-    }
-
-    const wrapper = document.createElement('section');
-    wrapper.id = 'nlo-admin-translation-matrix-tool';
-
-    const label = document.createElement('p');
-    label.className = 'nlo-admin-translation-label';
-    label.textContent = 'Translation Matrix';
-    wrapper.appendChild(label);
-
-    const note = document.createElement('p');
-    note.className = 'nlo-admin-translation-note';
-    note.textContent = 'Generate article-language matrix for AI translation workflow.';
-    wrapper.appendChild(note);
-
-    const controls = document.createElement('div');
-    controls.className = 'nlo-admin-translation-controls';
-
-    const generate = document.createElement('button');
-    generate.type = 'button';
-    generate.id = 'nlo-admin-translation-generate';
-    generate.textContent = 'Export Matrix';
-
-    const markdownLink = document.createElement('a');
-    markdownLink.className = 'nlo-admin-translation-link';
-    markdownLink.href = '/admin/_nlo/translation-matrix.md';
-    markdownLink.target = '_blank';
-    markdownLink.rel = 'noopener noreferrer';
-    markdownLink.textContent = 'Open .md';
-
-    const csvLink = document.createElement('a');
-    csvLink.className = 'nlo-admin-translation-link';
-    csvLink.href = '/admin/_nlo/translation-matrix.csv';
-    csvLink.target = '_blank';
-    csvLink.rel = 'noopener noreferrer';
-    csvLink.textContent = 'Open .csv';
-
-    generate.addEventListener('click', () => {
-      generateTranslationMatrix(generate, markdownLink, csvLink);
+  async function ensurePostsTranslationMatrixNav() {
+    const existing = document.getElementById('nlo-admin-translation-matrix-nav');
+    const candidates = Array.from(document.querySelectorAll('a,button')).filter((element) => {
+      const text = (element.textContent || '').trim().toLowerCase();
+      return text === 'new post';
     });
+    const newPostButton = candidates[0] || null;
 
-    controls.appendChild(generate);
-    controls.appendChild(markdownLink);
-    controls.appendChild(csvLink);
-    wrapper.appendChild(controls);
+    if (!newPostButton) {
+      existing?.remove();
+      return;
+    }
 
-    const status = document.createElement('p');
-    status.id = 'nlo-admin-translation-matrix-status';
-    status.className = 'nlo-admin-translation-status';
-    status.dataset.state = 'ok';
-    status.textContent = 'Click Export Matrix to refresh docs/*.';
-    wrapper.appendChild(status);
+    if (existing) {
+      return;
+    }
 
-    host.appendChild(wrapper);
+    const config = await fetchAdminConfig();
+    const matrixUrl = resolveAdminPageLink('/translation-matrix', config?.baseurl || '');
+    const tagName = newPostButton.tagName.toLowerCase();
+
+    let link;
+    if (tagName === 'a') {
+      link = document.createElement('a');
+      link.href = matrixUrl;
+    } else {
+      link = document.createElement('button');
+      link.type = 'button';
+      link.addEventListener('click', () => {
+        window.location.assign(matrixUrl);
+      });
+    }
+
+    link.id = 'nlo-admin-translation-matrix-nav';
+    link.className = newPostButton.className;
+    link.classList.add('nlo-admin-translation-nav');
+    link.textContent = 'Translation Matrix';
+    link.title = 'Open matrix of posts and available languages';
+
+    newPostButton.insertAdjacentElement('afterend', link);
   }
 
   function fieldScore(input, hints) {
@@ -1293,7 +1225,7 @@
     ensureThemeToggle();
     ensureGhPalettePicker();
     ensureAvatarFramePicker();
-    ensureTranslationMatrixTool();
+    void ensurePostsTranslationMatrixNav();
     void ensureSidebarBranding();
     ensurePathAutofill();
     ensureAuthorHint();
@@ -1304,7 +1236,7 @@
       ensureThemeToggle();
       ensureGhPalettePicker();
       ensureAvatarFramePicker();
-      ensureTranslationMatrixTool();
+      void ensurePostsTranslationMatrixNav();
       void ensureSidebarBranding();
       ensurePathAutofill();
       ensureAuthorHint();

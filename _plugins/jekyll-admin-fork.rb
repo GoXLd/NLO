@@ -3,6 +3,10 @@
 require "json"
 require "open3"
 require "rbconfig"
+require "csv"
+require "date"
+require "yaml"
+require "time"
 
 begin
   require "jekyll-admin"
@@ -115,6 +119,33 @@ if defined?(JekyllAdmin::Server)
           csv_path: TRANSLATION_MATRIX_CSV_PATH,
           output: result[:output]
         )
+      end
+
+      get "/_nlo/translation-matrix/data" do
+        content_type :json
+
+        result = rebuild_translation_matrix
+        unless result[:ok]
+          status 500
+          return JSON.generate(ok: false, error: result[:error], output: result[:output])
+        end
+
+        payload = translation_matrix_payload
+        unless payload[:ok]
+          status 500
+          return JSON.generate(ok: false, error: payload[:error])
+        end
+
+        JSON.generate(ok: true, data: payload[:data])
+      end
+
+      get "/translation-matrix" do
+        page_path = File.join(settings.public_folder, "translation-matrix.html")
+        if File.file?(page_path)
+          send_file page_path
+        else
+          send_file index_path
+        end
       end
 
       get "/_nlo/translation-matrix.md" do
@@ -327,6 +358,68 @@ if defined?(JekyllAdmin::Server)
         end
 
         { ok: true, output: output }
+      end
+
+      def translation_matrix_payload
+        unless File.file?(TRANSLATION_MATRIX_CSV_PATH)
+          return { ok: false, error: "Translation matrix CSV not found" }
+        end
+
+        config = YAML.safe_load(File.read(CONFIG_PATH), permitted_classes: [Date, Time], aliases: true) || {}
+        languages = normalize_language_list(config["lang"])
+        languages = ["en"] if languages.empty?
+
+        rows = CSV.read(TRANSLATION_MATRIX_CSV_PATH, headers: true)
+        items = rows.map { |row| build_translation_matrix_row(row, languages) }
+
+        {
+          ok: true,
+          data: {
+            generated_at: File.mtime(TRANSLATION_MATRIX_CSV_PATH).utc.iso8601,
+            languages: languages,
+            total_groups: items.length,
+            items: items
+          }
+        }
+      rescue StandardError => e
+        { ok: false, error: "Failed to build translation matrix payload: #{e.message}" }
+      end
+
+      def normalize_language_list(value)
+        raw =
+          case value
+          when Array
+            value
+          when String
+            value.split(",")
+          else
+            []
+          end
+
+        raw.map { |entry| entry.to_s.strip }.reject(&:empty?).uniq
+      end
+
+      def build_translation_matrix_row(row, languages)
+        by_language = {}
+
+        languages.each do |language|
+          token = language.gsub(/[^a-zA-Z0-9]/, "_")
+          files = row["files_#{token}"].to_s.split(";").map(&:strip).reject(&:empty?)
+          available = row["has_#{token}"].to_s == "1"
+          by_language[language] = {
+            available: available,
+            files: files
+          }
+        end
+
+        missing_languages = row["missing_languages"].to_s.split(";").map(&:strip).reject(&:empty?)
+
+        {
+          translation_key: row["translation_key"].to_s,
+          title: row["title"].to_s,
+          by_language: by_language,
+          missing_languages: missing_languages
+        }
       end
 
       def serve_translation_matrix_file(file_path:, mime_type:, file_name:)

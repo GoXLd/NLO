@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Matrix | NLO Admin</title>
+    <link rel="icon" type="image/png" href="/assets/img/favicons/favicon-32x32.png">
+    <link rel="stylesheet" href="/admin/nlo-admin.css?v=20260221-translation-matrix-page-1">
+  </head>
+  <body class="nlo-admin-matrix-body">
+    <main class="nlo-admin-matrix-page">
+      <header class="nlo-admin-matrix-head">
+        <div>
+          <h1>Translation Matrix</h1>
+          <p>Posts and available language versions.</p>
+        </div>
+        <div class="nlo-admin-matrix-actions">
+          <a id="nlo-admin-matrix-back" class="nlo-admin-matrix-back" href="/admin/posts">Back to Posts</a>
+          <button id="nlo-admin-matrix-copy" type="button">Copy JSON</button>
+        </div>
+      </header>
+
+      <section class="nlo-admin-matrix-meta" id="nlo-admin-matrix-meta"></section>
+
+      <section class="nlo-admin-matrix-table-wrap">
+        <table class="nlo-admin-matrix-table" id="nlo-admin-matrix-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <p class="nlo-admin-matrix-status" id="nlo-admin-matrix-status">Loading matrix...</p>
+    </main>
+
+    <script defer src="/admin/translation-matrix.js?v=20260221-translation-matrix-page-1"></script>
+  </body>
+</html>
