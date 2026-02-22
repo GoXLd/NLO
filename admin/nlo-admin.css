@@ -517,10 +517,15 @@ textarea {
   resize: vertical;
 }
 
-.editor-wrapper input.title {
+.editor-wrapper input.title,
+.editor-wrapper textarea.title,
+.editor-wrapper .title {
   color: var(--admin-heading) !important;
-  padding: 0.58rem 0.84rem !important;
-  line-height: 1.25 !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  min-height: 42px !important;
+  padding: 0.56rem 0.72rem !important;
+  line-height: 1.35 !important;
   letter-spacing: 0.01em;
   border-color: var(--admin-border-strong) !important;
   background: var(--admin-editor-bg) !important;
@@ -549,6 +554,14 @@ select:focus,
   background: var(--admin-surface) !important;
   box-shadow: 0 0 0 3px var(--admin-focus-ring) !important;
   outline: none !important;
+}
+
+input::selection,
+textarea::selection,
+.rw-input::selection,
+.rw-filter-input::selection {
+  color: var(--admin-heading) !important;
+  background: var(--admin-editor-selection) !important;
 }
 
 input:-webkit-autofill,

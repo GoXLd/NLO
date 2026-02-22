@@ -2,6 +2,7 @@
 title: Prise en main
 language: fr-FR
 translation_key: getting-started
+permalink: /posts/fr/getting-started/
 description: Commencez avec les bases de Chirpy dans cet aperçu complet. Vous apprendrez
   à installer, configurer et utiliser votre premier site Web basé sur Chirpy, ainsi
   qu'à le déployer sur un serveur Web.

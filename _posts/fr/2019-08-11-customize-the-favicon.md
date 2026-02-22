@@ -2,6 +2,7 @@
 title: Personnaliser le favicon
 language: fr-FR
 translation_key: customize-the-favicon
+permalink: /posts/fr/customize-the-favicon/
 author: GoXLd
 date: 2019-08-11 00:34:00 +0800
 categories:

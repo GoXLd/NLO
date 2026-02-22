@@ -2,6 +2,7 @@
 title: Настройка favicon
 language: ru-RU
 translation_key: customize-the-favicon
+permalink: /posts/ru/customize-the-favicon/
 author: GoXLd
 date: 2019-08-11 00:34:00 +0800
 categories:

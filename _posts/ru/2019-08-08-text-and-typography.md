@@ -2,6 +2,7 @@
 title: Текст и типографика
 language: ru-RU
 translation_key: text-and-typography
+permalink: /posts/ru/text-and-typography/
 description: Примеры текста, типографики, математических уравнений, диаграмм, блок-схем,
   изображений, видео и многого другого.
 author: cotes

@@ -1013,16 +1013,19 @@
     }
 
     const href = decodeURIComponent(anchor.getAttribute('href') || '');
-    if (!href.includes('entries')) {
+    const marker = 'entries/';
+    const markerIndex = href.indexOf(marker);
+    if (markerIndex === -1) {
       return '';
     }
 
-    const match = href.match(/(\d{4}-\d{2}-\d{2}-[^/?#]+\.(?:md|markdown))/i);
+    const relativePart = href.slice(markerIndex + marker.length);
+    const match = relativePart.match(/^([^?#]+\.(?:md|markdown))/i);
     if (!match) {
       return '';
     }
 
-    return `_posts/${match[1]}`;
+    return `_posts/${match[1].replace(/^\/+/, '')}`;
   }
 
   function buildTranslationFileIndex(matrixData) {

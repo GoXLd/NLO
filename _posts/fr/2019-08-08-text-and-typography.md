@@ -2,6 +2,7 @@
 title: Texte et typographie
 language: fr-FR
 translation_key: text-and-typography
+permalink: /posts/fr/text-and-typography/
 description: Exemples de texte, typographie, équations mathématiques, diagrammes,
   organigrammes, images, vidéos et bien plus encore.
 author: cotes

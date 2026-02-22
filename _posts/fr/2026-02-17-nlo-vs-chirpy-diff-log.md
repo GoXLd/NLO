@@ -2,6 +2,7 @@
 title: 'NLO vs Chirpy : journal des différences'
 language: fr-FR
 translation_key: nlo-vs-chirpy-diff-log
+permalink: /posts/fr/nlo-vs-chirpy-diff-log/
 description: Une liste objective des différences entre le thème NLO et le thème jekyll-chirpy
   original. Le message est mis à jour au fur et à mesure de la progression de la migration
   et du développement du sujet.

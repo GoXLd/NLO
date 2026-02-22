@@ -34,40 +34,54 @@
       <div class="nlo-lang-flags__list" role="group" aria-label="{{ _label }}">
         {% for _lang_code in available_langs %}
           {% assign _lang_prefix = _lang_code | downcase | split: '-' | first %}
-          {% if _lang_code == default_lang %}
-            {% assign _target_candidate = _base_path %}
-          {% elsif _base_path == '/' %}
-            {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
-          {% else %}
-            {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
+          {% assign _target = '' %}
+
+          {% if page.collection == 'posts' and page.translation_key %}
+            {% for _post in site.posts %}
+              {% assign _post_lang = _post.language | default: _post.lang | default: default_lang %}
+              {% if _post.translation_key == page.translation_key and _post_lang == _lang_code %}
+                {% assign _target = _post.url %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
           {% endif %}
 
-          {% assign _target = _target_candidate %}
-          {% assign _target_exists = false %}
-
-          {% for _post in site.posts %}
-            {% if _post.url == _target_candidate %}
-              {% assign _target_exists = true %}
-              {% break %}
+          {% if _target == '' %}
+            {% if _lang_code == default_lang %}
+              {% assign _target_candidate = _base_path %}
+            {% elsif _base_path == '/' %}
+              {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
+            {% else %}
+              {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
             {% endif %}
-          {% endfor %}
 
-          {% unless _target_exists %}
+            {% assign _target = _target_candidate %}
+            {% assign _target_exists = false %}
+
             {% for _page in site.pages %}
               {% if _page.url == _target_candidate %}
                 {% assign _target_exists = true %}
                 {% break %}
               {% endif %}
             {% endfor %}
-          {% endunless %}
 
-          {% unless _target_exists %}
-            {% if _lang_code == default_lang %}
-              {% assign _target = '/' %}
-            {% else %}
-              {% assign _target = '/' | append: _lang_prefix | append: '/' %}
-            {% endif %}
-          {% endunless %}
+            {% unless _target_exists %}
+              {% for _post in site.posts %}
+                {% if _post.url == _target_candidate %}
+                  {% assign _target_exists = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endunless %}
+
+            {% unless _target_exists %}
+              {% if _lang_code == default_lang %}
+                {% assign _target = '/' %}
+              {% else %}
+                {% assign _target = '/' | append: _lang_prefix | append: '/' %}
+              {% endif %}
+            {% endunless %}
+          {% endif %}
 
           {% assign _flag_file = _lang_code | downcase | append: '.svg' %}
           {% assign _lang_name = _lang_code | split: '-' | first | upcase %}
@@ -120,40 +134,54 @@
       >
         {% for _lang_code in available_langs %}
           {% assign _lang_prefix = _lang_code | downcase | split: '-' | first %}
-          {% if _lang_code == default_lang %}
-            {% assign _target_candidate = _base_path %}
-          {% elsif _base_path == '/' %}
-            {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
-          {% else %}
-            {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
+          {% assign _target = '' %}
+
+          {% if page.collection == 'posts' and page.translation_key %}
+            {% for _post in site.posts %}
+              {% assign _post_lang = _post.language | default: _post.lang | default: default_lang %}
+              {% if _post.translation_key == page.translation_key and _post_lang == _lang_code %}
+                {% assign _target = _post.url %}
+                {% break %}
+              {% endif %}
+            {% endfor %}
           {% endif %}
 
-          {% assign _target = _target_candidate %}
-          {% assign _target_exists = false %}
-
-          {% for _post in site.posts %}
-            {% if _post.url == _target_candidate %}
-              {% assign _target_exists = true %}
-              {% break %}
+          {% if _target == '' %}
+            {% if _lang_code == default_lang %}
+              {% assign _target_candidate = _base_path %}
+            {% elsif _base_path == '/' %}
+              {% assign _target_candidate = '/' | append: _lang_prefix | append: '/' %}
+            {% else %}
+              {% assign _target_candidate = '/' | append: _lang_prefix | append: _base_path %}
             {% endif %}
-          {% endfor %}
 
-          {% unless _target_exists %}
+            {% assign _target = _target_candidate %}
+            {% assign _target_exists = false %}
+
             {% for _page in site.pages %}
               {% if _page.url == _target_candidate %}
                 {% assign _target_exists = true %}
                 {% break %}
               {% endif %}
             {% endfor %}
-          {% endunless %}
 
-          {% unless _target_exists %}
-            {% if _lang_code == default_lang %}
-              {% assign _target = '/' %}
-            {% else %}
-              {% assign _target = '/' | append: _lang_prefix | append: '/' %}
-            {% endif %}
-          {% endunless %}
+            {% unless _target_exists %}
+              {% for _post in site.posts %}
+                {% if _post.url == _target_candidate %}
+                  {% assign _target_exists = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+            {% endunless %}
+
+            {% unless _target_exists %}
+              {% if _lang_code == default_lang %}
+                {% assign _target = '/' %}
+              {% else %}
+                {% assign _target = '/' | append: _lang_prefix | append: '/' %}
+              {% endif %}
+            {% endunless %}
+          {% endif %}
 
           <option value="{{ _target | relative_url }}" {% if _lang_code == _current_lang %}selected{% endif %}>
             {{ _lang_code | split: '-' | first | upcase }}

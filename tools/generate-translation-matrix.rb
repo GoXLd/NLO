@@ -127,9 +127,10 @@ default_lang = configured_langs.first
 
 groups = {}
 
-Dir.glob(File.join(POSTS_DIR, "*.md")).sort.each do |path|
+Dir.glob(File.join(POSTS_DIR, "**", "*.md")).sort.each do |path|
   front_matter = parse_front_matter(path)
   filename = File.basename(path)
+  relative_file = path.sub("#{ROOT}/", "")
   slug = filename.sub(/^\d{4}-\d{2}-\d{2}-/, "").sub(/\.md$/, "")
 
   translation_key = front_matter["translation_key"].to_s.strip
@@ -145,7 +146,7 @@ Dir.glob(File.join(POSTS_DIR, "*.md")).sort.each do |path|
     File.mtime(path)
 
   entry = {
-    file: "_posts/#{filename}",
+    file: relative_file,
     title: post_title,
     slug: slug,
     lang: post_lang,

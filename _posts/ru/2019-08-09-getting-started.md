@@ -2,6 +2,7 @@
 title: Быстрый старт
 language: ru-RU
 translation_key: getting-started
+permalink: /posts/ru/getting-started/
 description: Начните работу с основами Chirpy из этого подробного обзора. Вы узнаете,
   как установить, настроить и использовать свой первый веб-сайт на базе Chirpy, а
   также развернуть его на веб-сервере.

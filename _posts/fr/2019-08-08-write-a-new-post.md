@@ -2,6 +2,7 @@
 title: Rédiger un nouvel article
 language: fr-FR
 translation_key: write-a-new-post
+permalink: /posts/fr/write-a-new-post/
 author: cotes
 date: 2019-08-08 14:10:00 +0800
 categories:
