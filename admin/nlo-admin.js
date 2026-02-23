@@ -1318,6 +1318,62 @@
     return hints.some((hint) => content.includes(hint));
   }
 
+  function isTextControl(input) {
+    if (!(input instanceof HTMLElement)) {
+      return false;
+    }
+
+    if (input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA') {
+      return false;
+    }
+
+    if (input.tagName === 'TEXTAREA') {
+      return true;
+    }
+
+    const blockedTypes = new Set([
+      'hidden',
+      'checkbox',
+      'radio',
+      'button',
+      'submit',
+      'reset',
+      'file',
+      'image',
+      'color',
+      'range'
+    ]);
+    const type = String(input.getAttribute('type') || 'text').toLowerCase();
+    return !blockedTypes.has(type);
+  }
+
+  function isVisibleControl(input) {
+    if (!isTextControl(input)) {
+      return false;
+    }
+
+    const style = window.getComputedStyle(input);
+    if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0) {
+      return false;
+    }
+
+    const rect = input.getBoundingClientRect();
+    return rect.width > 0 && rect.height > 0;
+  }
+
+  function findInputByHints(hints) {
+    const candidates = Array.from(document.querySelectorAll('input,textarea'))
+      .filter(isTextControl)
+      .filter((input) => fieldScore(input, hints));
+
+    if (!candidates.length) {
+      return null;
+    }
+
+    const visible = candidates.find(isVisibleControl);
+    return visible || candidates[0];
+  }
+
   function findInputByLabel(labelText) {
     const labels = Array.from(document.querySelectorAll('label'));
     const match = labels.find((label) => label.textContent.trim().toLowerCase() === labelText);
@@ -1349,21 +1405,31 @@
   }
 
   function locateTitleInput() {
-    const candidates = Array.from(document.querySelectorAll('input,textarea'));
-    const byMeta = candidates.find((input) => fieldScore(input, ['title']));
-    if (byMeta) {
+    const byLabel = findInputByLabel('title');
+    if (isVisibleControl(byLabel)) {
+      return byLabel;
+    }
+
+    const byMeta = findInputByHints(['title']);
+    if (isVisibleControl(byMeta)) {
       return byMeta;
     }
-    return findInputByLabel('title');
+
+    return byLabel || byMeta;
   }
 
   function locatePathInput() {
-    const candidates = Array.from(document.querySelectorAll('input,textarea'));
-    const byMeta = candidates.find((input) => fieldScore(input, ['path', 'filename', 'relative_path']));
-    if (byMeta) {
+    const byLabel = findInputByLabel('path');
+    if (isVisibleControl(byLabel)) {
+      return byLabel;
+    }
+
+    const byMeta = findInputByHints(['path', 'filename', 'relative_path']);
+    if (isVisibleControl(byMeta)) {
       return byMeta;
     }
-    return findInputByLabel('path');
+
+    return byLabel || byMeta;
   }
 
   function locateAuthorInput() {
@@ -1475,6 +1541,63 @@
     titleInput.addEventListener('input', syncPathFromTitle);
     titleInput.addEventListener('blur', syncPathFromTitle);
     syncPathFromTitle();
+  }
+
+  function enforceTitleInputStyle(input, pathInput) {
+    if (!input) {
+      return;
+    }
+
+    const pathStyle = pathInput ? window.getComputedStyle(pathInput) : null;
+    const fontSize = pathStyle?.fontSize || '1rem';
+    const lineHeight = pathStyle?.lineHeight || '1.35';
+    const minHeight = pathStyle?.minHeight || '42px';
+    const paddingTop = pathStyle?.paddingTop || '0.56rem';
+    const paddingRight = pathStyle?.paddingRight || '0.72rem';
+    const paddingBottom = pathStyle?.paddingBottom || '0.56rem';
+    const paddingLeft = pathStyle?.paddingLeft || '0.72rem';
+    const borderRadius = pathStyle?.borderRadius || '10px';
+
+    input.style.setProperty('color', 'var(--admin-heading)', 'important');
+    input.style.setProperty('-webkit-text-fill-color', 'var(--admin-heading)', 'important');
+    input.style.setProperty('caret-color', 'var(--admin-heading)', 'important');
+    input.style.setProperty('font-size', fontSize, 'important');
+    input.style.setProperty('line-height', lineHeight, 'important');
+    input.style.setProperty('min-height', minHeight, 'important');
+    input.style.setProperty('padding-top', paddingTop, 'important');
+    input.style.setProperty('padding-right', paddingRight, 'important');
+    input.style.setProperty('padding-bottom', paddingBottom, 'important');
+    input.style.setProperty('padding-left', paddingLeft, 'important');
+    input.style.setProperty('border-radius', borderRadius, 'important');
+    input.style.setProperty('font-weight', '400', 'important');
+  }
+
+  function ensureTitleInputStyle() {
+    const titleInput = locateTitleInput();
+    if (!titleInput) {
+      return;
+    }
+
+    const apply = () => {
+      enforceTitleInputStyle(titleInput, locatePathInput());
+    };
+
+    apply();
+    requestAnimationFrame(apply);
+    setTimeout(apply, 0);
+
+    if (titleInput.dataset.nloTitleStyleBound === '1') {
+      return;
+    }
+
+    titleInput.dataset.nloTitleStyleBound = '1';
+
+    ['focus', 'input', 'change', 'blur', 'keyup'].forEach((eventName) => {
+      titleInput.addEventListener(eventName, () => {
+        apply();
+        requestAnimationFrame(apply);
+      });
+    });
   }
 
   function ensureAuthorHint() {
@@ -1643,6 +1766,7 @@
     schedulePostsI18nRefresh();
     void ensureSidebarBranding();
     ensurePathAutofill();
+    ensureTitleInputStyle();
     ensureAuthorHint();
     scanEditors();
     suppressFalseConfigErrorNotice();
@@ -1657,6 +1781,7 @@
       }
       void ensureSidebarBranding();
       ensurePathAutofill();
+      ensureTitleInputStyle();
       ensureAuthorHint();
       scanEditors();
       suppressFalseConfigErrorNotice();
