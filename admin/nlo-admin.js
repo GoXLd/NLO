@@ -1557,6 +1557,8 @@
     const paddingBottom = pathStyle?.paddingBottom || '0.56rem';
     const paddingLeft = pathStyle?.paddingLeft || '0.72rem';
     const borderRadius = pathStyle?.borderRadius || '10px';
+    const controlHeight =
+      pathStyle?.height && pathStyle.height !== 'auto' ? pathStyle.height : minHeight;
 
     input.style.setProperty('color', 'var(--admin-heading)', 'important');
     input.style.setProperty('-webkit-text-fill-color', 'var(--admin-heading)', 'important');
@@ -1564,12 +1566,20 @@
     input.style.setProperty('font-size', fontSize, 'important');
     input.style.setProperty('line-height', lineHeight, 'important');
     input.style.setProperty('min-height', minHeight, 'important');
+    input.style.setProperty('height', controlHeight, 'important');
+    input.style.setProperty('max-height', controlHeight, 'important');
     input.style.setProperty('padding-top', paddingTop, 'important');
     input.style.setProperty('padding-right', paddingRight, 'important');
     input.style.setProperty('padding-bottom', paddingBottom, 'important');
     input.style.setProperty('padding-left', paddingLeft, 'important');
     input.style.setProperty('border-radius', borderRadius, 'important');
     input.style.setProperty('font-weight', '400', 'important');
+
+    if (input.tagName === 'TEXTAREA') {
+      input.setAttribute('rows', '1');
+      input.style.setProperty('overflow-y', 'hidden', 'important');
+      input.style.setProperty('resize', 'none', 'important');
+    }
   }
 
   function ensureTitleInputStyle() {
