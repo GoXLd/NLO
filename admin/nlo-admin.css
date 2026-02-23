@@ -521,6 +521,7 @@ textarea {
 .editor-wrapper textarea.title,
 .editor-wrapper .title {
   color: var(--admin-heading) !important;
+  -webkit-text-fill-color: var(--admin-heading) !important;
   font-size: 1rem !important;
   font-weight: 400 !important;
   min-height: 42px !important;
@@ -529,6 +530,24 @@ textarea {
   letter-spacing: 0.01em;
   border-color: var(--admin-border-strong) !important;
   background: var(--admin-editor-bg) !important;
+  caret-color: var(--admin-heading) !important;
+}
+
+input[name='title'],
+textarea[name='title'],
+input[name$='[title]'],
+textarea[name$='[title]'],
+input#title,
+textarea#title,
+input[aria-label='Title'],
+textarea[aria-label='Title'] {
+  color: var(--admin-heading) !important;
+  -webkit-text-fill-color: var(--admin-heading) !important;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  min-height: 42px !important;
+  padding: 0.56rem 0.72rem !important;
+  line-height: 1.35 !important;
   caret-color: var(--admin-heading) !important;
 }
 
@@ -554,6 +573,19 @@ select:focus,
   background: var(--admin-surface) !important;
   box-shadow: 0 0 0 3px var(--admin-focus-ring) !important;
   outline: none !important;
+}
+
+input[name='title']:focus,
+textarea[name='title']:focus,
+input[name$='[title]']:focus,
+textarea[name$='[title]']:focus,
+input#title:focus,
+textarea#title:focus,
+input[aria-label='Title']:focus,
+textarea[aria-label='Title']:focus {
+  color: var(--admin-heading) !important;
+  -webkit-text-fill-color: var(--admin-heading) !important;
+  font-size: 1rem !important;
 }
 
 input::selection,

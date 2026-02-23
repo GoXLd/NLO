@@ -1,7 +1,7 @@
 # Translation Matrix
 
 Generated automatically by `tools/generate-translation-matrix.rb`.
-Updated at: 2026-02-22 11:22:32 UTC
+Updated at: 2026-02-23 18:44:08 UTC
 
 - Configured languages: en, ru-RU, fr-FR
 - Total article groups: 5
