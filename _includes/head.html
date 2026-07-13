@@ -87,7 +87,8 @@
   {% endunless %}
 
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ '/assets/css/:THEME.css' | replace: ':THEME', site.theme | relative_url }}">
+  {% assign nlo_theme_name = site.theme | default: 'jekyll-theme-nlo' %}
+  <link rel="stylesheet" href="{{ '/assets/css/:THEME.css' | replace: ':THEME', nlo_theme_name | relative_url }}">
 
   <!-- Web Font -->
   <link rel="stylesheet" href="{{ site.data.origin[type].webfonts | relative_url }}">
