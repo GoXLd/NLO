@@ -33,15 +33,19 @@
       <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
     {%- endcapture -%}
 
+    {%- assign nlo_version = theme.version | default: site.data.nlo.version -%}
+    {%- assign nlo_repo = site.data.nlo.repository | default: 'https://github.com/GoXLd/NLO' -%}
     {%- capture _theme -%}
       <a
-        data-bs-toggle="tooltip"
-        data-bs-placement="top"
-        title="v{{ theme.version }}"
-        href="https://github.com/GoXLd/NLO"
+        {% if nlo_version %}
+          data-bs-toggle="tooltip"
+          data-bs-placement="top"
+          title="v{{ nlo_version }}"
+        {% endif %}
+        href="{{ nlo_repo }}"
         target="_blank"
         rel="noopener"
-      >NLO</a>
+      >NLO{% if nlo_version %} <span class="nlo-version">v{{ nlo_version }}</span>{% endif %}</a>
     {%- endcapture -%}
 
     {{ site.data.locales[include.lang].meta | replace: ':PLATFORM', _platform | replace: ':THEME', _theme }}

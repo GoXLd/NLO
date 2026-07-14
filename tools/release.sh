@@ -14,6 +14,7 @@ GEM_SPEC="jekyll-theme-nlo.gemspec"
 NODE_SPEC="package.json"
 CHANGELOG="docs/CHANGELOG.md"
 CONFIG="_config.yml"
+DATA_META="_data/nlo.yml"
 
 CSS_DIST="_sass/vendors"
 JS_DIST="assets/js/dist"
@@ -23,6 +24,7 @@ FILES=(
   "$NODE_SPEC"
   "$CHANGELOG"
   "$CONFIG"
+  "$DATA_META"
 )
 
 TOOLS=(
@@ -94,6 +96,8 @@ init() {
 _bump_version() {
   _version="$(grep '"version":' "$NODE_SPEC" | sed 's/.*: "//;s/".*//')"
   sed -i "s/[[:digit:]]\+\.[[:digit:]]\+\.[[:digit:]]\+/$_version/" "$GEM_SPEC"
+  # Keep the Jekyll-readable version (footer fallback for vendored installs) in sync.
+  sed -i "s/^version:.*/version: $_version/" "$DATA_META"
   echo "> Bump gem version to $_version"
 }
 

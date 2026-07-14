@@ -66,6 +66,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Only handle same-origin GET requests. Cross-origin traffic (analytics,
+  // ads, comment widgets, CDNs) is left to the browser, so a failed
+  // third-party request never rejects an unhandled respondWith promise.
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  if (new URL(event.request.url).origin !== self.location.origin) {
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((response) => {
       if (response) {

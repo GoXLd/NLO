@@ -137,7 +137,8 @@
           "assets": [
             "docs",
             "package.json",
-            "*.gemspec"
+            "*.gemspec",
+            "_data/nlo.yml"
           ],
           "message": "chore(release): ${nextRelease.version}\n\n${nextRelease.notes}"
         }

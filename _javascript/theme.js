@@ -6,7 +6,6 @@
 class Theme {
   static #modeKey = 'mode';
   static #modeAttr = 'data-mode';
-  static #darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
   static switchable = !document.documentElement.hasAttribute(this.#modeAttr);
 
   static get DARK() {
@@ -34,7 +33,9 @@ class Theme {
     if (this.#hasMode) {
       return this.#mode;
     } else {
-      return this.#sysDark ? this.DARK : this.LIGHT;
+      // NLO default: light. The theme does not auto-follow the system's dark
+      // preference; users opt into dark via the sidebar toggle.
+      return this.LIGHT;
     }
   }
 
@@ -51,10 +52,6 @@ class Theme {
 
   static get #hasMode() {
     return this.#mode !== null;
-  }
-
-  static get #sysDark() {
-    return this.#darkMedia.matches;
   }
 
   /**
@@ -78,15 +75,6 @@ class Theme {
       return;
     }
 
-    this.#darkMedia.addEventListener('change', () => {
-      const lastMode = this.#mode;
-      this.#clearMode();
-
-      if (lastMode !== this.visualState) {
-        this.#notify();
-      }
-    });
-
     if (!this.#hasMode) {
       return;
     }
@@ -105,7 +93,8 @@ class Theme {
     if (this.#hasMode) {
       this.#clearMode();
     } else {
-      this.#sysDark ? this.#setLight() : this.#setDark();
+      // No explicit mode means the light default is showing, so flip to dark.
+      this.#setDark();
     }
     this.#notify();
   }

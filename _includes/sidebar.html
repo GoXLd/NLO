@@ -74,10 +74,6 @@
 
   <nav class="flex-column flex-grow-1 w-100 ps-0">
     <ul class="nav">
-      <li class="nav-item nlo-lang-switcher-item">
-        {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
-      </li>
-
       <!-- home -->
       <li class="nav-item{% if page.layout == 'home' %}{{ " active" }}{% endif %}">
         <a href="{{ '/' | relative_url }}" class="nav-link">
@@ -102,6 +98,8 @@
   </nav>
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
+    {% include lang-switch.html lang=include.lang class='nlo-lang-switcher--sidebar w-100' %}
+
     {% if jekyll.environment == 'development' %}
       <a href="{{ '/admin' | relative_url }}" aria-label="admin" class="admin-shortcut nav-link w-100">
         <i class="fa-fw fas fa-screwdriver-wrench"></i>

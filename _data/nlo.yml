@@ -1,0 +1,10 @@
+# NLO theme metadata.
+#
+# Single source of truth for the theme version shown in the site footer.
+# When consumed as a gem, `theme.version` (from the gemspec) is used instead;
+# this file is the fallback for vendored installs that have no gem object.
+#
+# Keep in sync with package.json / jekyll-theme-nlo.gemspec — `tools/release.sh`
+# stamps this value automatically on release.
+version: 7.4.1
+repository: https://github.com/GoXLd/NLO

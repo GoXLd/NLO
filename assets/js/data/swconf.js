@@ -9,8 +9,9 @@ const swconf = {
     cacheName: 'nlo-{{ "now" | date: "%s" }}',
 
     {%- comment -%} Resources added to the cache during PWA installation. {%- endcomment -%}
+    {%- assign nlo_theme_name = site.theme | default: 'jekyll-theme-nlo' -%}
     resources: [
-      '{{ "/assets/css/:THEME.css" | replace: ':THEME', site.theme | relative_url }}',
+      '{{ "/assets/css/:THEME.css" | replace: ':THEME', nlo_theme_name | relative_url }}',
       '{{ "/" | relative_url }}',
       {% for tab in site.tabs %}
         '{{- tab.url | relative_url -}}',
