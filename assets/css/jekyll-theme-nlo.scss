@@ -74,30 +74,6 @@ html[data-mode="light"] #post-list .home-githubchart .githubchart-dark {
   display: none !important;
 }
 
-@media (prefers-color-scheme: dark) {
-  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-dark,
-  html:not([data-mode]) #post-list .home-githubchart .githubchart-dark {
-    display: block !important;
-  }
-
-  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-light,
-  html:not([data-mode]) #post-list .home-githubchart .githubchart-light {
-    display: none !important;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-light,
-  html:not([data-mode]) #post-list .home-githubchart .githubchart-light {
-    display: block !important;
-  }
-
-  html:not([data-mode]) #sidebar .sidebar-githubchart .githubchart-dark,
-  html:not([data-mode]) #post-list .home-githubchart .githubchart-dark {
-    display: none !important;
-  }
-}
-
 .home-githubchart {
   width: 100%;
 }
