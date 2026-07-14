@@ -10,26 +10,15 @@
 }
 
 html {
-  @media (prefers-color-scheme: light) {
-    &:not([data-mode]),
-    &[data-mode='light'] {
-      @include light.styles;
-    }
-
-    &[data-mode='dark'] {
-      @include dark.styles;
-    }
+  // NLO: light is the default view regardless of the system preference.
+  // Dark mode is opt-in via the sidebar toggle, which sets [data-mode='dark'].
+  &:not([data-mode]),
+  &[data-mode='light'] {
+    @include light.styles;
   }
 
-  @media (prefers-color-scheme: dark) {
-    &:not([data-mode]),
-    &[data-mode='dark'] {
-      @include dark.styles;
-    }
-
-    &[data-mode='light'] {
-      @include light.styles;
-    }
+  &[data-mode='dark'] {
+    @include dark.styles;
   }
 
   @include bp.lg {
