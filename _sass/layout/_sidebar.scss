@@ -233,7 +233,9 @@ $sidebar-display: 'sidebar-display'; /* the attribute for sidebar display */
       }
     }
 
-    a {
+    // Direct children only: the social-icon links. Scoping to `> a` keeps the
+    // circular button style off the language-switcher flag links nested inside.
+    > a {
       @extend %button;
       @extend %sidebar-link-hover;
       @extend %clickable-transition;
