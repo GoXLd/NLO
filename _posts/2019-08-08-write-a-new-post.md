@@ -13,7 +13,7 @@ This tutorial covers how to write a post in the _Chirpy_ template. It's worth re
 
 ## Writing with dumalog
 
-![dumalog](/assets/img/dumalog-black.svg){: .light w="240" }
+![dumalog](/assets/img/dumalog-light.png){: .light w="240" }
 ![dumalog](/assets/img/dumalog-white.svg){: .dark w="240" }
 
 Prefer to skip the boilerplate? [**dumalog**](https://github.com/GoXLd/dumalog) is an AI writing agent that turns your development conversations (Claude Code, Codex CLI) into publish-ready Jekyll posts. It stores your chat history locally in a [memPalace](https://github.com/MemPalace/mempalace) index and drafts posts with the correct front matter — including NLO's `language` / `translation_key` fields — so drafts land ready to publish.
