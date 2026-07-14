@@ -3,9 +3,8 @@ title: Prise en main
 language: fr-FR
 translation_key: getting-started
 permalink: /posts/fr/getting-started/
-description: Commencez avec les bases de Chirpy dans cet aperçu complet. Vous apprendrez
-  à installer, configurer et utiliser votre premier site Web basé sur Chirpy, ainsi
-  qu'à le déployer sur un serveur Web.
+description: >-
+  Installez, configurez et déployez votre premier site basé sur Chirpy.
 author: cotes
 date: 2019-08-09 20:55:00 +0800
 categories:
@@ -19,72 +18,72 @@ media_subpath: /posts/20180809
 
 ## Créer le dépôt du site
 
-Lors de la création du dépôt du site, vous avez deux options selon vos besoins :
+Vous avez deux options :
 
 ### Option 1. Utilisation du démarreur (recommandé)
 
-Cette approche simplifie les mises à niveau, isole les fichiers inutiles et convient parfaitement aux utilisateurs qui souhaitent se concentrer sur l'écriture avec une configuration minimale.
+Simplifie les mises à niveau, isole les fichiers inutiles et vous laisse vous concentrer sur l'écriture avec une configuration minimale.
 
-1. Connectez-vous à GitHub et accédez au [**starter**][starter].
-2. Cliquez sur le bouton <kbd>Utiliser ce modèle</kbd>, puis sélectionnez <kbd>Créer un nouveau dépôt</kbd>.
-3. Nommez le nouveau dépôt `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub minuscule.
+1. Connectez-vous à GitHub et ouvrez le [**starter**][starter].
+2. Cliquez sur <kbd>Use this template</kbd> > <kbd>Create a new repository</kbd>.
+3. Nommez le dépôt `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub en minuscules.
 
 ### Option 2. Forker le thème
 
-Cette approche est pratique pour modifier des fonctionnalités ou la conception de l’interface utilisateur, mais présente des défis lors des mises à niveau. N'essayez donc pas ceci à moins que vous ne soyez familier avec Jekyll et que vous envisagez de modifier fortement ce thème.
+Pratique pour modifier des fonctionnalités ou l'interface, mais plus difficile à mettre à niveau. Ne choisissez cette voie que si vous connaissez Jekyll et comptez modifier fortement le thème.
 
 1. Connectez-vous à GitHub.
 2. [Forkez le dépôt du thème](https://github.com/cotes2020/jekyll-theme-chirpy/fork).
-3. Nommez le nouveau dépôt `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub minuscule.
+3. Nommez le dépôt `<username>.github.io`, en remplaçant `username` par votre nom d'utilisateur GitHub en minuscules.
 
 ## Configuration de l'environnement
 
-Une fois votre dépôt créé, il est temps de configurer votre environnement de développement. Il existe deux méthodes principales :
+Une fois le dépôt créé, configurez votre environnement de développement de l'une des deux façons suivantes :
 
-### Utilisation de conteneurs de développement (recommandé pour Windows)
+### Conteneurs de développement (recommandé pour Windows)
 
-Les conteneurs de développement offrent un environnement isolé utilisant Docker, qui évite les conflits avec votre système et garantit que toutes les dépendances sont gérées au sein du conteneur.
+Les Dev Containers offrent un environnement Docker isolé qui évite les conflits système et gère toutes les dépendances dans le conteneur.
 
-**Étapes**:
+**Étapes** :
 
-1. Installez Docker :
-   - Sous Windows/macOS, installez [Docker Desktop][docker-desktop].
-   - Sous Linux, installez [Docker Engine][docker-engine].
+1. Installez Docker :
+   - Windows/macOS : [Docker Desktop][docker-desktop].
+   - Linux : [Docker Engine][docker-engine].
 2. Installez [VS Code][vscode] et l'[extension Dev Containers][dev-containers].
-3. Clonez votre dépôt :
-   - Pour Docker Desktop : démarrez VS Code et [clonez votre dépôt dans un volume conteneur] [dc-clone-in-vol].
-   - Pour Docker Engine : clonez votre dépôt localement, puis [ouvrez-le dans un conteneur] [dc-open-in-container] via VS Code.
-4. Attendez la fin de la configuration des conteneurs de développement.
+3. Clonez votre dépôt :
+   - Docker Desktop : démarrez VS Code et [clonez votre dépôt dans un volume conteneur][dc-clone-in-vol].
+   - Docker Engine : clonez votre dépôt localement, puis [ouvrez-le dans un conteneur][dc-open-in-container] via VS Code.
+4. Attendez la fin de la configuration.
 
-### Configuration native (recommandée pour les systèmes d'exploitation de type Unix)
+### Configuration native (recommandée pour les OS de type Unix)
 
-Pour les systèmes de type Unix, vous pouvez configurer l'environnement de manière native pour des performances optimales, mais vous pouvez également utiliser des conteneurs de développement comme alternative.
+Sur les systèmes de type Unix, une configuration native offre les meilleures performances ; les Dev Containers fonctionnent aussi.
 
-**Étapes**:
+**Étapes** :
 
-1. Suivez le [Jekyll installation guide](https://jekyllrb.com/docs/installation/) pour installer Jekyll et assurez-vous que [Git](https://git-scm.com/) est installé.
-2. Clonez votre dépôt sur votre machine locale.
-3. Si vous avez créé le thème, installez [Node.js][nodejs] et exécutez `bash tools/init.sh` dans le répertoire racine pour initialiser le dépôt.
-4. Exécutez la commande `bundle` à la racine de votre dépôt pour installer les dépendances.
+1. Suivez le [Jekyll installation guide](https://jekyllrb.com/docs/installation/) et assurez-vous que [Git](https://git-scm.com/) est installé.
+2. Clonez votre dépôt localement.
+3. Si vous avez forké le thème, installez [Node.js][nodejs] et exécutez `bash tools/init.sh` à la racine pour initialiser le dépôt.
+4. Exécutez `bundle` à la racine du dépôt pour installer les dépendances.
 
 ## Utilisation
 
-### Démarrez le serveur Jekyll
+### Démarrer le serveur Jekyll
 
-Pour exécuter le site localement, utilisez la commande suivante :
+Lancez le site localement :
 
 ```terminal
 $ bundle exec jekyll serve
 ```
 
-> Si vous utilisez des conteneurs de développement, vous devez exécuter cette commande dans le terminal **VS Code**.
+> Avec les Dev Containers, exécutez cette commande dans le terminal **VS Code**.
 {: .prompt-info }
 
-Après quelques secondes, le serveur local sera disponible à <http://127.0.0.1:4000>.
+Après quelques secondes, le site est disponible à <http://127.0.0.1:4000>.
 
 ### Configuration
 
-Mettez à jour les variables dans `_config.yml`{: .filepath} si nécessaire. Certaines options typiques incluent :
+Mettez à jour `_config.yml`{: .filepath} au besoin. Options courantes :
 
 - `url`
 - `avatar`
@@ -93,56 +92,56 @@ Mettez à jour les variables dans `_config.yml`{: .filepath} si nécessaire. Cer
 
 ### Options de contact social
 
-Les options de contact social sont affichées en bas de la barre latérale. Vous pouvez activer ou désactiver des contacts spécifiques dans le fichier `_data/contact.yml`{: .filepath}.
+Les contacts sociaux apparaissent en bas de la barre latérale. Activez-les ou désactivez-les dans `_data/contact.yml`{: .filepath}.
 
 ### Personnalisation de la feuille de style
 
-Pour personnaliser la feuille de style, copiez le fichier `assets/css/jekyll-theme-chirpy.scss`{: .filepath} du thème dans le même chemin de votre site Jekyll et ajoutez vos styles personnalisés à la fin du fichier.
+Copiez le fichier `assets/css/jekyll-theme-chirpy.scss`{: .filepath} du thème dans le même chemin de votre site, puis ajoutez vos styles à la fin.
 
 ### Personnalisation des actifs statiques
 
-La configuration des actifs statiques a été introduite dans la version `5.1.0`. Le CDN des actifs statiques est défini dans `_data/origin/cors.yml`{: .filepath }. Vous pouvez en remplacer certains en fonction des conditions du réseau dans la région où votre site Web est publié.
+La configuration des actifs statiques est arrivée en `5.1.0`. Leur CDN est défini dans `_data/origin/cors.yml`{: .filepath } ; remplacez des entrées selon les conditions réseau de la région où votre site est publié.
 
-Si vous préférez auto-héberger les actifs statiques, référez-vous au dépôt [_chirpy-static-assets_](https://github.com/cotes2020/chirpy-static-assets#readme).
+Pour auto-héberger les actifs statiques, voir le dépôt [_chirpy-static-assets_](https://github.com/cotes2020/chirpy-static-assets#readme).
 
 ## Déploiement
 
-Avant le déploiement, vérifiez `_config.yml`{: .filepath} et assurez-vous que `url` est correctement défini. Si vous utilisez un [**project site**](https://help.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites) sans domaine personnalisé, ou si votre site est servi avec une base URL hors **GitHub Pages**, définissez `baseurl` avec le nom du projet en commençant par `/`, par exemple `/project-name`.
+Avant le déploiement, vérifiez `_config.yml`{: .filepath} et définissez correctement `url`. Pour un [**project site**](https://help.github.com/en/github/working-with-github-pages/about-github-pages#types-of-github-pages-sites) sans domaine personnalisé, ou pour servir sous une base URL hors **GitHub Pages**, définissez `baseurl` avec le nom du projet précédé de `/`, par exemple `/project-name`.
 
-Vous pouvez désormais choisir _UNE_ des méthodes suivantes pour déployer votre site Jekyll.
+Choisissez maintenant _une_ des méthodes suivantes.
 
 ### Déployer avec GitHub Actions
 
-Préparez ce qui suit :
+Préparez ce qui suit :
 
-- Si vous bénéficiez du forfait GitHub Free, gardez le dépôt de votre site public.
-- Si vous avez validé `Gemfile.lock`{: .filepath} dans le dépôt et que votre machine locale n'exécute pas Linux, mettez à jour la liste des plates-formes du fichier de verrouillage :
+- Sur le forfait GitHub Free, gardez le dépôt du site public.
+- Si vous avez validé `Gemfile.lock`{: .filepath} et que votre machine n'est pas sous Linux, ajoutez la plate-forme Linux :
 
   ```console
   $ bundle lock --add-platform x86_64-linux
   ```
 
-Ensuite, configurez le service _Pages_ :
+Configurez ensuite _Pages_ :
 
-1. Accédez à votre dépôt sur GitHub. Sélectionnez l'onglet _Paramètres_, puis cliquez sur _Pages_ dans la barre de navigation de gauche. Dans la section **Source** (sous _Build et déploiement_), sélectionnez [**GitHub Actions**][pages-workflow-src] dans le menu déroulant.
+1. Sur GitHub, ouvrez _Settings_ > _Pages_. Sous _Build and deployment_ > **Source**, sélectionnez [**GitHub Actions**][pages-workflow-src].  
    ![Build source](pages-source-light.png){: .light .border .normal w='375' h='140' }
    ![Build source](pages-source-dark.png){: .dark .normal w='375' h='140' }
 
-2. Envoyez tous les commits vers GitHub pour déclencher le workflow _Actions_. Dans l'onglet _Actions_ de votre dépôt, vous devriez voir le workflow _Build and Deploy_ en cours d'exécution. Une fois la construction terminée et réussie, le site sera déployé automatiquement.
+2. Poussez un commit pour déclencher le workflow. Dans l'onglet _Actions_, suivez _Build and Deploy_ ; en cas de succès, le site se déploie automatiquement.
 
-Vous pouvez maintenant visiter l'URL fournie par GitHub pour accéder à votre site.
+Ouvrez l'URL fournie par GitHub pour voir votre site.
 
 ### Construction et déploiement manuels
 
-Pour les serveurs auto-hébergés, vous devrez créer le site sur votre ordinateur local, puis télécharger les fichiers du site sur le serveur.
+Pour les serveurs auto-hébergés, construisez le site localement et téléversez le résultat.
 
-Accédez à la racine du projet source et créez votre site avec la commande suivante :
+Depuis la racine du projet, construisez le site :
 
 ```console
 $ JEKYLL_ENV=production bundle exec jekyll b
 ```
 
-Sauf si vous avez spécifié le chemin de sortie, les fichiers du site générés seront placés dans le dossier `_site`{: .filepath} du répertoire racine du projet. Téléchargez ces fichiers sur votre serveur cible.
+Sauf autre chemin de sortie, les fichiers sont placés dans `_site`{: .filepath}. Téléversez-les sur votre serveur.
 
 [nodejs]: https://nodejs.org/
 [starter]: https://github.com/cotes2020/chirpy-starter

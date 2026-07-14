@@ -15,9 +15,8 @@ tags:
 - changelog
 ---
 
-![](assets/img/logo_nlo.png)
-This post documents **specific technical differences** from the original thread.
-The format is simple: we add an item when it is implemented and verified.
+![NLO logo](assets/img/logo_nlo.png)
+This post documents the **specific technical differences** from the original theme. Each item is added once implemented and verified.
 
 ## Checklist of differences
 
@@ -162,4 +161,4 @@ Where filtering works:
 
 ## What's next
 
-We will add the following differences to the same post as we implement them in order to maintain a transparent and verifiable list of changes.
+New differences land in this post as we implement them, keeping the list transparent and verifiable.

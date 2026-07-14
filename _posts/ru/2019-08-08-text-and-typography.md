@@ -192,7 +192,7 @@ Praesent maximus aliquam sapien. Сед вел neque в горе pulvinar Auctor
 
 ### Режим «Темный/Светлый» и «Тень»
 
-Изображение ниже переключает темный/светлый режим в зависимости от предпочтений темы. Обратите внимание, что на нем есть тени.
+Изображение ниже переключается вместе с темой и имеет тень.
 
 ![light mode only](/posts/20190808/devtools-light.png){: .light .w-75 .shadow .rounded-10 w='1212' h='668' }
 ![dark mode only](/posts/20190808/devtools-dark.png){: .dark .w-75 .shadow .rounded-10 w='1212' h='668' }

@@ -14,6 +14,11 @@
       width: min(260px, 100%);
       margin-inline: auto;
       object-fit: contain;
+      transition: filter 0.4s ease;
+    }
+    /* Blur the micro placeholder until the real logo swaps in. */
+    .site-title img.lqip {
+      filter: blur(8px);
     }
   </style>
 
@@ -23,10 +28,25 @@
       if (!siteTitle || siteTitle.querySelector("img")) return;
 
       const logo = document.createElement("img");
-      logo.src = "{{ site.nlo.branding.logo_src | relative_url }}";
+      const realSrc = "{{ site.nlo.branding.logo_src | relative_url }}";
       logo.alt = "{{ site.nlo.branding.logo_alt | default: site.social.name | default: site.title | escape }}";
-      logo.loading = "lazy";
       logo.decoding = "async";
+
+      {%- if site.nlo.branding.logo_lqip %}
+      // Show the LQIP placeholder first so no alt text flashes, then swap to
+      // the full logo once it has loaded (generate via tools/generate-lqip.sh).
+      logo.src = "{{ site.nlo.branding.logo_lqip }}";
+      logo.classList.add("lqip");
+      const full = new Image();
+      full.onload = () => {
+        logo.src = realSrc;
+        logo.classList.remove("lqip");
+      };
+      full.src = realSrc;
+      {%- else %}
+      logo.src = realSrc;
+      logo.loading = "lazy";
+      {%- endif %}
 
       siteTitle.textContent = "";
       siteTitle.setAttribute(

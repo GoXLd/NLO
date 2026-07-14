@@ -150,6 +150,7 @@ nlo:
     sidebar_image_dark: /assets/img/githubchart-sidebar-dark.svg
   branding:
     logo_src: /assets/img/logo_nlo.png # e.g. /assets/img/logo_nlo.png
+    logo_lqip: data:image/webp;base64,UklGRgwBAABXRUJQVlA4WAoAAAAQAAAAEgAABwAAQUxQSIwAAAAFgGNt2/HojW3btu1l5KTLxpw9pLSTyio5tmeqf9YQEUKCRLpDAAGF+vuD/6EZAuL7+fEHEZ5GeJHkr89CTuHx8+PxE8AUZ3w9iQTTO7Z99oIjfzcWkM3VhxnBW+/y6Tmtxd5ArQKiCOlaqWXs71E0zDP8HVonADwei2MQCSh4fvt9+vn4RF4BBYBYAVZQOCBaAAAAUAMAnQEqEwAIAD7tYqlNqaWjojAIATAdiWYAtOgerZj8HAAA/p70UqmGq4wKGjs0inJBOz5SQJqTaVPtQYN3HAyC30BN0aYhCGAY/KyKegq7vO1tl2n5oEAA # micro placeholder; regenerate with tools/generate-lqip.sh <logo>
     logo_alt: NLO # defaults to social.name or title
     logo_aria_label: # defaults to social.name or title
     avatar_light: /assets/img/avatar_light.webp # optional

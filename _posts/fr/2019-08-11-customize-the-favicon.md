@@ -12,33 +12,33 @@ tags:
 - favicon
 ---
 
-Les [favicons](https://www.favicon-generator.org/about/) de [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) sont placés dans le répertoire `assets/img/favicons/`{: .filepath}. Vous souhaiterez peut-être les remplacer par les vôtres. Les sections suivantes vous guideront pour créer et remplacer les favicons par défaut.
+Les [favicons](https://www.favicon-generator.org/about/) du thème [**Chirpy**](https://github.com/cotes2020/jekyll-theme-chirpy/) se trouvent dans `assets/img/favicons/`{: .filepath}. Voici comment les remplacer par les vôtres.
 
 ## Générer le favicon
 
-Préparez une image carrée (PNG, JPG ou SVG) d'une taille de 512x512 ou plus, puis accédez à l'outil en ligne [**Real Favicon Generator**](https://realfavicongenerator.net/) et cliquez sur le bouton <kbd>Choisissez votre image favicon</kbd> pour télécharger votre fichier image.
+Préparez une image carrée (PNG, JPG ou SVG) d'au moins 512x512, ouvrez [**Real Favicon Generator**](https://realfavicongenerator.net/) et cliquez sur <kbd>Pick your favicon image</kbd> pour la téléverser.
 
-À l'étape suivante, la page Web affichera tous les scénarios d'utilisation. Vous pouvez conserver les options par défaut, faire défiler vers le bas de la page et cliquer sur le bouton <kbd>Suivant →</kbd> pour générer le favicon.
+La page suivante affiche tous les scénarios d'utilisation. Conservez les valeurs par défaut, faites défiler jusqu'en bas et cliquez sur <kbd>Next →</kbd> pour générer le favicon.
 
 ## Télécharger et remplacer
 
-Téléchargez le package généré, décompressez et supprimez le(s) fichier(s) suivant(s) des fichiers extraits :
+Téléchargez le package, décompressez-le et supprimez :
 
-- `site.webmanifest`{ : .filepath}
+- `site.webmanifest`{: .filepath}
 
-Et puis copiez les fichiers image restants (`.PNG`{: .filepath}, `.ICO`{: .filepath} et `.SVG`{: .filepath}) pour couvrir les fichiers originaux dans le répertoire `assets/img/favicons/`{: .filepath} de votre site Jekyll. Si votre site Jekyll ne dispose pas encore de ce répertoire, créez-en simplement un.
+Copiez les images restantes (`.PNG`{: .filepath}, `.ICO`{: .filepath}, `.SVG`{: .filepath}) par-dessus les originaux dans `assets/img/favicons/`{: .filepath}, en créant ce répertoire s'il n'existe pas.
 
-Le tableau suivant vous aidera à comprendre les modifications apportées aux fichiers favicon :
+Le tableau résume ce qui change :
 
-| Fichier(s) | Depuis l'outil en ligne | De Chirpy |
+| Fichier(s) | Depuis l'outil en ligne | Depuis Chirpy |
 | ------- | :--------------: | :---------: |
-| `*.PNG` | None | None |
-| `*.ICO` | None | None |
-| `*.SVG` | None | None |
+| `*.PNG` |        ✓         |      ✗      |
+| `*.ICO` |        ✓         |      ✗      |
+| `*.SVG` |        ✓         |      ✗      |
 
 
 <!-- markdownlint-disable-next-line -->
 >  ✓ signifie conserver, ✗ signifie supprimer.
 {: .prompt-info }
 
-La prochaine fois que vous créerez le site, le favicon sera remplacé par une édition personnalisée.
+La prochaine construction utilisera votre favicon personnalisé.

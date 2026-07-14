@@ -192,7 +192,7 @@ Praesent maximus aliquam sapien. Sed vel neque in dolor pulvinar auctor. Maecena
 
 ### Mode sombre/clair et ombre
 
-L'image ci-dessous basculera en mode sombre/clair en fonction des préférences de thème, remarquez qu'elle comporte des ombres.
+L'image ci-dessous bascule avec le thème et porte une ombre.
 
 ![light mode only](/posts/20190808/devtools-light.png){ : .light .w-75 .shadow .rounded-10 w='1212' h='668' }
 ![dark mode only](/posts/20190808/devtools-dark.png){ : .dark .w-75 .shadow .rounded-10 w='1212' h='668' }

@@ -9,15 +9,30 @@ tags: [writing]
 render_with_liquid: false
 ---
 
-This tutorial will guide you how to write a post in the _Chirpy_ template, and it's worth reading even if you've used Jekyll before, as many features require specific variables to be set.
+This tutorial covers how to write a post in the _Chirpy_ template. It's worth reading even if you know Jekyll, since many features rely on specific variables.
+
+## Writing with dumalog
+
+![dumalog](/assets/img/dumalog-black.svg){: .light w="240" }
+![dumalog](/assets/img/dumalog-white.svg){: .dark w="240" }
+
+Prefer to skip the boilerplate? [**dumalog**](https://github.com/GoXLd/dumalog) is an AI writing agent that turns your development conversations (Claude Code, Codex CLI) into publish-ready Jekyll posts. It stores your chat history locally in a [memPalace](https://github.com/MemPalace/mempalace) index and drafts posts with the correct front matter — including NLO's `language` / `translation_key` fields — so drafts land ready to publish.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/GoXLd/dumalog/main/install.sh | bash
+dumalog setup            # find your blog, learn its style
+dumalog write "topic"    # draft a post (omit topic for suggestions)
+```
+
+Everything runs locally; only the anonymized context needed to draft a post is sent to the model you configure. The rest of this guide covers the front matter and Markdown that dumalog fills in for you — handy when you want to tweak a draft by hand.
 
 ## Naming and Path
 
-Create a new file named `YYYY-MM-DD-TITLE.EXTENSION`{: .filepath} and put it in the `_posts`{: .filepath} of the root directory. Please note that the `EXTENSION`{: .filepath} must be one of `md`{: .filepath} and `markdown`{: .filepath}. If you want to save time of creating files, please consider using the plugin [`Jekyll-Compose`](https://github.com/jekyll/jekyll-compose) to accomplish this.
+Create a file named `YYYY-MM-DD-TITLE.EXTENSION`{: .filepath} in `_posts`{: .filepath} at the root. The `EXTENSION`{: .filepath} must be `md`{: .filepath} or `markdown`{: .filepath}. To save time, the [`Jekyll-Compose`](https://github.com/jekyll/jekyll-compose) plugin can create files for you.
 
 ## Front Matter
 
-Basically, you need to fill the [Front Matter](https://jekyllrb.com/docs/front-matter/) as below at the top of the post:
+Fill the [Front Matter](https://jekyllrb.com/docs/front-matter/) at the top of the post:
 
 ```yaml
 ---
@@ -33,11 +48,11 @@ tags: [TAG]     # TAG names should always be lowercase
 
 ### Timezone of Date
 
-To accurately record the release date of a post, you should not only set up the `timezone` of `_config.yml`{: .filepath} but also provide the post's timezone in variable `date` of its Front Matter block. Format: `+/-TTTT`, e.g. `+0800`.
+To record a post's release date accurately, set the `timezone` in `_config.yml`{: .filepath} and also give the post's timezone in its `date` field. Format: `+/-TTTT`, e.g. `+0800`.
 
 ### Categories and Tags
 
-The `categories` of each post are designed to contain up to two elements, and the number of elements in `tags` can be zero to infinity. For instance:
+Each post takes up to two `categories` and any number of `tags`. For instance:
 
 ```yaml
 ---
@@ -48,9 +63,7 @@ tags: [bee]
 
 ### Author Information
 
-The author information of the post usually does not need to be filled in the _Front Matter_ , they will be obtained from variables `social.name` and the first entry of `social.links` of the configuration file by default. But you can also override it as follows:
-
-Adding author information in `_data/authors.yml` (If your website doesn't have this file, don't hesitate to create one).
+Author info usually needn't go in the _Front Matter_; by default it comes from `social.name` and the first entry of `social.links` in the config. To override it, add the author to `_data/authors.yml` (create the file if it doesn't exist):
 
 ```yaml
 <author_id>:
@@ -70,14 +83,14 @@ authors: [<author1_id>, <author2_id>]   # for multiple entries
 ---
 ```
 
-Having said that, the key `author` can also identify multiple entries.
+The `author` key can also hold multiple entries.
 
 > The benefit of reading the author information from the file `_data/authors.yml`{: .filepath } is that the page will have the meta tag `twitter:creator`, which enriches the [Twitter Cards](https://developer.twitter.com/en/docs/twitter-for-websites/cards/guides/getting-started#card-and-content-attribution) and is good for SEO.
 {: .prompt-info }
 
 ### Post Description
 
-By default, the first words of the post are used to display on the home page for a list of posts, in the _Further Reading_ section, and in the XML of the RSS feed. If you don't want to display the auto-generated description for the post, you can customize it using the `description` field in the _Front Matter_ as follows:
+By default the post's opening words appear on the home page list, in _Further Reading_, and in the RSS feed. To replace that auto-generated snippet, set the `description` field in the _Front Matter_:
 
 ```yaml
 ---
@@ -85,11 +98,11 @@ description: Short summary of the post.
 ---
 ```
 
-Additionally, the `description` text will also be displayed under the post title on the post's page.
+The `description` text also appears under the title on the post page.
 
 ## Table of Contents
 
-By default, the **T**able **o**f **C**ontents (TOC) is displayed on the right panel of the post. If you want to turn it off globally, go to `_config.yml`{: .filepath} and set the value of variable `toc` to `false`. If you want to turn off TOC for a specific post, add the following to the post's [Front Matter](https://jekyllrb.com/docs/front-matter/):
+By default the **T**able **o**f **C**ontents (TOC) shows in the right panel. To disable it globally, set `toc` to `false` in `_config.yml`{: .filepath}. To disable it for one post, add to its [Front Matter](https://jekyllrb.com/docs/front-matter/):
 
 ```yaml
 ---
@@ -99,9 +112,9 @@ toc: false
 
 ## Comments
 
-The global setting for comments is defined by the `comments.provider` option in the `_config.yml`{: .filepath} file. Once a comment system is selected for this variable, comments will be enabled for all posts.
+Comments are set globally via `comments.provider` in `_config.yml`{: .filepath}. Once a provider is chosen, comments are enabled on all posts.
 
-If you want to close the comment for a specific post, add the following to the **Front Matter** of the post:
+To disable comments for one post, add to its **Front Matter**:
 
 ```yaml
 ---
@@ -111,20 +124,20 @@ comments: false
 
 ## Media
 
-We refer to images, audio and video as media resources in _Chirpy_.
+In _Chirpy_, images, audio, and video are all media resources.
 
 ### URL Prefix
 
-From time to time we have to define duplicate URL prefixes for multiple resources in a post, which is a boring task that you can avoid by setting two parameters.
+To avoid repeating the same URL prefix across a post's resources, set one of two parameters.
 
-- If you are using a CDN to host media files, you can specify the `cdn` in `_config.yml`{: .filepath }. The URLs of media resources for site avatar and posts are then prefixed with the CDN domain name.
+- If a CDN hosts your media, set `cdn` in `_config.yml`{: .filepath }. URLs for the site avatar and posts are then prefixed with the CDN domain.
 
   ```yaml
   cdn: https://cdn.com
   ```
   {: file='_config.yml' .nolineno }
 
-- To specify the resource path prefix for the current post/page range, set `media_subpath` in the _front matter_ of the post:
+- To set a path prefix for the current post/page, use `media_subpath` in its _front matter_:
 
   ```yaml
   ---
@@ -133,13 +146,13 @@ From time to time we have to define duplicate URL prefixes for multiple resource
   ```
   {: .nolineno }
 
-The option `site.cdn` and `page.media_subpath` can be used individually or in combination to flexibly compose the final resource URL: `[site.cdn/][page.media_subpath/]file.ext`
+`site.cdn` and `page.media_subpath` combine to form the final URL: `[site.cdn/][page.media_subpath/]file.ext`
 
 ### Images
 
 #### Caption
 
-Add italics to the next line of an image, then it will become the caption and appear at the bottom of the image:
+Italicize the line right after an image to turn it into a caption below the image:
 
 ```markdown
 ![img-description](/path/to/image)
@@ -149,7 +162,7 @@ _Image Caption_
 
 #### Size
 
-To prevent the page content layout from shifting when the image is loaded, we should set the width and height for each image.
+Set each image's width and height to stop the layout from shifting as it loads.
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: width="700" height="400" }
@@ -159,7 +172,7 @@ To prevent the page content layout from shifting when the image is loaded, we sh
 > For an SVG, you have to at least specify its _width_, otherwise it won't be rendered.
 {: .prompt-info }
 
-Starting from _Chirpy v5.0.0_, `height` and `width` support abbreviations (`height` → `h`, `width` → `w`). The following example has the same effect as the above:
+Since _Chirpy v5.0.0_, `height` and `width` can be abbreviated (`h`, `w`). This is equivalent to the above:
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: w="700" h="400" }
@@ -168,7 +181,7 @@ Starting from _Chirpy v5.0.0_, `height` and `width` support abbreviations (`heig
 
 #### Position
 
-By default, the image is centered, but you can specify the position by using one of the classes `normal`, `left`, and `right`.
+Images are centered by default; use the `normal`, `left`, or `right` class to position them.
 
 > Once the position is specified, the image caption should not be added.
 {: .prompt-warning }
@@ -198,7 +211,7 @@ By default, the image is centered, but you can specify the position by using one
 
 #### Dark/Light mode
 
-You can make images follow theme preferences in dark/light mode. This requires you to prepare two images, one for dark mode and one for light mode, and then assign them a specific class (`dark` or `light`):
+Images can follow the dark/light theme. Prepare two images and assign each the `dark` or `light` class:
 
 ```markdown
 ![Light mode only](/path/to/light-mode.png){: .light }
@@ -207,7 +220,7 @@ You can make images follow theme preferences in dark/light mode. This requires y
 
 #### Shadow
 
-The screenshots of the program window can be considered to show the shadow effect:
+Screenshots of program windows can carry a shadow effect:
 
 ```markdown
 ![Desktop View](/assets/img/sample/mockup.png){: .shadow }
@@ -216,9 +229,9 @@ The screenshots of the program window can be considered to show the shadow effec
 
 #### Preview Image
 
-If you want to add an image at the top of the post, please provide an image with a resolution of `1200 x 630`. Please note that if the image aspect ratio does not meet `1.91 : 1`, the image will be scaled and cropped.
+For an image at the top of the post, provide one at `1200 x 630`. If the aspect ratio isn't `1.91 : 1`, it will be scaled and cropped.
 
-Knowing these prerequisites, you can start setting the image's attribute:
+Then set the image attributes:
 
 ```yaml
 ---
@@ -228,9 +241,9 @@ image:
 ---
 ```
 
-Note that the [`media_subpath`](#url-prefix) can also be passed to the preview image, that is, when it has been set, the attribute `path` only needs the image file name.
+[`media_subpath`](#url-prefix) applies to the preview image too, so once it's set `path` needs only the file name.
 
-For simple use, you can also just use `image` to define the path.
+For simple cases, use `image` alone to set the path:
 
 ```yml
 ---
@@ -260,15 +273,15 @@ For normal images:
 
 ### Social Media Platforms
 
-You can embed video/audio from social media platforms with the following syntax:
+Embed video/audio from social platforms with:
 
 ```liquid
 {% include embed/{Platform}.html id='{ID}' %}
 ```
 
-Where `Platform` is the lowercase of the platform name, and `ID` is the video ID.
+`Platform` is the lowercase platform name and `ID` is the video ID.
 
-The following table shows how to get the two parameters we need in a given video/audio URL, and you can also know the currently supported video platforms.
+This table shows how to read both parameters from a URL, and which platforms are supported.
 
 | Video URL                                                                                                                  | Platform   | ID                       |
 | -------------------------------------------------------------------------------------------------------------------------- | ---------- | :----------------------- |
@@ -284,15 +297,15 @@ Spotify supports some additional parameters:
 
 ### Video Files
 
-If you want to embed a video file directly, use the following syntax:
+To embed a video file directly:
 
 ```liquid
 {% include embed/video.html src='{URL}' %}
 ```
 
-Where `URL` is a URL to a video file e.g. `/path/to/sample/video.mp4`.
+`URL` points to a video file, e.g. `/path/to/sample/video.mp4`.
 
-You can also specify additional attributes for the embedded video file. Here is a full list of attributes allowed.
+The embedded video also accepts these attributes:
 
 - `poster='/path/to/poster.png'` — poster image for a video that is shown while video is downloading
 - `title='Text'` — title for a video that appears below the video and looks same as for images
@@ -301,7 +314,7 @@ You can also specify additional attributes for the embedded video file. Here is 
 - `muted=true` — audio will be initially silenced
 - `types` — specify the extensions of additional video formats separated by `|`. Ensure these files exist in the same directory as your primary video file.
 
-Consider an example using all of the above:
+An example using all of them:
 
 ```liquid
 {%
@@ -318,20 +331,20 @@ Consider an example using all of the above:
 
 ### Audio Files
 
-If you want to embed an audio file directly, use the following syntax:
+To embed an audio file directly:
 
 ```liquid
 {% include embed/audio.html src='{URL}' %}
 ```
 
-Where `URL` is a URL to an audio file e.g. `/path/to/audio.mp3`.
+`URL` points to an audio file, e.g. `/path/to/audio.mp3`.
 
-You can also specify additional attributes for the embedded audio file. Here is a full list of attributes allowed.
+The embedded audio also accepts these attributes:
 
 - `title='Text'` — title for an audio that appears below the audio and looks same as for images
 - `types` — specify the extensions of additional audio formats separated by `|`. Ensure these files exist in the same directory as your primary audio file.
 
-Consider an example using all of the above:
+An example using all of them:
 
 ```liquid
 {%
@@ -344,7 +357,7 @@ Consider an example using all of the above:
 
 ## Pinned Posts
 
-You can pin one or more posts to the top of the home page, and the fixed posts are sorted in reverse order according to their release date. Enable by:
+Pin one or more posts to the top of the home page (pinned posts sort by release date, newest first). Enable with:
 
 ```yaml
 ---
@@ -354,7 +367,7 @@ pin: true
 
 ## Prompts
 
-There are several types of prompts: `tip`, `info`, `warning`, and `danger`. They can be generated by adding the class `prompt-{type}` to the blockquote. For example, define a prompt of type `info` as follows:
+Prompts come in four types: `tip`, `info`, `warning`, and `danger`. Add the `prompt-{type}` class to a blockquote. For example, an `info` prompt:
 
 ```md
 > Example line for prompt.
@@ -380,7 +393,7 @@ There are several types of prompts: `tip`, `info`, `warning`, and `danger`. They
 
 ### Code Block
 
-Markdown symbols ```` ``` ```` can easily create a code block as follows:
+Create a code block with ```` ``` ````:
 
 ````md
 ```
@@ -390,7 +403,7 @@ This is a plaintext code snippet.
 
 #### Specifying Language
 
-Using ```` ```{language} ```` you will get a code block with syntax highlight:
+Use ```` ```{language} ```` for syntax highlighting:
 
 ````markdown
 ```yaml
@@ -403,7 +416,7 @@ key: value
 
 #### Line Number
 
-By default, all languages except `plaintext`, `console`, and `terminal` will display line numbers. When you want to hide the line number of a code block, add the class `nolineno` to it:
+All languages except `plaintext`, `console`, and `terminal` show line numbers by default. To hide them, add the `nolineno` class:
 
 ````markdown
 ```shell
@@ -414,7 +427,7 @@ echo 'No more line numbers!'
 
 #### Specifying the Filename
 
-You may have noticed that the code language will be displayed at the top of the code block. If you want to replace it with the file name, you can add the attribute `file` to achieve this:
+The code language shows at the top of the block. To replace it with a file name, add the `file` attribute:
 
 ````markdown
 ```shell
@@ -425,7 +438,7 @@ You may have noticed that the code language will be displayed at the top of the 
 
 #### Liquid Codes
 
-If you want to display the **Liquid** snippet, surround the liquid code with `{% raw %}` and `{% endraw %}`:
+To display a **Liquid** snippet, wrap it in `{% raw %}` and `{% endraw %}`:
 
 ````markdown
 {% raw %}
@@ -441,7 +454,7 @@ Or adding `render_with_liquid: false` (Requires Jekyll 4.0 or higher) to the pos
 
 ## Mathematics
 
-We use [**MathJax**][mathjax] to generate mathematics. For website performance reasons, the mathematical feature won't be loaded by default. But it can be enabled by:
+Math is rendered with [**MathJax**][mathjax]. For performance it isn't loaded by default; enable it with:
 
 [mathjax]: https://www.mathjax.org/
 
@@ -451,7 +464,7 @@ math: true
 ---
 ```
 
-After enabling the mathematical feature, you can add math equations with the following syntax:
+Once enabled, add equations with this syntax:
 
 - **Block math** should be added with `$$ math $$` with **mandatory** blank lines before and after `$$`
   - **Inserting equation numbering** should be added with `$$\begin{equation} math \end{equation}$$`
@@ -496,7 +509,7 @@ Can be referenced as \eqref{eq:label_name}.
 
 ## Mermaid
 
-[**Mermaid**](https://github.com/mermaid-js/mermaid) is a great diagram generation tool. To enable it on your post, add the following to the YAML block:
+[**Mermaid**](https://github.com/mermaid-js/mermaid) is a diagram generation tool. Enable it per post via the YAML block:
 
 ```yaml
 ---
@@ -504,8 +517,8 @@ mermaid: true
 ---
 ```
 
-Then you can use it like other markdown languages: surround the graph code with ```` ```mermaid ```` and ```` ``` ````.
+Then wrap the graph code in ```` ```mermaid ```` and ```` ``` ````, like any other language.
 
 ## Learn More
 
-For more knowledge about Jekyll posts, visit the [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).
+For more on Jekyll posts, see the [Jekyll Docs: Posts](https://jekyllrb.com/docs/posts/).

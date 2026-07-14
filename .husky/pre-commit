@@ -1,0 +1,5 @@
+# Auto-fill image.lqip for staged posts that set image.path but no lqip.
+# Skips silently when sips/cwebp/openssl are unavailable (see tools/fill-lqip.rb).
+staged=$(git diff --cached --name-only --diff-filter=ACM -- _posts | grep '\.md$' || true)
+[ -n "$staged" ] || exit 0
+ruby tools/fill-lqip.rb $staged && printf '%s\n' "$staged" | xargs git add

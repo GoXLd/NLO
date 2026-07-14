@@ -16,9 +16,8 @@ tags:
 - changelog
 ---
 
-![](assets/img/logo_nlo.png)
-Cet article documente les **différences techniques spécifiques** par rapport au thème original.
-Le format est simple : on ajoute un élément lorsqu'il est implémenté et vérifié.
+![Logo NLO](assets/img/logo_nlo.png)
+Cet article documente les **différences techniques spécifiques** par rapport au thème original. Un élément est ajouté une fois implémenté et vérifié.
 
 ## Liste de contrôle des différences
 
@@ -163,4 +162,4 @@ Où le filtrage fonctionne :
 
 ## Quelle est la prochaine étape
 
-Nous ajouterons les différences suivantes au même message au fur et à mesure que nous les mettrons en œuvre afin de maintenir une liste transparente et vérifiable des modifications.
+Les nouvelles différences arrivent dans cet article au fil de leur implémentation, gardant la liste transparente et vérifiable.
