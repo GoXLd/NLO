@@ -1,10 +1,10 @@
 <p align="center">
   <img src="assets/img/logo_nlo.png" alt="NLO Jekyll theme" width="140">
-  <a href="[https://github.com/GoXLd/NLO/blob/main/LICENSE](https://theme.nlo.ovh/)"><img width="3332" height="1951" alt="image" src="https://github.com/user-attachments/assets/796f7e55-b8a8-4225-b12b-44d94c8060b8" /></a>
+  <a href="https://theme.nlo.ovh/"><img width="3332" height="1951" alt="image" src="https://github.com/user-attachments/assets/796f7e55-b8a8-4225-b12b-44d94c8060b8" /></a>
 
 </p>
 
-<a href="[https://github.com/GoXLd/NLO/blob/main/LICENSE](https://theme.nlo.ovh/)"><h1 align="center">NLO — a multilingual Jekyll theme</h1></a>
+<a href="https://theme.nlo.ovh/"><h1 align="center">NLO — a multilingual Jekyll theme</h1></a>
 
 <p align="center">
   <em>A standalone fork of <a href="https://github.com/cotes2020/jekyll-theme-chirpy">Chirpy</a>,
@@ -18,7 +18,7 @@
 
 ---
 
-<a href="[https://github.com/GoXLd/NLO/blob/main/LICENSE](https://theme.nlo.ovh/)">NLO</a> is a self-maintained fork of `jekyll-theme-chirpy`. It keeps Chirpy's
+<a href="https://theme.nlo.ovh/">NLO</a> is a self-maintained fork of `jekyll-theme-chirpy`. It keeps Chirpy's
 clean writing-first layout and adds the features a real production blog ends
 up needing — multiple languages, a GitHub contribution chart, brand logo,
 and opt-in AdSense — all driven from `_config.yml` so the theme source stays
