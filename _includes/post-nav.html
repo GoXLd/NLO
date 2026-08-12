@@ -3,14 +3,36 @@
 <nav class="post-navigation d-flex justify-content-between" aria-label="Post Navigation">
   {% assign previous = site.data.locales[include.lang].post.button.previous %}
   {% assign next = site.data.locales[include.lang].post.button.next %}
+  {% assign _lang_ctx = page.language | default: page.lang | default: include.lang | default: default_lang %}
+  {% assign _previous_post = nil %}
+  {% assign _next_post = nil %}
+  {% assign _last_post = nil %}
+  {% assign _current_found = false %}
 
-  {% if page.previous.url %}
+  {% for _post in site.posts %}
+    {% assign _post_lang = _post.language | default: _post.lang | default: default_lang %}
+    {% if _post_lang != _lang_ctx %}
+      {% continue %}
+    {% endif %}
+
+    {% if _post.url == page.url %}
+      {% assign _next_post = _last_post %}
+      {% assign _current_found = true %}
+    {% elsif _current_found %}
+      {% assign _previous_post = _post %}
+      {% break %}
+    {% endif %}
+
+    {% assign _last_post = _post %}
+  {% endfor %}
+
+  {% if _previous_post.url %}
     <a
-      href="{{ site.baseurl }}{{ page.previous.url }}"
+      href="{{ site.baseurl }}{{ _previous_post.url }}"
       class="btn btn-outline-primary"
       aria-label="{{ previous }}"
     >
-      <p>{{ page.previous.title }}</p>
+      <p>{{ _previous_post.title }}</p>
     </a>
   {% else %}
     <div class="btn btn-outline-primary disabled" aria-label="{{ previous }}">
@@ -18,13 +40,13 @@
     </div>
   {% endif %}
 
-  {% if page.next.url %}
+  {% if _next_post.url %}
     <a
-      href="{{ site.baseurl }}{{page.next.url}}"
+      href="{{ site.baseurl }}{{ _next_post.url }}"
       class="btn btn-outline-primary"
       aria-label="{{ next }}"
     >
-      <p>{{ page.next.title }}</p>
+      <p>{{ _next_post.title }}</p>
     </a>
   {% else %}
     <div class="btn btn-outline-primary disabled" aria-label="{{ next }}">
