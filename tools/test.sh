@@ -60,6 +60,8 @@ main() {
   JEKYLL_ENV=production bundle exec jekyll b \
     -d "$SITE_DIR$_baseurl" -c "$_config"
 
+  bundle exec ruby tools/check-post-nav.rb "$SITE_DIR$_baseurl"
+
   # test
   bundle exec htmlproofer "$SITE_DIR" \
     --disable-external \
